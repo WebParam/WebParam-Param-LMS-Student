@@ -1,0 +1,65 @@
+{
+    "siderbar": [
+      {
+        "link": "/#",
+        "text": "Dashboard",
+        "icon": "feather-home"
+      },
+      {
+        "link": "/#",
+        "text": "My Profile",
+        "icon": "feather-user"
+      },
+      {
+        "link": "/student/student-enrolled-courses",
+        "text": "Enrolled Courses",
+        "icon": "feather-book-open"
+      },
+      {
+        "link": "/#",
+        "text": "Wishlist",
+        "icon": "feather-bookmark"
+      },
+      {
+        "link": "/#",
+        "text": "Reviews",
+        "icon": "feather-star"
+      },
+      {
+        "link": "/#",
+        "text": "My Quiz Attempts",
+        "icon": "feather-help-circle"
+      },
+      {
+        "link": "/#",
+        "text": "Order History",
+        "icon": "feather-shopping-bag"
+      },
+      {
+        "link": "/#",
+        "text": "Settings",
+        "icon": "feather-settings"
+      },
+      {
+        "link": "/",
+        "text": "Logout",
+        "icon": "feather-log-out"
+      },
+      {
+        "link": "/#",
+        "text": "Announcements",
+        "icon": "feather-volume-2"
+      },
+      {
+        "link": "/#",
+        "text": "Assessments",
+        "icon": "feather-message-square"
+      },
+      {
+        "link": "/#",
+        "text": "Assignments",
+        "icon": "feather-menu"
+      }
+    ]
+  }
+  
