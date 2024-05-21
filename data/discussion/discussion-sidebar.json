@@ -1,0 +1,55 @@
+{
+    "siderbar": [
+      {
+        "link": "#",
+        "text": "Dashboard",
+        "icon": "bi bi-grid-fill"
+      },
+      {
+        "link": "#",
+        "text": "My Profile",
+        "icon": "feather-user"
+      },
+      {
+        "link": "/student/student-enrolled-courses",
+        "text": "My Courses",
+        "icon": "bi bi-laptop-fill"
+      },
+      {
+        "link": "/discussions",
+        "text": "Discussions",
+        "icon": "bi bi-chat-dots-fill"
+      },
+      {
+        "link": "#",
+        "text": "My Progress",
+        "icon": "bi bi-graph-up-arrow"
+      },
+      {
+        "link": "#",
+        "text": "Announcements",
+        "icon": "bi bi-volume-up"
+      },
+      {
+        "link": "#",
+        "text": "Assessment",
+        "icon": "bi bi-clipboard2-plus-fill"
+      },
+      {
+        "link": "#",
+        "text": "Assignments",
+        "icon": "bi bi-clipboard2-check-fill"
+      },
+      {
+        "link": "#",
+        "text": "Settings",
+        "icon": "bi bi-gear-fill"
+      },
+      {
+        "link": "/",
+        "text": "Logout",
+        "icon": "feather-log-out"
+      }
+    ]
+  }
+  
