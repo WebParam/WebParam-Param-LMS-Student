@@ -1,0 +1,22 @@
+.mainModal {
+    border-radius: 15px;
+}
+
+.modalContent {
+    text-align: center;
+    padding: 40px; 
+}
+  
+.modalTitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+  
+.customIcon {
+    font-size: 50px;
+}
+  
+.exclamationIcon {
+    width: 50px;
+    height: 50px;
+}

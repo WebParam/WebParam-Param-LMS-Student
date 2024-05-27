@@ -87,12 +87,95 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background:"#FDFDFD"
+}
+
+.margin-right-3 {
+  margin-right: 3rem !important;
+}
+.mt-1-mr {
+  margin-top: 8.25rem !important;
+}
+
+.style-3-left {
+  margin-left: 8px;
+}
+
+.pagination-container-1 {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 60px;
+  text-align: center;
+  padding: 0 240px;
+}
+
+.rbt-card-body-2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 10px 20px;
+}
+
+.rbt-card-top-2 {
+  margin-left: auto;
+}
+
+.video-title {
+  margin-right: auto;
+  margin: initial;
+}
+
+.course-title-2 {
+  font-size: 24px;
+  padding: 20px 0;
+  text-align: left;
+  padding: 10px 20px;
+}
+
+.underline-2 {
+  text-decoration: underline;
+}
+
+.custom-quill-1 .ql-container {
+  height: 120px;
+}
+
+.custom-quill-1 .ql-editor {
+  height: 100%; 
+}
+
+.get-4-color {
+  color: #34bf49;
+}
+
+.content-2 {
+  padding: 22px 10px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.custom-icon-1 {
+  position: relative;
+}
+
+.chat-icon-1 {
+  top: -25px;
+  font-size: 15px;
+}
+
+.people-icon-1 {
+  font-size: 1.9em;
+}
+
+.custom-line-break-1 {
+  border: 1px solid rgb(210, 210, 210);
+  margin-top: 30px;
+}
+
+.custom-button-4 {
+  padding: 10px 20px;
+  font-size: 1.25rem;
 }
 
 a {

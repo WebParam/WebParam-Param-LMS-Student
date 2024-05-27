@@ -1,0 +1,58 @@
+[
+    {
+      "question": "What is the capital of France?",
+      "options": ["Paris", "London", "Berlin", "Madrid"],
+      "answer": "Paris"
+    },
+    {
+      "question": "What is JavaScript?",
+      "options": [
+        "A programming language",
+        "A type of coffee",
+        "A musical instrument",
+        "A dance move"
+      ],
+      "answer": "A programming language"
+    },
+    {
+      "question": "What is the largest planet in our solar system?",
+      "options": ["Earth", "Mars", "Jupiter", "Saturn"],
+      "answer": "Jupiter"
+    },
+    {
+      "question": "Which language is primarily used for web development?",
+      "options": ["Python", "HTML", "C++", "Java"],
+      "answer": "HTML"
+    },
+    {
+      "question": "What is the chemical symbol for water?",
+      "options": ["H2O", "O2", "CO2", "H2"],
+      "answer": "H2O"
+    },
+    {
+      "question": "Who wrote 'Hamlet'?",
+      "options": ["Charles Dickens", "J.K. Rowling", "William Shakespeare", "Jane Austen"],
+      "answer": "William Shakespeare"
+    },
+    {
+      "question": "What is the speed of light?",
+      "options": ["300,000 km/s", "150,000 km/s", "450,000 km/s", "600,000 km/s"],
+      "answer": "300,000 km/s"
+    },
+    {
+      "question": "What is the powerhouse of the cell?",
+      "options": ["Nucleus", "Mitochondria", "Ribosome", "Endoplasmic Reticulum"],
+      "answer": "Mitochondria"
+    },
+    {
+      "question": "Which element has the atomic number 1?",
+      "options": ["Oxygen", "Helium", "Hydrogen", "Carbon"],
+      "answer": "Hydrogen"
+    },
+    {
+      "question": "What is the smallest unit of life?",
+      "options": ["Cell", "Atom", "Molecule", "Organ"],
+      "answer": "Cell"
+    }
+  ]
+  
