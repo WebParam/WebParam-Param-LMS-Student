@@ -3,6 +3,8 @@ import { updateDemographicsInformation } from "@/app/api/studentProfile/studentp
 import axios from "axios";
 import { FormEvent, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
+import { statsSAAreaCodeOptions } from "./data";
+import { useRouter } from "next/navigation";
 
 export default function DemocraticLegal({student}:any) {
   const cookies = new Cookies();
@@ -18,8 +20,11 @@ export default function DemocraticLegal({student}:any) {
   const [socioeconomicCode, setSocioeconomicCode] = useState('');
   const [disabilityCode, setDisabilityCode] = useState('');
   const [disabilityRating, setDisabilityRating] = useState('');
+  const [provinceCode, setProvinceCode] = useState('');
+  const [statsSAAreaCode, setStatsSAAreaCode] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [codes, setCodes] = useState<any>()
+  const [codes, setCodes] = useState<any>();
+  const router = useRouter();
 
   async function getInputCodes() {
     const res = await axios.get(`https://khumla-development-user-read.azurewebsites.net/api/Student/GetCodes`);
@@ -40,6 +45,8 @@ export default function DemocraticLegal({student}:any) {
     setSocioeconomicCode(student?.data?.socioeconomicCode);
     setDisabilityCode(student?.data?.disabilityCode);
     setDisabilityRating(student?.data?.disabilityRating);
+    setProvinceCode(student?.data?.provinceCode);
+    setStatsSAAreaCode(student?.data?.statsCodeSAAreaCode)
   }
 
   useEffect(() => {
@@ -66,7 +73,9 @@ export default function DemocraticLegal({student}:any) {
         citizenStatusCode: citizenStatusCode,
         socioeconomicCode: socioeconomicCode,
         disabilityCode: disabilityCode,
-        disabilityRating: disabilityRating
+        disabilityRating: disabilityRating,
+        provinceCode: provinceCode,
+        statsCodeSAAreaCode: statsSAAreaCode
       
       }
   
@@ -75,8 +84,21 @@ export default function DemocraticLegal({student}:any) {
       if (res) {
         console.log('response', res);
         setIsSubmitting(false);
+        router.push('/student/student-profile?tab=ContactInformation')
       }
   }
+
+  const groupedOptions: any = {
+    'Western Cape': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('WC')),
+    'Eastern Cape': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('EC')),
+    'Northern Cape': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('NC')),
+    'Free State': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('FS')),
+    'KwaZulu-Natal': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('KZN')),
+    'North West': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('NW')),
+    'Gauteng': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('GT')),
+    'Mpumalanga': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('MP')),
+    'Limpopo': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('LIM')),
+  };
 
 
   return (
@@ -98,6 +120,7 @@ export default function DemocraticLegal({student}:any) {
       name="equityCode" 
       value={equityCode} 
       id=""
+      required
       onChange={(e) => setEquityCode(e.target.value)}>
         <option value="">select</option>
         {
@@ -117,6 +140,7 @@ export default function DemocraticLegal({student}:any) {
         name="nationalityCode"
         value={nationalityCode}
         id="nationalityCode"
+        required
         onChange={(e) => setNationalityCode(e.target.value)}
       >
         <option value="">select</option>
@@ -135,6 +159,7 @@ export default function DemocraticLegal({student}:any) {
         name="homeLanguageCode"
         value={homeLanguageCode}
         id="homeLanguageCode"
+        required
         onChange={(e) => setHomeLanguageCode(e.target.value)}
       >
         <option value="">select</option>
@@ -153,6 +178,7 @@ export default function DemocraticLegal({student}:any) {
         name="citizenStatusCode"
         value={citizenStatusCode}
         id="citizenStatusCode"
+        required
         onChange={(e) => setCitizenStatusCode(e.target.value)}
       >
         <option value="">select</option>
@@ -171,6 +197,7 @@ export default function DemocraticLegal({student}:any) {
         name="socioeconomicCode"
         value={socioeconomicCode}
         id="socioeconomicCode"
+        required
         onChange={(e) => setSocioeconomicCode(e.target.value)}
       >
         <option value="">select</option>
@@ -189,6 +216,7 @@ export default function DemocraticLegal({student}:any) {
         name="disabilityCode"
         value={disabilityCode}
         id="disabilityCode"
+        required
         onChange={(e) => setDisabilityCode(e.target.value)}
       >
         <option value="">select</option>
@@ -200,6 +228,8 @@ export default function DemocraticLegal({student}:any) {
       </select>
     </div>
   </div>
+  
+  {disabilityCode != "N" && 
   <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{marginBottom:'15px'}}>
     <div className="rbt-form-group">
       <label htmlFor="disabilityRating">Disability Rating</label>
@@ -207,6 +237,7 @@ export default function DemocraticLegal({student}:any) {
         name="disabilityRating"
         value={disabilityRating}
         id="disabilityRating"
+        required
         onChange={(e) => setDisabilityRating(e.target.value)}
       >
         <option value="">select</option>
@@ -217,7 +248,8 @@ export default function DemocraticLegal({student}:any) {
         }
       </select>
     </div>
-  </div>
+  </div>}
+
   <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{marginBottom:'15px'}}>
     <div className="rbt-form-group">
       <label htmlFor="immigrantStatus">Immigrant Status</label>
@@ -225,6 +257,7 @@ export default function DemocraticLegal({student}:any) {
         name="immigrantStatus"
         value={immigrantStatus}
         id="immigrantStatus"
+        required
         onChange={(e) => setImmigrantStatus(e.target.value)}
       >
         <option value="">select</option>
@@ -236,7 +269,7 @@ export default function DemocraticLegal({student}:any) {
       </select>
     </div>
   </div>
-  <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{marginBottom:'15px'}}>
+  {/* <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{marginBottom:'15px'}}>
     <div className="rbt-form-group">
       <label htmlFor="popiActAgree">POPI Act Agreement</label>
         <select
@@ -253,8 +286,8 @@ export default function DemocraticLegal({student}:any) {
         }
       </select>
     </div>
-  </div>
-  <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{marginBottom:'15px'}}>
+  </div> */}
+  {/* <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{marginBottom:'15px'}}>
     <div className="rbt-form-group">
       <label htmlFor="popiActDate">POPI Act Date</label>
       <input
@@ -265,16 +298,71 @@ export default function DemocraticLegal({student}:any) {
         onChange={(e) => setPopiActDate(e.target.value)}
       />
     </div>
+  </div> */}
+  <div className="col-lg-6 col-md-6 col-sm-6 col-12">
+    <div className="rbt-form-group">
+      <label htmlFor="provinceCode">Province Code</label>
+       <select 
+        name="provinceCode"
+        value={provinceCode}
+        id="provinceCode"
+        required
+        onChange={(e) => setProvinceCode(e.target.value)}
+        >
+        <option value="">select</option>
+        {
+         codes && codes[11]?.codes?.map((item:any, index:number) => (
+            <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
+          ))
+        }
+      </select>
+    </div>
+  </div>
+  <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{marginBottom:'15px'}}>
+    <div className="rbt-form-group">
+      <label htmlFor="statsSAAreaCode">STATSSA Area Code</label>
+         <select
+          name="statsSAAreaCode"
+          id="statsSAAreaCode"
+          value={statsSAAreaCode}
+          required
+          onChange={(e) => setStatsSAAreaCode(e.target.value)}
+        >
+          <option value="">Select STATSSA Area Code</option>
+          {Object.keys(groupedOptions).map((province) => (
+            <optgroup key={province} label={province}>
+              {groupedOptions[province].map((option:any) => (
+                <option key={option.value} value={option.value}>
+                  {option.name}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+    </div>
   </div>
   <div className="col-12 mt--20">
     <div className="rbt-form-group">
-      <button
+      {/* <button
          className="rbt-btn btn-gradient"
          type='submit'
          style={{ backgroundColor: '#24345c', backgroundImage: 'none' }}
       >
         {isSubmitting ? <div className="spinner-border text-light" role="status"/>:'Update Info'}
-      </button>
+      </button> */}
+      <button
+        className="btn-sm mr--10 hover-icon-reverse w-100"
+        style={{height:'40px', border:'none', backgroundColor:'rgb(36, 52, 92)', borderRadius:'8px  '}}
+        type="submit"
+        disabled={isSubmitting}
+    >
+        <span className="icon-reverse-wrapper">
+            <span className="btn-text text-light">Proceed</span>
+            <span className="btn-icon">
+                <i className="feather-arrow-right" />
+            </span>
+        </span>
+    </button>
     </div>
   </div>
     </form>

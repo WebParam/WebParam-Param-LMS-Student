@@ -2,22 +2,54 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Link as ScrollLink } from "react-scroll";
-import Image from "next/image";
-import User from "@/avator/user.png";
-import UserStudent from "@/ui/user/user-dropdown";
-import styles from "@/styles/side-bar/profile-nav-bar.module.css";
+import axios from "axios";
+import './navbar.scss'
+import { usePathname } from "next/navigation";
+import SearchResults from "../searchResults/SearchResults";
 import StudentMobileSideBar from "../student/student-enrolled-courses/mobile-student-sidebar";
+import Nav from "./nav";
 
 const Navbar = () => {
   const [currentSection, setCurrentSection] = useState("home");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [courses, setCourses] = useState<any>([]);
+  const [coursesCopy, setCoursesCopy] = useState<any>([]);
+  const [search, setSearch] = useState("");
+  const pathname = usePathname();
 
   const sections = [
     { id: "dashboard", label: "Dashboard", link: "/student/analytics" },
     { id: "course", label: "My Courses", link: "/student/enrolled-courses" },
   ];
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(
+          "https://khumla-development-newcourse-read.azurewebsites.net/api/v1/Courses/GetCoursesNew"
+        );
+        setCourses(response.data);
+        setCoursesCopy(response.data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  useEffect(() => {
+    const searchResults = courses.filter((item: any) =>
+      item.data.title.toLowerCase().includes(search.toLowerCase())
+    );
+
+    setCoursesCopy(searchResults);
+
+    if (!search) {
+      setCoursesCopy(courses);
+    }
+  }, [search]);
 
   useEffect(() => {
     const sectionIds = ["dashboard", "course", "progress"];
@@ -41,10 +73,6 @@ const Navbar = () => {
     };
   }, [currentSection]);
 
-  const handleAvatarClick = () => {
-    setIsDropdownVisible(!isDropdownVisible);
-  };
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -55,91 +83,90 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="rbt-header">
-        <div className="rbt-sticky-placeholder"></div>
+      {pathname != "/login" &&
+        pathname != "/register" &&
+        pathname != "/verify-account" &&
+        pathname != "/forgot-password" &&
+        pathname != "/forgot-password/otp" && (
+          <>
+            <header className="rbt-header">
+              <div className="rbt-sticky-placeholder"></div>
 
-        <div className="rbt-header-wrapper">
-          <div className="container">
-            <div className="mainbar-row rbt-navigation-center align-items-center">
-              <div className="header-left">
-                <Link href="/" className="logo">
-                  Thooto
-                </Link>
-              </div>
-
-              <div className="rbt-main-navigation d-none d-xl-block">
-                <nav className="mainmenu-nav onepagenav">
-                  <ul className="mainmenu">
-                    {sections.map((sec, i) => (
-                      <li
-                        className={currentSection === sec.id ? "current" : ""}
-                        key={i}
+              <div className="rbt-header-wrapper">
+                <div className="container">
+                  <div className="mainbar-row rbt-navigation-center align-items-center">
+                    <div className="header-left">
+                      <Link
+                        href="/"
+                        className="logo"
+                        style={{
+                          fontFamily: "League Spartan, sans-serif",
+                          fontWeight: "900",
+                          color: "#24345c",
+                          fontSize: "50px",
+                        }}
                       >
-                        <Link href={sec.link}>{sec.label}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              </div>
+                        thooto
+                      </Link>
+                    </div>
 
-              <div className="rbt-header-sec-col rbt-header-center d-none d-md-block margin-right-3">
-                <div className="rbt-header-content">
-                  <div className="header-info">
-                    <div className="rbt-search-field">
-                      <div className="search-field">
-                        <input type="text" placeholder="Search Course" />
-                        <button
-                          className="rbt-round-btn serach-btn"
-                          type="submit"
-                        >
-                          <i className="feather-search"></i>
-                        </button>
+                    {/* <div className="rbt-main-navigation d-none d-xl-block">
+                      <nav className="mainmenu-nav onepagenav">
+                        <ul className="mainmenu">
+                          {sections.map((sec, i) => (
+                            <li
+                              className={
+                                currentSection === sec.id ? "current" : ""
+                              }
+                              key={i}
+                            >
+                              <Link href={sec.link}>{sec.label}</Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </nav>
+                    </div> */}
+
+                    <div className="rbt-header-sec-col rbt-header-center d-none d-md-block margin-right-3">
+                      <div className="rbt-header-content">
+                        <div className="header-info">
+                          <div className="rbt-search-field">
+                            <div className="search-field">
+                              <input
+                                type="text"
+                                placeholder="Search Course"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                              />
+                              <button
+                                className="rbt-round-btn serach-btn"
+                                type="submit"
+                              >
+                                <i className="feather-search"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="header-right d-flex align-items-center mt" onClick={() => setIsSidebarOpen(state => !state)} style={{cursor:'pointer', height:'20px'}}>
+                      <div className="d-none d-md-block me-3">
+                        <div className={`humburger-menu ${isSidebarOpen && "active"}`}>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </header>
 
-              <div className="header-right d-flex align-items-center mt">
-                <div className="d-none d-md-block me-3">
-                  <Link href="#" onClick={handleAvatarClick}>
-                    <Image
-                      src={User}
-                      alt="User Avatar"
-                      width={40}
-                      height={40}
-                      className="rounded-circle"
-                    />
-                  </Link>
-                  {isDropdownVisible && (
-                    <div className={styles.dropdownMenu}>
-                      <UserStudent closeDropdown={closeDropdown} />
-                    </div>
-                  )}
-                </div>
-
-                <div
-                  className="rbt-offcanvas-trigger d-xl-none"
-                  id="rbt-offcanvas-activation"
-                  onClick={toggleSidebar}
-                >
-                  <span className="offcanvas-trigger">
-                    <span className="offcanvas-bars">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-      <StudentMobileSideBar
-        isOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-      />
+            {isSidebarOpen && 
+            <Nav />
+           }
+            {search.trim() && <SearchResults coursesCopy={coursesCopy} />}
+          </>
+        )}
     </>
   );
 };

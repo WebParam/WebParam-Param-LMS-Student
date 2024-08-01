@@ -3,6 +3,8 @@
     display: flex;
     flex-wrap: wrap;
     position: relative;
+
+    justify-content: center;
 }
 
 .docContainer {
@@ -14,6 +16,11 @@
     position: relative;
     box-sizing: border-box;
     transition: background-color 0.3s;
+
+    &.uploaded {
+        background-color: #DFEDFA;
+        border: 2px dashed #ccc;
+    }
 
     & > span {
         cursor: pointer;

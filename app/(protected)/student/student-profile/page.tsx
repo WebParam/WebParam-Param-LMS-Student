@@ -33,7 +33,7 @@ function UserProfileContent() {
     const renderComponent = (tab: string | null) => {
         switch (tab) {
             case 'profile':
-                return <Profile user={user} />;
+                return <Profile student={student} />;
             case 'democraticLegal':
                 return <DemocraticLegal student={student} />;
             case 'ContactInformation':

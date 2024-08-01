@@ -109,7 +109,7 @@ export default function RegionalInformation({student}:any) {
       />
     </div>
   </div>
-  <div className="col-lg-6 col-md-6 col-sm-6 col-12">
+  {/* <div className="col-lg-6 col-md-6 col-sm-6 col-12">
     <div className="rbt-form-group">
       <label htmlFor="sdpAccreditationNumber">SDP Accreditation Number</label>
       <input
@@ -134,8 +134,8 @@ export default function RegionalInformation({student}:any) {
         onChange={(e) => setSkillsProgrammeID(e.target.value)}
       />
     </div>
-  </div>
-  <div className="col-lg-6 col-md-6 col-sm-6 col-12">
+  </div> */}
+  {/* <div className="col-lg-6 col-md-6 col-sm-6 col-12">
     <div className="rbt-form-group">
       <label htmlFor="learnerEnrolledDate">Learner Enrolled Date</label>
       <input
@@ -146,7 +146,7 @@ export default function RegionalInformation({student}:any) {
         onChange={(e) => setLearnerEnrolledDate(e.target.value)}
       />
     </div>
-  </div>
+  </div> */}
   <div className="col-12 mt--20">
     <div className="rbt-form-group">
       <button

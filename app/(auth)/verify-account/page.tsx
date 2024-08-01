@@ -68,10 +68,11 @@ export default function VerifyAccount() {
         }
 
         const res = await verifyUserAccount(payload);
-
+        debugger;
         if (res?.data.message != `Otp don't match`) {
             console.log(res);
             setIsSubmitted(false);
+            // const user = await 
             cookies.set("loggedInUser", res?.data);
             localStorage.setItem("loggedInUser", res?.data)
             router.push('/student/student-profile')

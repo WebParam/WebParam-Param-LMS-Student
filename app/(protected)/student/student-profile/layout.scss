@@ -29,7 +29,7 @@
     }
 }
 
-.tab-button-style-2 li a::after {
+.tab-button.active li a::after {
     content: "";
     display: inline-block;
     width: 100%;

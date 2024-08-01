@@ -40,7 +40,7 @@ interface Props {
 interface UnitData {
   id: string;
   title: string;
-  // Add other relevant fields from the server response if needed
+  
 }
 
 const CourseWidgets: React.FC<Props> = ({

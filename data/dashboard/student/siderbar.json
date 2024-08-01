@@ -12,26 +12,8 @@
         "icon": "bi bi-laptop-fill"
       },
      
-      {
-        "link": "/student/assessments",
-        "text": "Assessments",
-        "icon": "feather-message-square"
-      },
-      {
-        "link": "/student/assignments",
-        "text": "Assignments",
-        "icon": "feather-menu"
-      },
-      {
-        "link": "/student/logbook",
-        "text": "Logbook",
-        "icon": "bi bi-journal-bookmark"
-      },
-      {
-        "link": "/student/Statement",
-        "text": "Statement of record",
-        "icon": "bi bi-journal-bookmark"
-      },
+      
+      
       {
         "link": "/student/student-profile",
         "text": "My Profile",
@@ -42,11 +24,7 @@
         "text": "Notifications",
         "icon": "feather-volume-2"
       },
-      {
-        "link": "#",
-        "text": "Settings",
-        "icon": "feather-settings"
-      },
+      
       {
         "link": "/",
         "text": "Logout",

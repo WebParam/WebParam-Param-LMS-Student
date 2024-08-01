@@ -100,8 +100,8 @@ export default function Login() {
                         </button>
                     </div>
                     <div className="auth-footer">
-                        <p>Don&apos;t have an account? </p>
-                        <Link href="/register">Register</Link>
+                        {/* <p>Don&apos;t have an account? </p> */}
+                        {/* <Link href="/register">Register</Link> */}
                     </div>
                 </form>
             </div>

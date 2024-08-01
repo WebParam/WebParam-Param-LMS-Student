@@ -47,6 +47,7 @@ const StudentMobileSideBar = ({
                       ))}
                   </ul>
                 </nav>
+
                 <div className="section-title mt--40 mb--20">
                   <h6 className="rbt-title-style-2">User</h6>
                 </div>
