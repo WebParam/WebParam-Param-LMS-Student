@@ -1,5 +1,6 @@
 "use client";
 
+import "./navbar.scss";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Link as ScrollLink } from "react-scroll";
@@ -79,7 +80,7 @@ const Navbar = () => {
               </div>
 
               {process.env.SHOW_TOP_BANNER &&
-<>
+              <>
               <div className="rbt-main-navigation d-none d-xl-block">
                 <nav className="mainmenu-nav onepagenav">
                     <ul className="mainmenu">
@@ -113,9 +114,12 @@ const Navbar = () => {
                   </div>
                 </div>
               </div>
+              </>
+              }
   
            
-              <div className="header-right d-flex align-items-center mt">
+                <div className="header-right d-flex align-items-center mt">
+              {process.env.SHOW_TOP_BANNER && 
                 <div className="d-none d-md-block me-3">
                   <Link href="#" onClick={handleAvatarClick}>
                     <Image
@@ -132,23 +136,17 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
-
+                }
+              
                 <div
-                  className="rbt-offcanvas-trigger d-xl-none"
+                  className={`humburger-menu ${isSidebarOpen ? "active" : ""}`}
                   id="rbt-offcanvas-activation"
                   onClick={toggleSidebar}
                 >
-                  <span className="offcanvas-trigger">
-                    <span className="offcanvas-bars">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </span>
-                  </span>
+                {/* hmamburger menu will be added with before and after psuedo classes */}
                 </div>
               </div>
-              </>
-            }
+            
             
             </div>
           </div>
