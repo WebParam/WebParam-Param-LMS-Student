@@ -7,7 +7,7 @@
 
     /* Target the scrollbar */
     &::-webkit-scrollbar {
-        width: 10px; /* Set the scrollbar width */
+        width: 0px; /* Set the scrollbar width */
         height: 80% !important; 
     }
     

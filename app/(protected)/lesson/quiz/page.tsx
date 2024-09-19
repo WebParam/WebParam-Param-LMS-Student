@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import quizData from "@/data/quiz/quiz.json";
+import quizData from "@/data/quiz/quiz-callcenter.json";
 import styles from "@/styles/quiz/quiz.module.css";
+import './quiz.scss'
 
 type QuizQuestion = {
   question: string;
@@ -90,101 +91,102 @@ const LessonQuiz = ({setVideoEnded, handleNext}:any) => {
   };
 
   return (
-    <>
-      <div className="rbt-lesson-rightsidebar overflow-hidden lesson-video">
-        <div className="inner">
-          <div className="content">
+    <div className="rbt-lesson-rightsidebar overflow-hidden lesson-video">
+      <div className="inner">
+        <div className="content">
             <div className="quiz-form-wrapper">
-              {currentQuiz.map((item, index) => (
-                <div
-                  key={index}
-                  id={`question-${index + 1}`}
-                  className={`question ${index === next ? "" : "d-none"}`}
-                >
-                  <div className="quize-top-meta">
-                    <div className="quize-top-left">
-                      <span>
-                        Questions No:{" "}
-                        <strong>
-                          {index + 1}/{currentQuiz.length}
-                        </strong>
-                      </span>
-                      <span>
-                        Points Allocated: <strong>{score}</strong>
-                      </span>
-                    </div>
-                    <div className="quize-top-right">
-                      <span>
-                        Time remaining: <strong>No Limit</strong>
-                      </span>
-                    </div>
-                  </div>
-                  <hr />
-                  <div className="rbt-single-quiz">
-                    <h4>
-                      {index + 1}. {item.question}
-                    </h4>
-                    <div className="row g-3 mt--10">
-                      {item.options.map((option, optIndex) => (
-                        <div className="col-lg-6" key={optIndex}>
-                          <p className="rbt-checkbox-wrapper mb--5">
-                            <input
-                              id={`rbt-checkbox-${index + 1}-${optIndex}`}
-                              name={`rbt-checkbox-${index + 1}`}
-                              type="radio"
-                              value={option}
-                              checked={selectedAnswer === option}
-                              onChange={handleOptionChange}
-                              disabled={answeredQuestions[index]}
-                            />
-                            <label
-                              htmlFor={`rbt-checkbox-${index + 1}-${optIndex}`}
-                              className={
-                                answeredQuestions[index]
-                                  ? option === item.answer
-                                    ? styles.correct
-                                    : selectedAnswers[index] === option
-                                    ? styles.wrong
-                                    : styles.wrong
-                                  : ""
-                              }
-                            >
-                              {option}
-                            </label>
-                          </p>
+                {currentQuiz.map((item, index) => (
+                    <div
+                        key={index}
+                        id={`question-${index + 1}`}
+                        className={`question ${index === next ? "" : "d-none"}`}
+                    >
+                        <div className="quize-top-meta">
+                            <div className="quize-top-left">
+                                <span>
+                                <i style={{color:"skyblue"}} className="feather-help-circle" />
+                                <small> <b>  Question: </b>{index + 1}/{currentQuiz.length}</small> 
+                                </span>
+                            </div>
+                            <div className="quize-top-left">
+                                <span>
+                                <i style={{color:"limegreen"}} className="feather-award" />
+                                <small>    <b>   Points: </b>{score} </small>
+                                </span>
+                            </div>
+                            <div className="quize-top-right">
+                                <span>
+                                <i style={{color:"orange"}} className="feather-clock" />
+                                <small>       <b>    Time remaining: </b> No Limit </small>
+                                </span>
+                            </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
+                        <hr />
+                        <div className="rbt-single-quiz">
+                          <h4>
+                            {index + 1}. {item.question}
+                          </h4>
+                          <div className="row g-3 mt--10">
+                            {item.options.map((option, optIndex) => (
+                              <div className="col-lg-6" key={optIndex}>
+                                <p className="rbt-checkbox-wrapper mb--5">
+                                  <input
+                                    id={`rbt-checkbox-${index + 1}-${optIndex}`}
+                                    name={`rbt-checkbox-${index + 1}`}
+                                    type="radio"
+                                    value={option}
+                                    checked={selectedAnswer === option}
+                                    onChange={handleOptionChange}
+                                    disabled={answeredQuestions[index]}
+                                  />
+                                  <label
+                                    htmlFor={`rbt-checkbox-${index + 1}-${optIndex}`}
+                                    style={{border:"none",boxShadow:"0px 6px 34px rgba(215, 216, 222, 0.41)", padding:"30px" }}
+                                    className={
+                                      answeredQuestions[index]
+                                        ? option === item.answer
+                                          ? styles.correct
+                                          : selectedAnswers[index] === option
+                                          ? styles.wrong
+                                          : styles.wrong
+                                        : ""
+                                    }
+                                  >
+                                    {option}
+                                  </label>
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                <div className={styles.buttonWrapper}>
+                  <button
+                    className="rbt-btn icon-hover icon-hover-left btn-md bg-primary-opacity"
+                    id="retake-btn"
+                    type="button"
+                    onClick={handleRetake}
+                    disabled={!answeredQuestions.some((answered) => answered)}
+                  >
+                    New
+                  </button>
+
+                  <button
+                    className="rbt-btn icon-hover btn-sm"
+                    style={{ width: '150px' }}
+                    id="next-btn"
+                    type="button"
+                    onClick={() => {setVideoEnded(false), handleNext()}}
+                  >
+                    Done
+                  </button>
                 </div>
-              ))}
-
-              <div className={styles.buttonWrapper}>
-                <button
-                  className="rbt-btn bg-primary-opacity btn-sm ms-2"
-                  id="retake-btn"
-                  type="button"
-                  onClick={handleRetake}
-                  disabled={!answeredQuestions.some((answered) => answered)}
-                >
-                  New
-                </button>
-
-                <button
-                  className="rbt-btn btn-gradient btn-sm ms-2"
-                  id="next-btn"
-                  type="button"
-                  onClick={() => {setVideoEnded(false), handleNext()}}
-                >
-                  Done
-                </button>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </>
-  );
+    );
 };
 
 export default LessonQuiz;

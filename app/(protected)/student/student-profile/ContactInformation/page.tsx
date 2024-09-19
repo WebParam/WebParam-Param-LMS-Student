@@ -4,11 +4,14 @@ import { FormEvent, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { relationshipOptions } from "./data";
 import { useRouter } from "next/navigation";
+import { useProgressContext } from "@/context/progress-card-context/progress-context";
+
 
 export default function ContactInformation({student}:any) {
   const cookies = new Cookies();
   const user = cookies.get("loggedInUser");
   const router = useRouter();
+  const {setContactInformationPercentage} = useProgressContext();
 
   const [homeAddress1, setHomeAddress1] = useState('');
   const [postalAddress1, setPostalAddress1] = useState('');
@@ -46,12 +49,13 @@ export default function ContactInformation({student}:any) {
 
     useEffect(() => {
         setStudentContactInformation(student);
+        calculateEmptyFieldsPercentage();
     }, [student]);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
       event.preventDefault();
       setIsSubmitting(true);
-      debugger;
+      
   
       const payload = {
         userId: user?.data?.id || user?.data?.userId,
@@ -76,9 +80,41 @@ export default function ContactInformation({student}:any) {
         if (res) {
           console.log('response', res);
           setIsSubmitting(false);
+          calculateEmptyFieldsPercentage();
           router.push('/student/student-profile?tab=EmploymentInformation')
         }
     }
+
+    const calculateEmptyFieldsPercentage = () => {
+      const fields = [
+        homeAddress1,
+        postalAddress1,
+        postalAddress2,
+        postalAddress3,
+        learnerHomeAddressPostalCode,
+        learnerHomeAddressPhysicalCode,
+        learnerPhoneNumber,
+        learnerCellPhoneNumber,
+        learnerFaxNumber,
+        learnerEmailAddress,
+        nextOfKinName,
+        nextOfKinSurname,
+        nextOfKinRelationship,
+        nextOfKinContactNumber,
+      ];
+  
+      const totalFields = fields.length;
+      
+      // Filter the fields that are empty (empty strings, null, or undefined)
+      const emptyFields = fields.filter(field => field).length;
+      
+      // Calculate percentage of empty fields
+      const percentage = (emptyFields / totalFields) * 100;
+      if (typeof window !== "undefined") {
+        localStorage.setItem('contactInformationPercentage', percentage.toString());
+        setContactInformationPercentage(percentage);
+      }
+  };
 
 
   return (
@@ -92,6 +128,7 @@ export default function ContactInformation({student}:any) {
     <form
         onSubmit={handleSubmit}
         className="rbt-profile-row rbt-default-form row row--15"
+        style={{minWidth:'100%'}}
       >
   <div className="col-lg-6 col-md-6 col-sm-6 col-12">
     <div className="rbt-form-group">
@@ -224,7 +261,7 @@ export default function ContactInformation({student}:any) {
     </div>
   </div>
 
-  <h5 className="rbt-form-group text-decoration-underline mt-5">Next of Kin</h5>
+  <h6 className="rbt-form-group mt-5">Next of Kin</h6>
 
   <div className="col-lg-6 col-md-6 col-sm-6 col-12">
     <div className="rbt-form-group">
@@ -298,12 +335,12 @@ export default function ContactInformation({student}:any) {
       </button> */}
       <button
           className="btn-sm mr--10 hover-icon-reverse w-100"
-          style={{height:'40px', border:'none', backgroundColor:'rgb(36, 52, 92)', borderRadius:'8px  '}}
+          style={{height:'40px', border:'none', backgroundColor:`${process.env.NEXT_PUBLIC_PRIMARY_COLOR??'rgb(36, 52, 92)'}`, borderRadius:'8px  '}}
           type="submit"
           disabled={isSubmitting}
       >
           <span className="icon-reverse-wrapper">
-              <span className="btn-text text-light">Proceed</span>
+              <span className="btn-text text-light">Save & Proceed</span>
               <span className="btn-icon text-light">
                   <i className="feather-arrow-right" />
               </span>

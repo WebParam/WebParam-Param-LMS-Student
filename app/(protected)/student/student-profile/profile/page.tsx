@@ -10,8 +10,10 @@ import Image from 'next/image';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Modal } from 'react-bootstrap';
-import { readUserData, writeUserData } from '@/app/lib/endpoints';
-
+import { readUserData } from '@/app/lib/endpoints';
+import { GET } from '@/app/lib/api-client';
+import MaintenanceModal from '@/ui/banner/MaintanceModal';
+import { useProgressContext } from '@/context/progress-card-context/progress-context';
 
 export default function Profile({ student }: any) {
   const [firstName, setFirstName] = useState("");
@@ -34,20 +36,22 @@ export default function Profile({ student }: any) {
   const cookies = new Cookies();
   const user = cookies.get("loggedInUser");
   const router = useRouter();
+  const { setBiographyPercentage } = useProgressContext();
 
     useEffect(() => {
-        debugger;
+        
         getUserProfile();
     }, [profilePic]);
 
     async function getInputCodes() {
-        const res = await axios.get(`${readUserData}/api/v1/Student/GetCodes`);
-        console.log('codes:', res?.data?.data);
-        setCodes(res?.data?.data);
+        // const res = await axios.get(`${readUserData}/api/v1/Student/GetCodes`);
+        const res = await GET(`${readUserData}/api/v1/Student/GetCodes`);
+        console.log('codes:', res?.data.data);
+        setCodes(res?.data.data);
     }
     
     useEffect(() => {
-        debugger;
+        
         getUserProfile();
     },[profilePic])
     
@@ -56,6 +60,7 @@ export default function Profile({ student }: any) {
         getUserProfile();
         setProvince(student?.data?.country)
         getInputCodes();
+        calculateEmptyFieldsPercentage();
 
         if (user) {
             setEmail(user?.data?.email)
@@ -63,7 +68,7 @@ export default function Profile({ student }: any) {
     }, []);
 
   async function getUserProfile() {
-    debugger;
+    
     if (!user?.data?.id && !user?.id) return;
     const res = await getStudentProfile(user.data.id || user.id);
 
@@ -72,7 +77,6 @@ export default function Profile({ student }: any) {
             setFirstName(res.data.data.firstName);
             setSurname(res.data.data.surname);
             setIdNumber(res.data.data.idNumber);
-            // setEmail(res.data.data.email);
             setGender(res.data.data.gender);
             setDateOfBirth(dob);
             setCountry(res.data.data.country);
@@ -99,7 +103,7 @@ export default function Profile({ student }: any) {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        debugger;
+        
         setIsSubmitting(true);
         const payload = {
             userId: user?.data?.id||user?.id,
@@ -119,6 +123,7 @@ export default function Profile({ student }: any) {
         const res = await StudentProfile(payload);
 
         if (res) {
+            calculateEmptyFieldsPercentage();
             router.push('/student/student-profile?tab=democraticLegal')
         }
         console.log(res);
@@ -140,7 +145,7 @@ export default function Profile({ student }: any) {
             formData.append('file', file);
 
             try {
-                const response = await axios.post(`${writeUserData}/api/v1/Profile/UploadProfilePicture/${user?.data?.id}`, formData, {
+                const response = await axios.post(`${readUserData}/api/v1/Profile/UploadProfilePicture/${user?.data?.id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -160,6 +165,34 @@ export default function Profile({ student }: any) {
         const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
         const day = String(today.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
+    };
+
+    const calculateEmptyFieldsPercentage = () => {
+        const fields = [
+            firstName,
+            surname,
+            idNumber,
+            gender,
+            dateOfBirth,
+            country,
+            city,
+            province,
+            phoneNumber,
+            bio
+        ];
+    
+        const totalFields = fields.length;
+        
+        // Filter the fields that are empty (empty strings, null, or undefined)
+        const emptyFields = fields.filter(field => field).length;
+        
+        // Calculate percentage of empty fields
+        const percentage = (emptyFields / totalFields) * 100;
+        
+        if (typeof window !== "undefined") {
+            localStorage.setItem('Biography', percentage.toString());
+            setBiographyPercentage(percentage);
+        }
     };
 
     return (
@@ -218,16 +251,16 @@ export default function Profile({ student }: any) {
                             </div>
                         </div>
                     </div>
-                    <div className="rbt-tutor-information-right">
+                    {/* <div className="rbt-tutor-information-right">
                         <div className="tutor-btn">
                             <a className="rbt-btn btn-sm btn-border color-white radius-round-10">
                                 Edit Cover Photo
                             </a>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
-            <form onSubmit={handleSubmit} className="rbt-profile-row rbt-default-form row row--15">
+            <form onSubmit={handleSubmit} className="rbt-profile-row rbt-default-form row row--15" style={{minWidth:'100%'}}>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-12">
                     <div className="rbt-form-group">
                         <label htmlFor="firstname">First Name</label>
@@ -350,7 +383,7 @@ export default function Profile({ student }: any) {
                     </div>
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-12">
-                    <div className="filter-select rbt-modern-select">
+                    <div className="filter-select rbt-modern-select rbt-form-group">
                         <label htmlFor="gender">Gender</label>
                         <select
                             id="gender"
@@ -359,7 +392,7 @@ export default function Profile({ student }: any) {
                             required
                             onChange={(e) => setGender(e.target.value)}
                             className="w-100">                                
-                            <option value={""} >select</option>
+                            <option value={""} >Select</option>
                             {
                             codes && codes[4]?.codes?.map((item:any, index:number) => (
                                 <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -370,6 +403,7 @@ export default function Profile({ student }: any) {
                 </div>
                 <div className="col-12">
                     <div className="rbt-form-group">
+                        <br/>
                         <label htmlFor="bio">Biography</label>
                         <textarea
                             name="bio"
@@ -385,12 +419,12 @@ export default function Profile({ student }: any) {
                 <div className="col-12">
                     <button
                         className="btn-sm mr--10 hover-icon-reverse w-100 text-light"
-                        style={{height:'40px', border:'none', backgroundColor:'rgb(36, 52, 92)', borderRadius:'8px  '}}
+                        style={{height:'40px', border:'none', backgroundColor:`${process.env.NEXT_PUBLIC_PRIMARY_COLOR??'rgb(36, 52, 92)'}`, borderRadius:'8px  '}}
                         type="submit"
                         disabled={isSubmitting}
                     >
                         <span className="icon-reverse-wrapper">
-                            <span className="btn-text text-light">Proceed</span>
+                            <span className="btn-text text-light">Save & Proceed</span>
                             <span className="btn-icon">
                                 <i className="feather-arrow-right" />
                             </span>

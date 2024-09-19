@@ -1,36 +1,34 @@
 "use client";
 import Cookies from "universal-cookie";
-import { useEffect, useState } from "react";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { GetSideBarData } from "@/interfaces/SidebarData";
+import Link from "next/link";
 
-const StudentDashboardSidebar = ({isEnrolled}:any) => {
-  const [username, setUsername] = useState<string | null>(null);
+const StudentDashboardSidebar = () => {
   const cookies = new Cookies();
+  const user = cookies.get("loggedInUser");
   const path = usePathname();
-  const router = useRouter();
-  const user = cookies.get("logggedInUser");
-
-  useEffect(() => {
-    const storedUsername = cookies.get("username");
-    setUsername(storedUsername);
-  }, []);
-
 
   function handleLogOut() {
     cookies.remove("loggedInUser");
-     cookies.remove("username");
-     cookies.remove("userEmail")
-     cookies.remove("resetEmail")
-     router.push('/login')
+    cookies.remove("username");
+    cookies.remove("userEmail");
+    cookies.remove("resetEmail");
+    localStorage.removeItem("courseId");
+    localStorage.removeItem("modalOpened");
+    router.push("/login");
   }
+  const [username, setUsername] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const storedUsername = cookies.get("username");
     setUsername(storedUsername);
   }, []);
-  
-  
+
+  const SidebarData = GetSideBarData();
+
   return (
     <>
       <div
@@ -41,114 +39,99 @@ const StudentDashboardSidebar = ({isEnrolled}:any) => {
           <div className="content-item-content">
             <div className="rbt-default-sidebar-wrapper">
               <div className="section-title mb--20">
-                <h6 className="rbt-title-style-2">{username ? `Welcome ${username}` : "name surname"}</h6>
+                <h6 className="rbt-title-style-2">
+                  {username ? `Welcome ${username}` : "name surname"}
+                </h6>
               </div>
-
-              {isEnrolled == 0 && 
-              <>
-              <div className="section-title mt--40 mb--20">
-                <h6 className="rbt-title-style-2">Student</h6>
-              </div>
-
               <nav className="mainmenu-nav">
-                {<ul className="dashboard-mainmenu rbt-default-sidebar-list">
-                      {/* <li>
+                <ul className="dashboard-mainmenu rbt-default-sidebar-list">
+                  {SidebarData &&
+                    SidebarData.slice(0, process.env.NEXT_PUBLIC_FREEMIUM?3:2).map((data: any, index: any) => {
+                      
+                      // if freemium, show projects instead of enrolled courses
+                      if (process.env.NEXT_PUBLIC_FREEMIUM && data.link == "/student/enrolled-courses") {
+                        return  (
+                        <li className="nav-item" key={index} role="presentation">
                         <Link
-                          href={'/student/dashboard'}
-                          className={`${path === '/student/dashboard' ? "active" : ""}`}
+                          href={'/student/projects?tab=enrolled'}
+                          className={`${path == '/student/projects' ? "active" : ""}`}
+                          style={{color: path == '/student/projects' ? "#2f57ef" : ""}} 
                         >
-                          <i className='bi bi-grid-fill' />
-                          <span>Dashboard</span>
+                          <i className={data.icon} />
+                          <span>My Projects</span>
                         </Link>
-                      </li> */}
-                      <li>
+                      </li>);
+                      }
+                      return (
+                      <li className="nav-item" key={index} role="presentation">
                         <Link
-                          href={'/student/enrolled-courses'}
-                          className={`${path === '/student/enrolled-courses' ? "active" : ""}`}
+                          href={data.link}  
+                          className={`${path === data.link ? "active" : ""}`}
                         >
-                          <i className='bi bi-laptop-fill' />
-                          <span>My Courses</span>
+                          <i className={data.icon} />
+                          <span>{data.text}</span>
                         </Link>
                       </li>
-
-                      {/* <li>
-                        <Link
-                          href={'/student/assessments'}
-                          className={`${path === '/student/assessments' ? "active" : ""}`}
-                        >
-                          <i className='feather-message-square' />
-                          <span>Assessments</span>
-                        </Link>
-                      </li> */}
-
-                      
-                      {/* <li>
-                        <Link
-                          href={'/student/assignments'}
-                          className={`${path === '/student/assignments' ? "active" : ""}`}
-                        >
-                          <i className='feather-menu' />
-                          <span>Assignments</span>
-                        </Link>
-                      </li> */}
-
-                      {/* <li>
-                        <Link
-                          href={'/student/logbook'}
-                          className={`${path === '/student/logbook' ? "active" : ""}`}
-                        >
-                          <i className='bi-journal-bookmark' />
-                          <span>Logbook</span>
-                        </Link>
-                      </li> */}
-                </ul>}
+                    )
+                    })}
+                </ul>
               </nav>
-              </>}
 
-              <div className="section-title mt--40 mb--20">
-                <h6 className="rbt-title-style-2">User</h6>
-              </div>
-
+                <div className="section-title mt--40 mb--20">
+                  <h6 className="rbt-title-style-2">User</h6>
+                </div>
+              
               <nav className="mainmenu-nav">
                 <ul className="dashboard-mainmenu rbt-default-sidebar-list">
                   <li>
-                    <Link
+                    <a
+                  
                       href={'/student/student-profile'}
                       className={`${path === '/student/student-profile' ? "active" : ""}`}
                     >
-                      <i className='feather-user' />
+                      <i className="feather-user" />
                       <span>My Profile</span>
-                    </Link>
+                    </a>
                   </li>
                   <li>
-                    <Link
-                      href={'/student/notifications'}
-                      className={`${path === '/student/notifications' ? "active" : ""}`}
+                    <a
+                    onClick={handleLogOut}
+                      href={'/'}
+                      className={`${path === '/' ? "active" : ""}`}
                     >
-                      <i className='feather-volume-2' />
-                      <span>Notifications</span>
-                    </Link>
-                  </li>
-
-                  {/* <li>
-                    <Link
-                      href={'#'}
-                      className={`${path === '/student/settings' ? "active" : ""}`}
-                    >
-                      <i className='feather-volume-2' />
-                      <span>Settings</span>
-                    </Link>
-                  </li> */}
-
-                  <li>
-                    <div
-                      style={{cursor:'pointer'}}
-                      onClick={handleLogOut}
-                    >
-                      <i className='feather-log-out' />
+                      <i className="feather-log-out" />
                       <span>Logout</span>
-                    </div>
+                    </a>
                   </li>
+                  {/* {SidebarData &&
+                  
+                    SidebarData?.slice(-1).map((data: any, index: any) => {
+                      // if logout, attach the logout function to the link
+                      if (data.text == "Logout") {
+                        return  <li key={index}>
+                        <Link
+                        onClick={handleLogOut}
+                          href={data.link}
+                          className={`${path === data.link ? "active" : ""}`}
+                        >
+                          <i className={data.icon} />
+                          <span>{data.text}</span>
+                        </Link>
+                      </li>;
+                      }
+
+                      return (
+                      <li key={index}>
+                        <Link
+                          href={data.link}
+                          className={`${path === data.link ? "active" : ""}`}
+                        >
+                          <i className={data.icon} />
+                          <span>{data.text}</span>
+                        </Link>
+                      </li>
+                    )
+                    })} */}
                 </ul>
               </nav>
             </div>

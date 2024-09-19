@@ -1,17 +1,15 @@
 {
-  "siderbar": [
+  "ALL_ACCESS": [
     {
       "link": "/student/dashboard",
       "text": "Dashboard",
       "icon": "bi bi-grid-fill"
     },
-
     {
       "link": "/student/enrolled-courses",
       "text": "My Courses",
       "icon": "bi bi-laptop-fill"
     },
-   
     {
       "link": "/student/assessments",
       "text": "Assessments",
@@ -28,9 +26,9 @@
       "icon": "bi bi-journal-bookmark"
     },
     {
-      "link": "/student/Statement",
-      "text": "Statement of record",
-      "icon": "bi bi-journal-bookmark"
+      "link": "/classes",
+      "text": "Classes",
+      "icon": "bi bi-calendar-event"
     },
     {
       "link": "/student/student-profile",
@@ -52,5 +50,36 @@
       "text": "Logout",
       "icon": "feather-log-out"
     }
+  ],
+  "FREEMIUM": [
+    {
+      "link": "/student/student-profile",
+      "text": "My Profile",
+      "icon": "feather-user"
+    },
+    {
+      "link": "/student/notifications",
+      "text": "Notifications",
+      "icon": "feather-volume-2"
+    },
+
+    {
+      "link": "/",
+      "text": "Logout",
+      "icon": "feather-log-out"
+    }
+  ],
+  "COURSE_ONLY": [
+    {
+      "link": "/student/enrolled-courses",
+      "text": "My Courses",
+      "icon": "bi bi-laptop-fill"
+    },
+    {
+      "link": "/",
+      "text": "Logout",
+      "icon": "feather-log-out"
+    }
   ]
+
 }

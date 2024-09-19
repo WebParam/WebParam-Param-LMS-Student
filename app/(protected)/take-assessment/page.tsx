@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import styles from "@/styles/assessment/assessment.module.css";
 import loaderStyles from "@/ui/loader-ui/loader.module.css";
 import assessmentData from "@/data/assessment/assessment.json";
+import { useRouter } from "next/navigation";
 import { submitAssessment } from "@/actions/assessments/assessments-action";
 import MultipleChoice from "./multipleChoise";
 
@@ -25,6 +26,7 @@ const AssessmentComponent = () => {
   const [isInteracted, setIsInteracted] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const savedState = JSON.parse(
@@ -58,7 +60,7 @@ const AssessmentComponent = () => {
     setAnswers(newAnswers);
     if (!isInteracted) {
       setIsInteracted(true);
-      setTimeRemaining(3600); // Start the timer with 1 hour (3600 seconds)
+      setTimeRemaining(3600);
     }
   };
 
@@ -81,8 +83,12 @@ const AssessmentComponent = () => {
       setAnswers(Array(assessment.quizData.length).fill(""));
       setTimeRemaining(null); // Reset the timer
 
+      setTimeout(() => {
+        
+        router.push("/student/assessments?tab=completed");
+      }, 2000)
+
       // Redirect to /lesson
-      window.location.href = "/student/assessment?tab=completed";
     } catch (error) {
       console.error("Error submitting assessment:", error);
     } finally {
@@ -110,26 +116,22 @@ const AssessmentComponent = () => {
       <div className="inner" style={{margin:'0 auto'}}>
         <div className="content">
           <div className="quiz-form-wrapper">
-             <div className="quize-top-meta">
-                
-                    <>
-                      <div className="quize-top-left">
-                        <span>
-                          Total Marks: <strong>50</strong>
-                        </span>
-                      </div>
-                      <div className="quize-top-right">
-                        <span>
-                          Time remaining:{" "}
-                          <strong>
-                            {timeRemaining !== null
-                              ? formatTime(timeRemaining)
-                              : "No Limit"}
-                          </strong>
-                        </span>
-                      </div>
-                    </>
-                    </div>
+                <div className="quize-top-meta">
+                       
+                            <div className="quize-top-left">
+                                <span>
+                                <i style={{color:"limegreen"}} className="feather-award" />
+                                <small>    <b>   Points: </b>{10} </small>
+                                </span>
+                            </div>
+                            
+                            <div className="quize-top-right">
+                                <span>
+                                <i style={{color:"orange"}} className="feather-clock" />
+                                <small>       <b>    Time remaining: </b> No Limit </small>
+                                </span>
+                            </div>
+                        </div>
             <MultipleChoice setIsInteracted={setIsInteracted} />
             {assessment.quizData.slice(4,9).map((item, index) => (
               <div
@@ -174,15 +176,15 @@ const AssessmentComponent = () => {
 
             <div className={styles.buttonWrapper}>
               <button
-                className="rbt-btn btn-gradient btn-sm"
-                style={{backgroundColor:'rgb(36, 52, 92)'}}
+                className="rbt-btn btn-sm"
+                style={{backgroundColor:'rgb(36, 52, 92) !important'}}
                 type="button"
                 onClick={handleSubmitAssessment}
-                disabled={
-                  !isInteracted ||
-                  loading ||
-                  answers.some((answer) => answer === "")
-                }
+                // disabled={
+                //   !isInteracted ||
+                //   loading ||
+                //   answers.some((answer) => answer === "")
+                // }
               >
                 {loading ? (
                   <>

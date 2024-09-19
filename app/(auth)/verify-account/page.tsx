@@ -1,12 +1,17 @@
-'use client'
-import Link from "next/link";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useRouter } from 'next/navigation';
+'use client';
+import './verify.scss';
+import Image from 'next/image';
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import imageCover from "./verify.svg";
+import { LoginUser, verifyUserAccount } from '@/app/api/auth/auth';
 import Cookies from 'universal-cookie';
-import { verifyUserAccount } from "@/app/api/auth/auth";
+import { useRouter } from 'next/navigation';
+import { isMobile } from 'react-device-detect';
 
 
-export default function VerifyAccount() {
+
+export default function VerifyPage() {
     const [otpValues, setOtpValues] = useState(['', '', '', '', '']);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
@@ -37,26 +42,20 @@ export default function VerifyAccount() {
             setOtp(otp);
           }
       
-          // Remove the "incorrect" class when a valid input is entered
           e.target.classList.remove('incorrect');
-         
         
         } else {
-          // Clear the input if the value is not a number
           const newOtpValues = [...otpValues];
           newOtpValues[index] = '';
           setOtpValues(newOtpValues);
       
-          // Optionally, you can move focus back to the previous input
           if (index > 0 && inputRefs[index - 1].current) {
             inputRefs[index - 1].current?.focus();
           }
       
-          // Add the "incorrect" class to trigger the animation
           e.target.classList.add('incorrect');
         }
       };
-
 
       async function handleVerify(e:any) {
         e.preventDefault();
@@ -68,27 +67,52 @@ export default function VerifyAccount() {
         }
 
         const res = await verifyUserAccount(payload);
-        debugger;
-        if (res?.data.message != `Otp don't match`) {
+        
+        if (res) {
             console.log(res);
             setIsSubmitted(false);
             // const user = await 
             cookies.set("loggedInUser", res?.data);
             localStorage.setItem("loggedInUser", res?.data)
-            router.push('/student/student-profile')
+            const redirectPath = process.env.NEXT_PUBLIC_FREEMIUM === 'true' ? "/student/projects?tab=enrolled" : "/student/student-profile";
+
+            router.push(redirectPath)
         } else {
             setIsSubmitted(false);
             setErrorMessage(true)
         }
       }
-  
     return (
-        <div className="verify">
-            <h1>Confirm  your email address</h1>
-            <p>We’ve sent an email to the address you provided.
-            Check your inbox and enter the 5 digit code.</p>
+        <div className="login-container">
+            <div 
+                className='left-container'
+                data-aos="zoom-out-right"
+                style={{
+                  backgroundImage: !isMobile? `url(${imageCover.src})`:"none",
+                  backgroundSize: 'cover',                
+                  backgroundPosition: 'center',
+                  filter:"none !important",
+                  backgroundColor:"#24345C;",
+                  boxShadow: 'inset 0 0 100px rgba(0,0,0,0.5)',
+              }}
+                >
+                    {/* <div className='verify-card'>
+                        <Image src={imageCover.src} alt="verify" width={200} height={200}/>
+                        <p className='text-center'>We sent an OTP to the phone number you provided.
+                        Check your inbox and enter the 5 digit code.</p>
+                    </div> */}
+            </div>
+           <div className="login-inner" style={{filter:"none !important"}} data-aos="zoom-out-left">
+           <div className="verify">
+            <h1 style={{color:"white"}}>Confirm  your Phone Number</h1>
+            {/* <p className='text-center'>We sent an OTP to the phone number you provided.
+            Check your inbox and enter the 5 digit code.</p> */}
+           <small>We sent an OTP to the phone number you provided.
+           Check your inbox and enter the 5 digit code.</small><br/>
             <form onSubmit={handleVerify}>
+           
                 <div className="otpContainer">
+               
                     {inputRefs.map((ref, index) => (
                     <input
                       key={index}
@@ -103,19 +127,20 @@ export default function VerifyAccount() {
                   ))}
                 </div>
                 {errorMessage && <span className={`errorMessage`} style={{marginBottom:'3px'}}>Incorrect OTP, please check and try again</span>}
-                <button type="submit" disabled={isSubmitted}>
-                    {
-                        isSubmitted ? 
-                        <div className="spinner-border" role="status"/>
-                        :
-                        'Confirm'
-                    }
-                </button>
-                <div className="account">
-                    <p>Already have an account?
-                    <Link href='/login'> Log in</Link></p>
+                <div className="form-submit-group w-100">
+                    <button type="submit" className="btn w-100 position-relative" style={{height:'50px', fontSize:'18px'}}>
+                        {isSubmitted ? <div className="spinner-grow text-light" role="status" /> : 'Confirm'}
+                    </button>
                 </div>
+                <div className="auth-footer">
+            <p style={{marginRight:"10px"}}>Already have an account? </p>
+            <Link style={{ color: "#2597ac" }} href="/login">
+              Login
+            </Link>
+          </div>
             </form>
         </div>
-    )
+            </div>
+        </div>
+    );
 }

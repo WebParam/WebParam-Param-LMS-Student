@@ -1,6 +1,7 @@
 // components/WorkExperienceModules.tsx
 import React, { useState, ChangeEvent } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { isMobile } from 'react-device-detect';
 
 interface Module {
   date: string;
@@ -18,19 +19,19 @@ const WorkExperienceModules: React.FC = () => {
 
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-10 mt-5 rbt-review-wrapper rbt-shadow-box">
+    <div className={isMobile? "rbt-dashboard-table table-responsive mobile-table-200 mt-3" :"rbt-dashboard-table table-responsive mobile-table-200 mt-3"}>   
       <div className="d-flex justify-content-between align-items-center w-100 p-2">
         <h5>Work Experience Modules</h5>
       </div>
       
-      <table className="rbt-table table table-borderless">
+      <table className="rbt-table table table-borderless" style={{minWidth:'10px'}}>
         <thead className='thead-light'>
           <tr>
-            <th scope="col">Date</th>
-            <th scope="col">% Signed off</th>
-            <th scope="col">Name of Module</th>
-            <th scope="col">Credits</th>
-            <th scope="col">Achievement</th>
+          <th >Date</th>
+            <th >Mark</th>
+            <th >Module name</th>
+            <th >Credits</th>
+            <th >Achievement</th>
           </tr>
         </thead>
         <tbody>

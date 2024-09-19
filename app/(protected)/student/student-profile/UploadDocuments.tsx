@@ -10,6 +10,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { getStudentDocuments } from '@/app/api/studentProfile/studentprofile';
 import { readUserData, writeUserData } from '@/app/lib/endpoints';
+import { POST_MULTIPART } from '@/app/lib/api-client';
 const pdfVersion = "2.16.105";
 const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
 
@@ -102,9 +103,13 @@ const FileUpload: React.FC = () => {
   try {
     const response = await axios.post(`${writeUserData}/api/v1/Profile/SubmitDocument`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'ClientKey':process.env.NEXT_PUBLIC_CLIENTKEY,
+        'Content-Type': 'multipart/form-data'
+     
       },
     });
+
+    // const response = await POST_MULTIPART(`${writeUserData}/api/v1/Profile/SubmitDocument`, formData);
 
         if (response.status === 200) {
           setIsUploaded(true);
