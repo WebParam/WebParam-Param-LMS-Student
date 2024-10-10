@@ -10,6 +10,7 @@ import { POST } from "@/app/lib/api-client";
 import Loader from "@/ui/loader/loader";
 import Countdown from 'react-countdown';
 import { rDocumentParaphraseUrl } from "@/app/lib/endpoints";
+import QuizLoading from "./loading";
 
 interface IQuizQuestion  {
   question: string;
@@ -24,6 +25,7 @@ const LessonQuiz = ({firstQuiz, setVideoEnded, handleNext, currentVideo}:any) =>
   const [error, setError] = useState<string>("");
   const [loading, setLoader] = useState<boolean>(false);
   const [timeRemaining, setTimeRemaining] = useState<number>(600/60); 
+  const [loadingMessage, setLoadingMessage] = useState<string>("Generating quiz. Please do not leave this page...");
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(
     Array(quizData.length).fill(false)
   );
@@ -77,21 +79,50 @@ const renderer = ({ hours, minutes, seconds, completed }:any) => {
   }
 };
 
+const initializeQuiz = async () => {
+  setLoader(true); // Start loading
 
-  const initializeQuiz = async () => {
-    setLoader(true);
-   const questions = await getQuizQuestions(currentVideo.id);
-   debugger;
-    const shuffledQuestions = questions.data?.sort(() => 0.5 - Math.random());
-    const selectedQuestions = shuffledQuestions?.slice(0, 10);
-    setCurrentQuiz(selectedQuestions);
+  // Set timeouts to update loading messages
+  const timeout1 = setTimeout(() => {
+      setLoadingMessage("Still generating. Please hang tight...");
+  }, 15000); // Message after 15 seconds
 
-    setNext(0);
-    setScore(0);
-    setAnsweredQuestions(Array(selectedQuestions.length).fill(false));
-    setSelectedAnswers(Array(selectedQuestions.length).fill(null));
-    setSelectedAnswer(null);
-  };
+  const timeout2 = setTimeout(() => {
+      setLoadingMessage("Taking longer than expected...make sure your network is stable");
+  }, 30000); // Message after 30 seconds
+
+  const timeout3 = setTimeout(() => {
+    setLoadingMessage("Almost done. Wrapping up...");
+}, 45000); // Message after 30 seconds
+
+  try {
+      const questions = await getQuizQuestions(currentVideo.id);
+
+      // Assuming questions.data is the expected format
+      const shuffledQuestions = questions.data?.sort(() => 0.5 - Math.random());
+      const selectedQuestions = shuffledQuestions?.slice(0, 10);
+      
+      setCurrentQuiz(selectedQuestions); // Update the current quiz with selected questions
+      setNext(0); // Reset question index
+      setScore(0); // Reset score
+      setAnsweredQuestions(Array(selectedQuestions.length).fill(false)); // Reset answered state
+      setSelectedAnswers(Array(selectedQuestions.length).fill(null)); // Reset selected answers
+      setSelectedAnswer(null); // Reset currently selected answer
+  } catch (error) {
+      console.error("Error fetching quiz questions:", error);
+      setLoadingMessage("Error loading quiz. Please try again."); // Set error message if fetching fails
+  } finally {
+      // Clear timeouts when loading is complete
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+      clearTimeout(timeout3);
+      setLoader(false); // Stop loading
+      setLoadingMessage(""); // Reset loading message
+  }
+};
+
+
+
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!answeredQuestions[next]) {
@@ -124,25 +155,55 @@ const renderer = ({ hours, minutes, seconds, completed }:any) => {
     }
   };
 
-  const getQuizQuestions = async (videoId:string) => {
-    const payload = {
-      videoId:videoId
-    }
-    const res = await POST(payload,`${rDocumentParaphraseUrl}/api/v1/topicQuiz/generate`);
-    debugger;
-   
-    if(res == null){
-      setError("Error generating quiz, please try again.")
+  const getQuizQuestions = async (videoId: string) => {
+    try {
+      const payload = { videoId };
+      const res = await POST(payload, `${rDocumentParaphraseUrl}/api/v1/topicQuiz/generate`);
+      if (!res?.data) throw new Error("Error generating quiz, please try again.");
       setLoader(false);
+      return res.data;
+    } catch (error: any) {
+      setError(error?.message);
+      setLoader(false);
+      return null;
     }
-    setLoader(false);
-    return res.data;
-    
-  }
+  };
 
   const handleRetake = () => {
     initializeQuiz();
   };
+
+
+  if (error) return (<div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh",
+      backgroundColor: "#ffffff",
+    }}
+  >
+    <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px" }}>
+      <h1>Oops! {error}.</h1>
+      <p>Please try again.</p>
+      <button
+      onClick={()=>{initializeQuiz()}}
+        style={{
+          backgroundColor: "#ffffff",
+          border: "1px solid #333",
+          color: "#333",
+          padding: "10px 20px",
+          fontSize: "16px",
+          borderRadius: "5px",
+          cursor: "pointer",
+          transition: "background-color 0.3s, color 0.3s",
+        }}
+        disabled={loading}
+      >
+        Retry
+      </button>
+    </div>
+  </div>)
 
 
   return (
@@ -150,38 +211,7 @@ const renderer = ({ hours, minutes, seconds, completed }:any) => {
       <div className="inner">
         <div className="content">
             <div className="quiz-form-wrapper">
-              {loading && <><p  style={{textAlign: "center"}}>Generating quiz. <br/> <small> Please do not leave this page.. </small></p><br/><br/><Loader/></>}
-              {error!==""&&   <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: "#ffffff",
-      }}
-    >
-      <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px" }}>
-        <h1>Oops! {error}.</h1>
-        <p>Please try again.</p>
-        <button
-        onClick={()=>{initializeQuiz()}}
-          style={{
-            backgroundColor: "#ffffff",
-            border: "1px solid #333",
-            color: "#333",
-            padding: "10px 20px",
-            fontSize: "16px",
-            borderRadius: "5px",
-            cursor: "pointer",
-            transition: "background-color 0.3s, color 0.3s",
-          }}
-          disabled={loading}
-        >
-          Retry
-        </button>
-      </div>
-    </div>}
-                {currentQuiz.map((item, index) => (
+                {currentQuiz.length > 0 ? currentQuiz.map((item, index) => (
                     <div
                         key={index}
                         id={`question-${index + 1}`}
@@ -204,10 +234,7 @@ const renderer = ({ hours, minutes, seconds, completed }:any) => {
                                 <span>
                                 <i style={{color:"orange"}} className="feather-clock" />
                                 <small><b>Time remaining: </b>{timeRemaining.toFixed(2)} minutes</small>
-                                {/* <Countdown
-    date={Date.now() + 5000}
-    renderer={renderer}
-  />, */}
+                               
                                 </span>
                             </div>
                         </div>
@@ -250,7 +277,7 @@ const renderer = ({ hours, minutes, seconds, completed }:any) => {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    )):<QuizLoading loadingMessage={loadingMessage}/>}
                 <div className={styles.buttonWrapper}>
                   <button
                     className="rbt-btn icon-hover icon-hover-left btn-md bg-primary-opacity"

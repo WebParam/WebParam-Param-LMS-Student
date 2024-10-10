@@ -1,150 +1,162 @@
-export default function CompletedAssignment() {
+"use client";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import {
+  downloadStudentAssignment,
+  getStudentMarkedAssignments,
+} from "@/app/api/assignments/assignments";
+import { IMarkedAssignment } from "@/interfaces/assignments/assignments";
+import Cookies from "universal-cookie";
+import NoAssignmentsCard from "./NoAssignmentsCard";
+
+export default function ActiveAssignment() {
+  const [assignments, setAssignments] = useState<IMarkedAssignment[]>([]);
+  const searchParams = useSearchParams();
+
+  const cookies = new Cookies();
+  const user = cookies.get("loggedInUser");
+
+  const fetchAssignments = async () => {
+    try {
+      const assignmentsData = await getStudentMarkedAssignments(user.data.id!);
+      setAssignments(assignmentsData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+
   return (
-    <table className="rbt-table table table-borderless" style={{minWidth:'10px'}}>
-      <thead>
-        <tr>
-          <th>Assignment Name</th>
-          <th>Total Marks</th>
-          <th># Submissions</th>
-          <th />
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>
-            <span className="h6 mb--5">
-              Write Link short essay on yourself using the 5
-            </span>
-            <p className="b3">
-              Module:{" "}
-              <a href="/instructor/instructor-assignments#">Fundamentals 101</a>
-            </p>
-          </th>
-          <td>
-            <p className="b3">80</p>
-          </td>
-          <td>
-            <p className="b3">2</p>
-          </td>
-          <td>
-            <div className="rbt-button-group justify-content-end">
-              {/* <a
-                  className="rbt-btn btn-xs bg-primary-opacity radius-round"
-                  title="Edit"
-                  href="#"
-                >
-                  <i className="feather-edit pl--0" /> Edit
-                </a>
+    <div>
+      {assignments.length > 0 ? (
+        assignments.map((assignment: IMarkedAssignment, index) => (
+          <AssignmentCard key={index} assignment={assignment} />
+        ))
+      ) : (
+        <NoAssignmentsCard />
+      )}
+    </div>
+  );
+}
+
+type assignment = {
+  assignment: IMarkedAssignment;
+};
+
+function AssignmentCard({ assignment }: assignment) {
+  const cookies = new Cookies();
+  const user = cookies.get("loggedInUser");
+  const [loading, setLoading] = useState(false);
+  const [isAssignmentDownloadedError, setIsAssignmentDownloadedError] = useState(false);
+
+  const handleDownloadAssignment = async () => {
+    setIsAssignmentDownloadedError(false);
+    setLoading(true);
+    try {
+      const response = await downloadStudentAssignment(
+        user.data.id,
+        assignment.studentAssignment.id
+      );
+      const blob = new Blob([response], { type: 'application/pdf' });
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', `${assignment.studentAssignment.title}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      if (link.parentNode) {
+          link.parentNode.removeChild(link);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsAssignmentDownloadedError(true);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+
+      {isAssignmentDownloadedError && (
+        <div className="alert alert-danger text-center">
+          Failed to download asssignment
+        </div>
+      )}
+    
+      <table
+        className="rbt-table table table-borderless"
+        style={{ minWidth: "10px" }}
+      >
+        <thead>
+          <tr>
+            <th>Assignment Name</th>
+            <th>Due Date</th>
+            <th>Submission Date</th>
+            <th>Mark</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>
+              <span className="h6 mb--5">
+                {assignment.studentAssignment.title}
+              </span>
+            </th>
+            <td>
+              <p className="b3">
+                {new Date(
+                  assignment.studentAssignment.dueDate
+                ).toLocaleDateString()}
+              </p>
+            </td>
+            <td>
+              <p className="b3">
+                {new Date(
+                  assignment.studentAssignment.submissionDate
+                ).toLocaleDateString()}
+              </p>
+            </td>
+            <td>
+              <p className="b3">{assignment.mark}</p>
+            </td>
+            <td>
+              <div className="rbt-button-group justify-content-end">
                 <a
-                  className="rbt-btn btn-xs bg-color-danger-opacity radius-round color-danger"
-                  title="Delete"
-                  href="/instructor/instructor-assignments#"
+                    style={{
+                      cursor : "pointer"
+                    }}
+                                        onClick={handleDownloadAssignment}
+
+                  className="rbt-btn btn-xs bg-primary-opacity radius-round"
+                  title="Download"
                 >
-                  <i className="feather-trash-2 pl--0" />
+                  {loading ? (
+                    <span
+                      style={{
+                        marginTop: "5px",
+                      }}
+                      className="text-primary spinner-border"
+                      role="status"
+                    />
+                  ) : (
+                    <>
+                      <i
+                        className="bi bi-download pl--0"
+                      />{" "}
+                      download
+                    </>
+                  )}
                 </a>
               </div>
             </td>
           </tr>
-          <tr>
-            <th>
-              <span className="h6 mb--5">Speaking Korean for Beginners</span>
-              <p className="b3">
-                Course:{" "}
-                <a href="/instructor/instructor-assignments#">Speaking 101</a>
-              </p>
-            </th>
-            <td>
-              <p className="b3">20</p>
-            </td>
-            <td>
-              <p className="b3">3</p>
-            </td>
-            <td>
-              <div className="rbt-button-group justify-content-end">
-                {/* <a
-                  className="rbt-btn btn-xs bg-primary-opacity radius-round"
-                  title="Edit"
-                  href="#"
-                >
-                  <i className="feather-edit pl--0" /> Edit
-                </a>
-                <a
-                  className="rbt-btn btn-xs bg-color-danger-opacity radius-round color-danger"
-                  title="Delete"
-                  href="/instructor/instructor-assignments#"
-                >
-                  <i className="feather-trash-2 pl--0" />
-                </a>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <span className="h6 mb--5">Song Writing Techniques 101</span>
-              <p className="b3">
-                Course:{" "}
-                <a href="/instructor/instructor-assignments#">Song Writing</a>
-              </p>
-            </th>
-            <td>
-              <p className="b3">60</p>
-            </td>
-            <td>
-              <p className="b3">10</p>
-            </td>
-            <td>
-              <div className="rbt-button-group justify-content-end">
-                {/* <a
-                  className="rbt-btn btn-xs bg-primary-opacity radius-round"
-                  title="Edit"
-                  href="#"
-                >
-                  <i className="feather-edit pl--0" /> Edit
-                </a>
-                <a
-                  className="rbt-btn btn-xs bg-color-danger-opacity radius-round color-danger"
-                  title="Delete"
-                  href="/instructor/instructor-assignments#"
-                >
-                  <i className="feather-trash-2 pl--0" />
-                </a>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <span className="h6 mb--5">Arabic For Beginners</span>
-              <p className="b3">
-                Course:{" "}
-                <a href="/instructor/instructor-assignments#">Arabic Writing</a>
-              </p>
-            </th>
-            <td>
-              <p className="b3">40</p>
-            </td>
-            <td>
-              <p className="b3">15</p>
-            </td>
-            <td>
-              <div className="rbt-button-group justify-content-end">
-                {/* <a
-                  className="rbt-btn btn-xs bg-primary-opacity radius-round"
-                  title="Edit"
-                  href="#"
-                >
-                  <i className="feather-edit pl--0" /> Edit
-                </a> */}
-              <a
-                className="rbt-btn btn-xs bg-primary-opacity radius-round"
-                title="Delete"
-                href="/instructor/instructor-assignments#"
-              >
-                <i className="bi bi-eye pl--0" /> View
-              </a>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </>
   );
 }

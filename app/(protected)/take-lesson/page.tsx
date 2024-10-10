@@ -36,7 +36,6 @@ function TakeLesson() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [videoEnded, setVideoEnded] = useState<boolean>(false);
   const [videosWatched, setVideosWatched] = useState<any[]>([]);
-  const [expandedTopicId, setExpandedTopicId] = useState<any>();
   const [currentQuiz, setCurrentQuiz] = useState<IQuizQuestion[]>([]);
   const cookies = new Cookies();
   const loggedInUser = cookies.get('loggedInUser');
@@ -91,8 +90,6 @@ function TakeLesson() {
     setCurrentQuiz(res?.data);
     
   }
-
-  
 
   async function fetchTopics(topicId: string) {
     try {

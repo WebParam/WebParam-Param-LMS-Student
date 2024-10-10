@@ -17,14 +17,10 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const EnrolledCourses = () => {
-  const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [unitStandards, setUnitStandards] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
   
   const cookies = new Cookies();
 const access = process.env.NEXT_PUBLIC_ACCESS??"ALL_ACCESS";
-  const user = cookies.get("loggedInUser");
 
   const router = useRouter();
   const searchParams = useSearchParams();

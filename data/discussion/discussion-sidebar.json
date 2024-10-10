@@ -16,7 +16,7 @@
       "icon": "feather-message-square"
     },
     {
-      "link": "/student/assignments",
+      "link": "/student/assignments?tab=all",
       "text": "Assignments",
       "icon": "feather-menu"
     },
