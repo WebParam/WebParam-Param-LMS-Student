@@ -1,7 +1,7 @@
 export interface UnitStandardData {
   id: string;
   title: string;
-  courseId: string;
+  moduleCode: string;
   description: string;
   status: number;
   lengthOfParagraph: string;

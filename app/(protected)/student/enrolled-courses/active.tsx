@@ -73,8 +73,6 @@ export default function Active() {
   }
 
 
-
-
     return (
         <div
               className="tab-pane fade active show"

@@ -6,6 +6,9 @@ import { CheckIn, CheckOut } from "@/actions/logbook-actions/logbook-action";
 import LogbookList from "@/ui/logbook/logbook-display/logbook-display";
 import { useUser } from "@/context/user-context/user-context";
 import { getLogbooks } from "@/actions/logbook-actions/logbook-action";
+import { FiClock } from 'react-icons/fi';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 interface LogbookEntry {
   date: string;
@@ -44,6 +47,7 @@ const StudentLogbook = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingLogbooks, setLoadingLogbooks] = useState<boolean>(false);
   const { user } = useUser();
+  const [selectedRating, setSelectedRating] = useState<string | null>(null);
 
   const userId: string | undefined = user?.data.id;
 
@@ -80,6 +84,13 @@ const StudentLogbook = () => {
       getAllLogbooks(userId);
     }
   }, [userId]);
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -226,6 +237,11 @@ const StudentLogbook = () => {
     }
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  };
+
   const renderForm = (
     entry: LogbookEntry | null,
     setEntry: React.Dispatch<React.SetStateAction<LogbookEntry | null>>,
@@ -237,25 +253,45 @@ const StudentLogbook = () => {
 
     const isDisabled = entry.status !== "Checked In";
 
+    const handleRatingClick = (rating: string) => {
+      if (selectedRating === null) {
+        setSelectedRating(rating);
+        setRating(rating);
+        AOS.refresh(); // Refresh AOS to trigger animation
+      }
+    };
+
     return (
       <div
-      className={` logbook-entry p-4 mb-4 rounded border ${
-        entry.status === "Checked Out" ? "bg-light" : "border-success"
-      }`}
+        className={`logbook-entry p-4 mb-4 rounded border ${
+          entry.status === "Checked Out" ? "bg-light" : "border-success"
+        }`}
       >
         <div className="d-flex justify-content-between align-items-center">
-          <h5>
-            {entry.date} {entry.title}
-          </h5>
+          <h6 className="mb-0" style={{ fontSize: '1.5rem' }}>
+            {formatDate(entry.date)} {entry.title}
+          </h6>
           {entry.timeRemaining && (
             <span className="text-muted">{entry.timeRemaining}</span>
           )}
-          <span className="text-muted">{entry.createdTime}</span>
+          <span style={{ fontSize: '1.5rem', color: 'black' }}>
+            <FiClock className="me-1" style={{ color: 'black' }} />
+            {entry.createdTime}
+          </span>
         </div>
         <div className="mt-3">
           <textarea
             className="form-control"
-            rows={2}
+            style={{
+              height: '110px',
+              width: '90%',
+              marginLeft: '0',
+              borderRadius: '10px',
+              resize: 'none',
+              paddingTop: '10px',
+              fontSize: '1.3rem',
+              border: '1px solid lightgray',
+            }}
             placeholder="What did you learn from today's lessons?"
             value={entry.description}
             onChange={(e) => {
@@ -266,65 +302,93 @@ const StudentLogbook = () => {
           />
         </div>
         <div className="d-flex justify-content-between align-items-center mt-3">
-          <div>
-            <button
-              className="btn btn-outline-success me-2"
-              disabled={isDisabled || rating !== ""}
-              onClick={() => setRating("good")}
-            >
-              <i className="bi bi-emoji-smile"></i> Good
-            </button>
-            <button
-              className="btn btn-outline-secondary me-2"
-              disabled={isDisabled || rating !== ""}
-              onClick={() => setRating("okay")}
-            >
-              <i className="bi bi-emoji-neutral"></i> Okay
-            </button>
-            <button
-              className="btn btn-outline-danger"
-              disabled={isDisabled || rating !== ""}
-              onClick={() => setRating("bad")}
-            >
-              <i className="bi bi-emoji-frown"></i> Bad
-            </button>
+          <div className="d-flex justify-content-center" style={{ flex: 1 }}>
+            {(!selectedRating || selectedRating === "good") && (
+              <button
+                className="btn me-2"
+                style={{
+                  borderColor: selectedRating === "good" ? 'green' : 'rgb(36, 52, 92)',
+                }}
+                disabled={isDisabled}
+                onClick={() => handleRatingClick("good")}
+                data-aos={selectedRating === "good" ? "fade-down" : ""}
+              >
+                <i className="bi bi-emoji-smile" style={{ color: 'green' }}></i> Good
+              </button>
+            )}
+            {(!selectedRating || selectedRating === "okay") && (
+              <button
+                className="btn me-2"
+                style={{
+                  borderColor: 'rgb(36, 52, 92)',
+                }}
+                disabled={isDisabled}
+                onClick={() => handleRatingClick("okay")}
+                data-aos={selectedRating === "okay" ? "fade-down" : ""}
+              >
+                <i className="bi bi-emoji-neutral" style={{ color: 'orange' }}></i> Okay
+              </button>
+            )}
+            {(!selectedRating || selectedRating === "bad") && (
+              <button
+                className="btn"
+                style={{
+                  borderColor: 'rgb(36, 52, 92)',
+                }}
+                disabled={isDisabled}
+                onClick={() => handleRatingClick("bad")}
+                data-aos={selectedRating === "bad" ? "fade-down" : ""}
+              >
+                <i className="bi bi-emoji-frown" style={{ color: 'red' }}></i> Bad
+              </button>
+            )}
           </div>
-          {entry.status === "Checked Out" ? (
-            <button className="btn btn-secondary" disabled>
-              {entry.status}
-            </button>
-          ) : entry.status === "Checked In" ? (
-            <button
-              className="btn btn-success"
-              onClick={() => handleCheckout(entry, setEntry, setTimer)}
-              disabled={loading}
-            >
-              {loading ? (
-                <div className={styles.loaderButton}></div>
-              ) : (
-                "Checkout"
-              )}
-            </button>
-          ) : (
-            <button
-              className="btn btn-primary"
-              onClick={() => handleCheckin(entry, setEntry, setTimer)}
-              disabled={loading}
-            >
-              {loading ? (
-                <div className={styles.loaderButton}></div>
-              ) : (
-                "Checkin"
-              )}
-            </button>
-          )}
+          <div>
+            {entry.status === "Checked Out" ? (
+              <button className="btn btn-secondary" disabled>
+                {entry.status}
+              </button>
+            ) : entry.status === "Checked In" ? (
+              <button
+                className="btn btn-success"
+                onClick={() => handleCheckout(entry, setEntry, setTimer)}
+                disabled={loading}
+              >
+                {loading ? (
+                  <div className={styles.loaderButton}></div>
+                ) : (
+                  "Checkout"
+                )}
+              </button>
+            ) : (
+              <button
+                className={`rbt-btn btn-gradient`}
+                style={{ 
+                  backgroundColor: `${showLogbookList ? 'white':'rgb(36, 52, 92)'}`, 
+                  backgroundImage: 'none', 
+                  color: `${showLogbookList ? 'black':'white'}`,
+                  border: `${showLogbookList && '1px solid #25355c'}`,
+                  padding: '0.3rem 1.2rem',  // Increased width
+                  height: '38px',  // Slightly decreased height
+                }}
+                onClick={() => handleCheckin(entry, setEntry, setTimer)}
+                disabled={loading}
+              >
+                {loading ? (
+                  <div className={styles.loaderButton}></div>
+                ) : (
+                  <h6 style={{ color: 'white', fontSize: '0.8rem', textAlign: 'center', margin: '0' }}>Check-In</h6>
+                )}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );
   };
 
   return (
-    <div className={`${styles.logbookContainer}`}>
+    <div className={`${styles.logbookContainer}`} style={{ margin: '0', padding: '20px' }}>
       <div className={styles.buttonContainer}>
         <button
           className="rbt-btn btn-gradient"

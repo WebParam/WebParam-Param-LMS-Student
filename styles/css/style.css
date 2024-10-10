@@ -14520,7 +14520,7 @@ fieldset:disabled {
 
 .rbt-btn {
   padding: 0 26px;
-  background: var(--color-primary);
+  background:  rgb(36, 52, 92);
   height: 60px;
   line-height: 60px;
   color: var(--color-white);
@@ -15077,6 +15077,16 @@ fieldset:disabled {
   }
 }
 
+.rbt-btn.btn-navy {
+  background: rgb(36, 52, 92);
+  color: var(--color-white);
+}
+
+.rbt-btn.btn-navy:hover {
+  background-color: rgb(46, 62, 102);
+  color: var(--color-white);
+}
+
 .rbt-btn i {
   padding-left: 6px;
   display: inline-block;
@@ -15091,7 +15101,7 @@ fieldset:disabled {
 }
 
 .rbt-btn.btn-border-gradient {
-  background: linear-gradient(90deg, #CFA2E8, #637FEA);
+  background:  rgb(36, 52, 92);
   border: none;
   outline: none;
   cursor: pointer;

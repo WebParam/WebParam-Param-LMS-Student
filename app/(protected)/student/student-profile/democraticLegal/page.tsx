@@ -7,10 +7,15 @@ import { statsSAAreaCodeOptions } from "./data";
 import { useRouter } from "next/navigation";
 import { readUserData } from "@/app/lib/endpoints";
 import { GET } from "@/app/lib/api-client";
+import { useProgressContext } from "@/context/progress-card-context/progress-context";
+import { codes } from "../codes";
 
-export default function DemocraticLegal({ student }: any) {
+export default function DemocraticLegal({ student, codes }: any) {
+  console.log("codes in democratic legal:", codes)
   const cookies = new Cookies();
   const user = cookies.get("loggedInUser");
+
+  const {setDemographicLegalPercentage} = useProgressContext(); // Use context values
 
   const [equityCode, setEquityCode] = useState('');
   const [nationalityCode, setNationalityCode] = useState('');
@@ -25,19 +30,24 @@ export default function DemocraticLegal({ student }: any) {
   const [provinceCode, setProvinceCode] = useState('');
   const [statsSAAreaCode, setStatsSAAreaCode] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [codes, setCodes] = useState<any>();
+
+  // codes
+  const [equityCodes, setEquityCodes] = useState<any>();
+  const [nationalityCodes, setNationalityCodes] = useState<any>();
+  const [homeLanguageCodes, setHomeLanguageCodes] = useState<any>();
+  const [immigrantStatusCodes, setImmigrantStatusCodes] = useState<any>();
+  const [popiActAgreeCodes, setPopiActAgreeCodes] = useState<any>();
+  const [popiActDateCodes, setPopiActDateCodes] = useState<any>();
+  const [citizenStatusCodeCodes, setCitizenStatusCodeCodes] = useState<any>();
+  const [socioeconomicCodes, setSocioeconomicCodes] = useState<any>();
+  const [disabilityCodes, setDisabilityCodes] = useState<any>();
+  const [disabilityRatingCodes, setDisabilityRatingCodes] = useState<any>();
+  const [provinceCodes, setProvinceCodes] = useState<any>();
+  const [statsSAAreaCodes, setStatsSAAreaCodes] = useState<any>();
   const router = useRouter();
 
-  async function getInputCodes() {
-    // const res = await axios.get(`${readUserData}/api/v1/Student/GetCodes`);
-    const res = await GET(`${readUserData}/api/v1/Student/GetCodes`);
-
-    console.log("codes:", res?.data.data);
-    setCodes(res?.data.data);
-  }
 
   function setStudentContactInformation(student: any) {
-    console.log("stu:", student?.data);
     setEquityCode(student?.data?.equityCode);
     setNationalityCode(student?.data?.nationalityCode);
     setHomeLanguageCode(student?.data?.homeLanguageCode);
@@ -49,17 +59,32 @@ export default function DemocraticLegal({ student }: any) {
     setDisabilityCode(student?.data?.disabilityCode);
     setDisabilityRating(student?.data?.disabilityRating);
     setProvinceCode(student?.data?.provinceCode);
-    setStatsSAAreaCode(student?.data?.statsCodeSAAreaCode)
+    setStatsSAAreaCode(student?.data?.statssAreaCode)
   }
 
   useEffect(() => {
     setStudentContactInformation(student);
+    calculateDemographicLegalPercentage();
   }, [student]);
 
-  useEffect(() => {
-    getInputCodes();
-  }, []);
-
+    useEffect(() => {
+      console.log("codes:", codes)
+      setEquityCodes(codes.filter((code:any)=>code.Type===1)[0]?.Codes)
+      setNationalityCodes(codes.filter((code:any)=>code.Type===2)[0]?.Codes)
+      setHomeLanguageCodes(codes.filter((code:any)=>code.Type===3)[0]?.Codes)
+      setImmigrantStatusCodes(codes.filter((code:any)=>code.Type===9)[0]?.Codes)
+      setPopiActAgreeCodes(codes.filter((code:any)=>code.Type===12)[0]?.Codes)
+      setPopiActDateCodes(codes.filter((code:any)=>code.Type===13)[0]?.Codes)
+      setCitizenStatusCodeCodes(codes.filter((code:any)=>code.Type===5)[0]?.Codes)
+      setSocioeconomicCodes(codes.filter((code:any)=>code.Type===6)[0]?.Codes)
+      setDisabilityCodes(codes.filter((code:any)=>code.Type===7)[0]?.Codes)
+      setDisabilityRatingCodes(codes.filter((code:any)=>code.Type===8)[0]?.Codes)
+      setProvinceCodes(codes.filter((code:any)=>code.Type===11)[0]?.Codes)
+      setStatsSAAreaCodes(codes.filter((code:any)=>code.Type===14)[0]?.Codes)
+      calculateDemographicLegalPercentage();
+    }, []);
+    
+    console.log("equityCodes:", equityCodes)
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
     
@@ -87,6 +112,7 @@ export default function DemocraticLegal({ student }: any) {
       if (res) {
         console.log('response', res);
         setIsSubmitting(false);
+        calculateDemographicLegalPercentage();
         router.push('/student/student-profile?tab=ContactInformation')
       }
   }
@@ -102,6 +128,35 @@ export default function DemocraticLegal({ student }: any) {
     'Mpumalanga': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('MP')),
     'Limpopo': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('LIM')),
   };
+
+  const calculateDemographicLegalPercentage = () => {
+    const fields = [
+      equityCode,
+      nationalityCode,
+      homeLanguageCode,
+      immigrantStatus,
+      popiActAgree,
+      popiActDate,
+      citizenStatusCode,
+      socioeconomicCode,
+      disabilityCode,
+      disabilityRating,
+      provinceCode,
+      statsSAAreaCode
+    ];
+
+    const totalFields = fields.length;
+    
+    // Filter the fields that are empty (empty strings, null, or undefined)
+    const emptyFields = fields.filter(field => field).length;
+    
+    // Calculate percentage of empty fields
+    const percentage = (emptyFields / totalFields) * 100;
+    if (typeof window !== "undefined") {
+      localStorage.setItem('demographicLegalPercentage', percentage.toString());
+      setDemographicLegalPercentage(percentage);
+    }
+};
 
 
   return (
@@ -128,8 +183,8 @@ export default function DemocraticLegal({ student }: any) {
       onChange={(e) => setEquityCode(e.target.value)}>
         <option value="">Select</option>
         {
-         codes && codes[1]?.codes?.map((item:any, index:number) => (
-            <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
+         equityCodes && equityCodes.map((item:any, index:number) => (
+            <option key={index} value={`${item.Code}`} className="text-dark">{item.Description}</option>
           ))
         }
       </select>
@@ -149,8 +204,8 @@ export default function DemocraticLegal({ student }: any) {
       >
         <option value="">Select</option>
         {
-         codes && codes[2]?.codes?.map((item:any, index:number) => (
-            <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
+         nationalityCodes && nationalityCodes.map((item:any, index:number) => (
+            <option key={index} value={`${item.Code}`} className="text-dark">{item.Description}</option>
           ))
         }
       </select>
@@ -168,8 +223,8 @@ export default function DemocraticLegal({ student }: any) {
       >
         <option value="">Select</option>
         {
-         codes && codes[3]?.codes?.map((item:any, index:number) => (
-            <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
+         homeLanguageCodes && homeLanguageCodes.map((item:any, index:number) => (
+            <option key={index} value={`${item.Code}`} className="text-dark">{item.Description}</option>
           ))
         }
       </select>
@@ -187,8 +242,8 @@ export default function DemocraticLegal({ student }: any) {
       >
         <option value="">Select</option>
         {
-         codes && codes[5]?.codes?.map((item:any, index:number) => (
-            <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
+         citizenStatusCodeCodes && citizenStatusCodeCodes.map((item:any, index:number) => (
+            <option key={index} value={`${item.Code}`} className="text-dark">{item.Description}</option>
           ))
         }
       </select>
@@ -206,8 +261,8 @@ export default function DemocraticLegal({ student }: any) {
       >
         <option value="">Select</option>
         {
-         codes && codes[6]?.codes?.map((item:any, index:number) => (
-            <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
+         socioeconomicCodes && socioeconomicCodes.map((item:any, index:number) => (
+            <option key={index} value={`${item.Code}`} className="text-dark">{item.Description}</option>
           ))
         }
       </select>
@@ -225,8 +280,8 @@ export default function DemocraticLegal({ student }: any) {
       >
         <option value="">Select</option>
         {
-         codes && codes[7]?.codes?.map((item:any, index:number) => (
-            <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
+         disabilityCodes && disabilityCodes.map((item:any, index:number) => (
+            <option key={index} value={`${item.Code}`} className="text-dark">{item.Description}</option>
           ))
         }
       </select>
@@ -246,8 +301,8 @@ export default function DemocraticLegal({ student }: any) {
       >
         <option value="">Select</option>
         {
-         codes && codes[8]?.codes?.map((item:any, index:number) => (
-            <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
+         disabilityRatingCodes && disabilityRatingCodes.map((item:any, index:number) => (
+            <option key={index} value={`${item.Code}`} className="text-dark">{item.Description}</option>
           ))
         }
       </select>
@@ -266,43 +321,14 @@ export default function DemocraticLegal({ student }: any) {
       >
         <option value="">Select</option>
         {
-         codes && codes[9]?.codes?.map((item:any, index:number) => (
-            <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
+         immigrantStatusCodes && immigrantStatusCodes.map((item:any, index:number) => (
+            <option key={index} value={`${item.Code}`} className="text-dark">{item.Description}</option>
           ))
         }
       </select>
     </div>
   </div>
-  {/* <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{marginBottom:'15px'}}>
-    <div className="rbt-form-group">
-      <label htmlFor="popiActAgree">POPI Act Agreement</label>
-        <select
-        name="popiActAgree"
-        value={popiActAgree}
-        id="popiActAgree"
-        onChange={(e) => setPopiActAgree(e.target.value)}
-      >
-        <option value="">Select</option>
-        {
-         codes && codes[12]?.codes?.map((item:any, index:number) => (
-            <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
-          ))
-        }
-      </select>
-    </div>
-  </div> */}
-  {/* <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{marginBottom:'15px'}}>
-    <div className="rbt-form-group">
-      <label htmlFor="popiActDate">POPI Act Date</label>
-      <input
-        type="date"
-        name="popiActDate"
-        value={popiActDate}
-        id="popiActDate"
-        onChange={(e) => setPopiActDate(e.target.value)}
-      />
-    </div>
-  </div> */}
+
   <div className="col-lg-6 col-md-6 col-sm-6 col-12">
     <div className="rbt-form-group">
       <label htmlFor="provinceCode">Province Code</label>
@@ -315,8 +341,8 @@ export default function DemocraticLegal({ student }: any) {
         >
         <option value="">Select</option>
         {
-         codes && codes[11]?.codes?.map((item:any, index:number) => (
-            <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
+         provinceCodes && provinceCodes.map((item:any, index:number) => (
+            <option key={index} value={`${item.Code}`} className="text-dark">{item.Description}</option>
           ))
         }
       </select>
@@ -335,11 +361,13 @@ export default function DemocraticLegal({ student }: any) {
           <option value="">Select STATSSA Area Code</option>
           {Object.keys(groupedOptions).map((province) => (
             <optgroup key={province} label={province}>
-              {groupedOptions[province].map((option:any) => (
+              {groupedOptions[province].map((option:any) => { 
+                console.log("option:", {option:option.value, statsSAAreaCode:statsSAAreaCode})
+                return (
                 <option key={option.value} value={option.value}>
                   {option.name}
                 </option>
-              ))}
+              )})}
             </optgroup>
           ))}
         </select>
@@ -361,7 +389,7 @@ export default function DemocraticLegal({ student }: any) {
         disabled={isSubmitting}
     >
         <span className="icon-reverse-wrapper">
-            <span className="btn-text text-light">Proceed</span>
+            <span className="btn-text text-light">Save & Proceed</span>
             <span className="btn-icon text-light">
                 <i className="feather-arrow-right" />
             </span>
