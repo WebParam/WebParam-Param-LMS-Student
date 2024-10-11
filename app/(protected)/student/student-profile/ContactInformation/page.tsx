@@ -4,11 +4,14 @@ import { FormEvent, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { relationshipOptions } from "./data";
 import { useRouter } from "next/navigation";
+import { useProgressContext } from "@/context/progress-card-context/progress-context";
+
 
 export default function ContactInformation({student}:any) {
   const cookies = new Cookies();
   const user = cookies.get("loggedInUser");
   const router = useRouter();
+  const {setContactInformationPercentage} = useProgressContext();
 
   const [homeAddress1, setHomeAddress1] = useState('');
   const [postalAddress1, setPostalAddress1] = useState('');
@@ -46,6 +49,7 @@ export default function ContactInformation({student}:any) {
 
     useEffect(() => {
         setStudentContactInformation(student);
+        calculateEmptyFieldsPercentage();
     }, [student]);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -76,9 +80,41 @@ export default function ContactInformation({student}:any) {
         if (res) {
           console.log('response', res);
           setIsSubmitting(false);
+          calculateEmptyFieldsPercentage();
           router.push('/student/student-profile?tab=EmploymentInformation')
         }
     }
+
+    const calculateEmptyFieldsPercentage = () => {
+      const fields = [
+        homeAddress1,
+        postalAddress1,
+        postalAddress2,
+        postalAddress3,
+        learnerHomeAddressPostalCode,
+        learnerHomeAddressPhysicalCode,
+        learnerPhoneNumber,
+        learnerCellPhoneNumber,
+        learnerFaxNumber,
+        learnerEmailAddress,
+        nextOfKinName,
+        nextOfKinSurname,
+        nextOfKinRelationship,
+        nextOfKinContactNumber,
+      ];
+  
+      const totalFields = fields.length;
+      
+      // Filter the fields that are empty (empty strings, null, or undefined)
+      const emptyFields = fields.filter(field => field).length;
+      
+      // Calculate percentage of empty fields
+      const percentage = (emptyFields / totalFields) * 100;
+      if (typeof window !== "undefined") {
+        localStorage.setItem('contactInformationPercentage', percentage.toString());
+        setContactInformationPercentage(percentage);
+      }
+  };
 
 
   return (
@@ -304,7 +340,7 @@ export default function ContactInformation({student}:any) {
           disabled={isSubmitting}
       >
           <span className="icon-reverse-wrapper">
-              <span className="btn-text text-light">Proceed</span>
+              <span className="btn-text text-light">Save & Proceed</span>
               <span className="btn-icon text-light">
                   <i className="feather-arrow-right" />
               </span>

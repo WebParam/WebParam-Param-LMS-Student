@@ -16,7 +16,7 @@ const EnrolledCourses = () => {
         <div className="section-title">
           <h4 className="get-4-color rbt-title-style-3">
             <i className="bi bi-laptop "></i>
-            <span className="style-3-left">My Projects</span>
+            <span className="style-3-left">My Applications</span>
           </h4>
         </div>
 

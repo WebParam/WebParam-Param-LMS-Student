@@ -21,6 +21,9 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/thumbnail/lib/styles/index.css';
 import '@react-pdf-viewer/zoom/lib/styles/index.css';
 import {isMobile} from 'react-device-detect';
+import { GET, GET_DOCUMENT, POST, POST_MULTIPART, PUT, PUT_MULTIPART } from '@/app/lib/api-client';
+import { useProgressContext } from "@/context/progress-card-context/progress-context";
+
 
 const pdfVersion = "3.11.174";
 const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
@@ -32,10 +35,11 @@ const FileUpload: React.FC = () => {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const thumbnailPluginInstance = thumbnailPlugin();
   const zoomPluginInstance = zoomPlugin();
+  const { setDocumentsPercentage } = useProgressContext();
 
   const { ZoomInButton, ZoomOutButton, ZoomPopover } = zoomPluginInstance;
   const cookies = new Cookies();
-
+  const [documentUrl, setDocumentUrl] = useState<any>()
   const [isUploading, setIsUploading] = useState(false);
   const [upLoadingLoader, setUpLoadingLoader] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
@@ -45,7 +49,8 @@ const FileUpload: React.FC = () => {
   const [documentToView, setDocumentToView] = useState('');
   const [isChangingDoc, setIsChangingDoc] = useState(false);
   const [loaded, setLoader] = useState(true);
-  const [docToChange, setDocToChange] = useState<any>()
+  const [docsProgress, setDocsProgress] = useState([]);
+  const [totalDocs, setTotalDocs] = useState(0);
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -59,6 +64,20 @@ const FileUpload: React.FC = () => {
   const courseId = cookies.get("courseId");
 
   let documentinfo = documents.find((doc) => doc.name === selectedDocument);
+
+  useEffect(() => {
+    // check if the view is set to view and if the documentUrl is not set
+    if (action === 'view' && !documentUrl) {
+      router.push(`/student/student-profile?tab=documents`)
+    }
+  },[documents])
+
+   // Use effect to fetch document after documentToView is updated
+    useEffect(() => {
+      if (documentToView) {
+          fetchDocument();
+      }
+    }, [documentToView]);
 
   useEffect(() => {
   if (courseId =='66aa8cab45223bcb337a9643') {
@@ -78,21 +97,31 @@ const FileUpload: React.FC = () => {
   }
   },[])
 
+  const calculateDocumentsPercentage = () => {
+    // Filter documents that have a `blobUrl` value
+    if (documents.length > 0) {
+      const documentsWithBlob = documents.filter((document) => document.blobUrl);
+      console.log('documentsWithBlob',documentsWithBlob, documents);
+  
+    // Calculate percentage
+    const totalDocuments = documents.length;
+    const uploadedDocuments = documentsWithBlob.length;
+    const percentage = (uploadedDocuments / totalDocuments) * 100;
+  
+    // Store the count of uploaded documents and the percentage in localStorage
+    if (typeof window !== "undefined") {
+      localStorage.setItem('uploadedDocumentsCount', uploadedDocuments.toString());
+      localStorage.setItem('documentsPercentage', percentage.toString());
+  
+      // Optionally update any other state/context with the percentage
+      setDocumentsPercentage(percentage);
+    }
+  }
+  }
+
 
   const user = cookies.get('loggedInUser');
 
-  async function getDocumentsByCourse(courseId: string) {
-    try {
-      const response = await getDocumentsByCourseId(courseId);
-      if (response?.data?.data) {
-        console.log('Documents by course:', response.data.data);
-        return response.data.data; // Return documents data if needed elsewhere
-      }
-    } catch (error) {
-      console.error('Error fetching documents by course:', error);
-    }
-    return [];
-  }
 
   async function getDocuments() {
     setLoader(true);
@@ -102,6 +131,7 @@ const FileUpload: React.FC = () => {
 
         if (docs) {
           setDocuments(docs?.data.data);
+          calculateDocumentsPercentage();
         }
       }
     } catch (error) {
@@ -114,6 +144,8 @@ const FileUpload: React.FC = () => {
   function viewDocument(docId: string) {
     console.log(docId);
     setDocumentToView(docId);
+    console.log('documentToView',documentToView);
+    fetchDocument();
   }
 
   const [dragging, setDragging] = useState<Record<DocumentType, boolean>>(
@@ -175,29 +207,24 @@ const FileUpload: React.FC = () => {
       formData.append('File', selectedFile.file);
 
       try {
-        const response = await axios.post(`${writeUserData}/api/v1/Profile/SubmitDocument`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        const response = await POST_MULTIPART(`${writeUserData}/api/v1/Profile/SubmitDocument`, formData);
+        
         if (response.status === 200) {
           setIsUploaded(true);
-          router.push(`/student/student-profile?tab=documents&document=${selectedDocument}&action=view`);
-          // window.location.reload();
-          window.location.href = `/student/student-profile?tab=documents&document=${selectedDocument}&action=view`;
-        } else {
-          alert('File upload failed');
-        }
+          router.push(`/student/student-profile?tab=documents`);
+          viewDocument(response.data.data.id)
+          calculateDocumentsPercentage()
+        
+        } 
       } catch (error) {
         console.error('Error uploading file:', error);
-        alert('File upload failed');
       } finally {
         setUpLoadingLoader(false);
         setIsUploading(false);
         setSelectedFile(null);
         setIsUploaded(false);
-        debugger
-        
+        router.push(`/student/student-profile?tab=documents`);
+        window.location.reload();
       }
     }
   };
@@ -211,46 +238,53 @@ const FileUpload: React.FC = () => {
       formData.append('DocumentId', documentinfo?.id);
 
       try {
-        const response = await axios.put(`${writeUserData}/api/v1/Documents/UpdateStudentDocument`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        const response = await PUT_MULTIPART(formData, `${writeUserData}/api/v1/Documents/UpdateStudentDocument`);
 
         if (response.status === 200) {
           router.push(`/student/student-profile?tab=documents&document=${selectedDocument}&action=view`);
 
         } else {
-          alert('File upload failed');
+          // alert('File upload failed');
         }
       } catch (error) {
         console.error('Error uploading file:', error);
-        alert('File upload failed');
+        // alert('File upload failed');
       } finally {
         setUpLoadingLoader(false);
         setIsChangingDoc(false);
         setSelectedFile(null);
         setIsUploaded(false);
         router.push(`/student/student-profile?tab=documents&document=${selectedDocument}&action=view`);
-        window.location.reload();
+        viewDocument(documentinfo?.id)
       }
     }
   };
 
   useEffect(() => {
     getDocuments();
+    calculateDocumentsPercentage();
     console.log('documents:', documents);
+    router.push(`/student/student-profile?tab=documents`);
   }, []);
 
   if (loaded) {
     return <Loading />; // Show loading while documents are being fetched
   }
 
-  
-  
-  console.log('document ',documentinfo);
 
-  console.log('isMobile', isMobile);
+  async function fetchDocument() {
+    try {
+      const response = await GET_DOCUMENT(`${readUserData}/api/v1/Documents/PreviewDocument/${documentToView}`);
+  
+      if (response) {
+        const blob = response.data; // Get the blob data from the response
+        const fileUrl = URL.createObjectURL(blob); // Create a URL for the blob
+        setDocumentUrl(fileUrl); // Set the blob URL to the documentUrl state
+      }
+    } catch (error) {
+      console.error('Failed to fetch document:', error);
+    }
+  }
 
 
   return (
@@ -269,7 +303,7 @@ const FileUpload: React.FC = () => {
             }>
             {documentinfo?.status ? documentinfo.status : 'Status'}
           </button>
-          <button 
+           <button 
           type="button" 
           className="btn btn-dark btn-reupload" 
           onClick={() => (router.push(`/student/student-profile?tab=documents&document=${selectedDocument}&action=upload`), setIsChangingDoc(!isChangingDoc))}
@@ -288,10 +322,13 @@ const FileUpload: React.FC = () => {
             yesProgramme.filter(doc => (process.env.NEXT_PUBLIC_FREEMIUM ? freemiumDocuments.includes(doc.documentName):true)).map((doc, index) => {
             const docType = doc.documentName as DocumentType;
             const matchingDoc = documents.find((doc) => doc?.name === docType);
+            // alert(setTotalDocs(state => state++));
 
               console.log('document',matchingDoc);
               return (
-                <li className={`nav-item ${selectedDocument === doc?.documentName ? 'active' : ''}`} role="presentation" key={index} onClick={() => (router.push(`/student/student-profile?tab=documents&document=${doc.documentName}&action=view`), viewDocument(matchingDoc.id))}>  
+                <li className={`nav-item ${selectedDocument === doc?.documentName ? 'active' : ''}`}
+                 role="presentation" key={index}
+                  onClick={() => (router.push(`/student/student-profile?tab=documents&document=${doc.documentName}&action=view`), viewDocument(matchingDoc.id))}>  
                   <div className="icon">
                   <i className="bi bi-file-pdf"></i>
                   </div>
@@ -305,6 +342,8 @@ const FileUpload: React.FC = () => {
           documentsRequired.filter(doc => (process.env.NEXT_PUBLIC_FREEMIUM ? freemiumDocuments.includes(doc.documentName):true)).map((doc, index) => {
             const docType = doc.documentName as DocumentType;
             const matchingDoc = documents.find((doc) => doc.name === docType);
+            // alert(setTotalDocs(state => state++));
+
             return (
               <li className={`nav-item ${selectedDocument === doc?.documentName ? 'active' : ''}`} role="presentation" key={index} onClick={() => (router.push(`/student/student-profile?tab=documents&document=${doc?.documentName}&action=view`), viewDocument(matchingDoc?.id))}>
                   <div className="d-flex align-items-center">
@@ -338,11 +377,13 @@ const FileUpload: React.FC = () => {
             <ZoomPopover />
             <ZoomInButton />
           </div>
+        {documentUrl &&
           <Viewer
-            fileUrl={`${readUserData}/api/v1/Documents/PreviewDocument/${documentToView}`}
+            fileUrl= {`${documentUrl}`}
             plugins={[thumbnailPluginInstance, zoomPluginInstance]}
             defaultScale={isMobile ? .3 : .9}  
             />
+          }
         </Worker>
         :
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%'}}>
@@ -382,13 +423,13 @@ const FileUpload: React.FC = () => {
                 id="file-input" 
                 name='file-input' 
                 onChange={(e) => handleFileChange(e, documentinfo  as DocumentType)} 
-                accept=".pdf,.doc,.docx"
+                accept=".pdf"
                 style={{display: 'none'}}
                 />
               <label className="btn btn-dark" htmlFor="file-input" >Choose File</label>
             </div>
             <div>
-              <p>Supported Formats: PDF, DOC, DOCX</p>
+              <p>Supported Formats: PDF</p>
               <p>Max file size: 4MB</p>
             </div>
 
@@ -426,13 +467,13 @@ const FileUpload: React.FC = () => {
                 id="file-input" 
                 name='file-input' 
                 onChange={(e) => handleFileChange(e, selectedDocument as DocumentType)} 
-                accept=".pdf,.doc,.docx"
+                accept=".pdf"
                 style={{display: 'none'}}
                 />
               <label className="btn" htmlFor="file-input" style={{backgroundColor: 'rgb(36, 52, 92)'}}>Choose File</label>
             </div>
             <div>
-              <p>Supported Formats: PDF, DOC, DOCX</p>
+              <p>Supported Formats: PDF</p>
               <p>Max file size: 4MB</p>
             </div>
 
@@ -467,6 +508,7 @@ const FileUpload: React.FC = () => {
   </>
   )
 };
+
 
 export default FileUpload;
 

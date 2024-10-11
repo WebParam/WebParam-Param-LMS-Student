@@ -1,14 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import Calendar from "@/ui/classes/calendar";
 import "./classes.scss"; 
 
 export default function ClassesPage() {
   const router = useRouter();
-
-  
 
   return (
     <div className="rbt-dashboard-content bg-color-white rbt-shadow-box">

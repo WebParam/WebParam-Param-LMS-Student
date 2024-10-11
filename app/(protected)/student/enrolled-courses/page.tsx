@@ -4,12 +4,9 @@ import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import Loader from "@/ui/loader/loader";
 import styles from "@/styles/enrolled-courses/enrolled-courses.module.css";
-import { getAlltUnitStandards } from "@/actions/unit-standards/get-unit-standards";
-import { UnitStandardData } from "@/interfaces/enrolled-unit-standards/unit-standards/unit-standards";
-import UnitStandardWidget from "@/ui/student/enrolled/sample-unit";
+import './course.scss';
 // import { isMobile } from "react-device-detect";
-import { getCourseId, getEnrolledCourse } from "@/app/api/my-courses/course";
-import courseImage from './courseImage.jpeg';
+
 import Cookies from "universal-cookie";
 import { isMobile } from "react-device-detect";
 import Active from "./active";
@@ -21,24 +18,27 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const EnrolledCourses = () => {
-  const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [unitStandards, setUnitStandards] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
   
   const cookies = new Cookies();
 const access = process.env.NEXT_PUBLIC_ACCESS??"ALL_ACCESS";
-  const user = cookies.get("loggedInUser");
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
+  const type = searchParams.get("type")??'KM';
 
   useEffect(() => {
     if (tab === null) {
       router.push('/student/enrolled-courses?tab=enrolled');
     }
   }, [tab, router]);
+
+  useEffect(() => {
+    if (!type) {
+      router.push('/student/enrolled-courses?tab=enrolled&type=KM');
+    }
+  }, [type]);
 
   useEffect(() => {
     AOS.init({
@@ -57,11 +57,17 @@ const access = process.env.NEXT_PUBLIC_ACCESS??"ALL_ACCESS";
       data-aos="fade-right"
     >
       <div className="content">
-        <div className="section-title">
-          <h4 className="get-4-color rbt-title-style-3">
+        <div className="section-title d-flex justify-content-between align-items-center nav-titles mb-5">
+          <h4 className="get-4-color rbt-title-style-3" style={{margin:'0', padding:'0'}}>
             <i className="bi bi-laptop "></i>
             <span className="style-3-left">My Courses</span>
           </h4>
+          <div>
+            <select className="form-select" value={type} onChange={(e) => router.push(`/student/enrolled-courses?tab=enrolled&type=${e.target.value}`)} style={{width:'200px', borderRadius:'5px', margin:'0'}}>
+              <option value="KM">Knowledge Modules</option>
+              <option value="PM">Practical Modules</option>
+            </select>
+          </div>
         </div>
         <div className={`advance-tab-button mb--30 ${styles.advanceTabButton}`}>
           <ul className={`nav nav-tabs tab-button-style-2 ${styles.navTabs}`} id="myTab-4" role="tablist">

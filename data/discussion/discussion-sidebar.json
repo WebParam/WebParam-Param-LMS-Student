@@ -37,20 +37,34 @@
     }
   ],
   "FREEMIUM": [
-  
+      {
+      "link": "/student/projects?tab=enrolled",
+      "text": "My Projects",
+      "icon": "bi bi-laptop-fill"
+    },
     {
       "link": "/student/notifications",
       "text": "Notifications",
       "icon": "feather-volume-2"
     }
+  
   ],
   "COURSE_ONLY": [
     {
       "link": "/student/enrolled-courses",
       "text": "My Courses",
       "icon": "bi bi-laptop-fill"
+    },
+    {
+      "link": "/classes",
+      "text": "Classes",
+      "icon": "bi bi-calendar-event"
+    },
+    {
+      "link": "/student/notifications",
+      "text": "Notifications",
+      "icon": "feather-volume-2"
     }
-    
   ]
 
 }

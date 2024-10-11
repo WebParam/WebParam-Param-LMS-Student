@@ -56,7 +56,7 @@ const Navbar = () => {
     setIsDropdownVisible(false);
   };
 
-  if (["/register", "/login", "/verify-account", "/forgot-password", "/forgot-password/otp", "/testing"].includes(pathname)) {
+  if (["/register", "/login", "/verify-account", "/forgot-password", "/forgot-password/otp", "/testing", "/activate-account"].includes(pathname)) {
     return <div></div>;
   } 
 
