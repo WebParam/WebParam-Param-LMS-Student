@@ -175,6 +175,18 @@ function TakeLesson() {
       console.log("Videos watched:", res.data);
       if (res.data) {
         setVideosWatched(res.data);
+        // Automatically select the last watched video
+        const lastWatchedVideo = res.data[res.data.length - 1]; // Get the last watched video
+        if (lastWatchedVideo) {
+          const subTopic = expandedTopics[lastWatchedVideo.topicId]?.find((video) => video.id === lastWatchedVideo.elementId);
+          const index = expandedTopics[lastWatchedVideo.topicId]?.findIndex((video) => video.id === lastWatchedVideo.elementId);
+          setCurrentIndex(index);
+          debugger;
+          if (subTopic) {
+            handleSubTopicClick(subTopic, index); // Select the last watched video
+            setCurrentIndex(0);
+          }
+        }
       }
     } catch (error) {
       console.error("Error fetching watched videos:", error);
@@ -257,6 +269,10 @@ function TakeLesson() {
     }
   
     const currentTopicSubTopics = expandedTopics[currentVideo.topicId];
+
+    if (currentTopicSubTopics) {
+      
+    }
     if (currentIndex <= currentTopicSubTopics.length - 1) {
       const nextIndex = currentIndex + 1;
       console.log("Navigating to next index:", nextIndex);  // Debugging log
@@ -272,6 +288,8 @@ function TakeLesson() {
         setCurrentIndex(nextIndex);
         setVideoEnded(false);
       }
+    } else {
+      debugger;
     }
   };
 
@@ -366,7 +384,7 @@ function TakeLesson() {
                             (subTopic: TopicElement, subIndex) => {
 
                               const isWatched = videosWatched.find(video => video?.elementId == subTopic.id);
-
+                              
                               return (
                               <li
                                 ref={subIndex === 0 ? topicRef : null}
