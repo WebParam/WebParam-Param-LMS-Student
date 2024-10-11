@@ -28,7 +28,7 @@ export default function ActiveAssessment() {
   const [data, setData] = useState<Assessment[]>([]);
   const [filteredData, setFilteredData] = useState<Assessment[]>([]);
   const [course, setCourse] = useState<Course | null>(null);
-  const courseId = '6669f0ff8759b480859c10a7';
+  const courseId = process.env.NEXT_PUBLIC_COURSE_ID;
   const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
 
   useEffect(() => {
@@ -158,7 +158,7 @@ export default function ActiveAssessment() {
                   title="Start"
                   href={{
                     pathname: '/student/assessments/assessmentId',
-                    query: { id: `${assessment.id}`, title: `${assessment.title}`},
+                    query: { id: `${assessment.id}`, title: `${assessment.title}`,totalMarks: `${assessment.totalMarks}`},
                   }}
                 >
                   Start
