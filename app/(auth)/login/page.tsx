@@ -7,6 +7,7 @@ import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 import Modal from "react-responsive-modal";
 import styles from './login.module.scss';
+import LoginNav from "@/ui/login/login-nav";
 
 export default function LoginPage() {
     const imageCover = process.env.NEXT_PUBLIC_LOGIN_IMAGE;
@@ -134,6 +135,7 @@ export default function LoginPage() {
 
   return (
     <>
+    <LoginNav />
     <Modal 
       open={modalMessageShow} 
       data-aos="zoom-out-right"
