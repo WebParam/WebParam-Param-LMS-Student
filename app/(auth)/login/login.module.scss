@@ -1,0 +1,161 @@
+$primary-color: #FE457A;
+
+.loginPage {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-size: cover;
+  background-position: center;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/login/image.jpg') !important;
+}
+
+.loginContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.loginFormWrapper {
+  width: 100%;
+  max-width: 400px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 36px;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.titleUnderline {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 20px;
+    background-image: url('/svg/underline-curve.svg'); // Updated path
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+}
+
+.subtitle {
+  margin-bottom: 30px;
+  color: #fff;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid $primary-color !important;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: white !important;
+  color: #333;
+
+  &::placeholder {
+    color: #999;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: darken($primary-color, 10%) !important;
+  }
+}
+
+.errorMessage {
+  color: $primary-color;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.signUpButton {
+  padding: 15px 30px;
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+}
+
+.recoverPassword {
+  a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.requiredField {
+  position: relative;
+}
+
+.asterisk {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $primary-color;
+}
+
+.signUpPrompt {
+  text-align: center;
+  font-size: 14px;
+  margin-top: auto;
+  padding-top: 20px;
+  margin-bottom: 20px;
+
+  a {
+    color: $primary-color;
+    text-decoration: none;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Add this class for the password toggle icon
+.passwordToggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #999;
+}

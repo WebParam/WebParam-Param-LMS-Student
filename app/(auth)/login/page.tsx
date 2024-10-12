@@ -1,11 +1,12 @@
 "use client";
-import "./login.scss";
+
 import React, { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { LoginUser, ResendSMS } from "@/app/api/auth/auth";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 import Modal from "react-responsive-modal";
+import styles from './login.module.scss';
 
 export default function LoginPage() {
     const imageCover = process.env.NEXT_PUBLIC_LOGIN_IMAGE;
@@ -158,102 +159,70 @@ export default function LoginPage() {
         </form>
       </div>
     </Modal>
-    <div className="login-container">
-      <div
-        className="left-container d-md-block d-none"
-        data-aos="zoom-out-right"
-        style={{
-          backgroundImage: `url(${imageCover})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          boxShadow: "inset 0 0 100px rgba(0,0,0,0.5)",
-        }}
-      ></div>
-      <div className="login-inner" data-aos="zoom-out-left">
-        <h1>Sign in</h1>
-        <p>Welcome back! Please enter your details</p>
-        <form className="col-12" onSubmit={handleSubmit}>
+    <div className={styles.loginPage} style={{backgroundImage: `url(${imageCover})`}}>
+      <div className={styles.loginContainer}>
+        <div className={styles.loginFormWrapper}>
           <div>
-            <div className="rbt-form-group mb-5">
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter Email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                // required
-                className={hasError.email ? "error" : ""}
-              />
-            </div>
-          </div>
-          <div>
-            <div className="rbt-form-group mb-5 position-relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter Password"
-                id="password"
-                // required
-                className={hasError.password ? "error" : ""}
-                
-              />
-              <i onClick={()=>setShowPassword(!showPassword)} className="feather-eye position-absolute" style={{right:"10px", top:"17px", cursor:"pointer"}}  />
-            </div>
-          </div>
-          <div className="mb--30 remember-me">
-            <div>
-              <div className="form-check form-switch">
+            <h1 className={styles.title}>
+              Hello <span className={styles.titleUnderline}>Again</span>
+            </h1>
+            <p className={styles.subtitle}>
+              Welcome back! Please fill in your details.
+            </p>
+            <form onSubmit={handleSubmit}>
+              <div className={styles.formGroup}>
                 <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="formSwitch1"
-                  checked={true}
+                  type="email"
+                  placeholder="Email Address"
+                  className={`${styles.input} ${styles.requiredField} ${hasError.email ? styles.error : ""}`}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-                <label className="form-check-label" htmlFor="formSwitch1">
-                  Remember me
-                </label>
+                <span className={styles.asterisk}>*</span>
               </div>
-            </div>
-            <div>
-              <div className="">
-                <Link className="rbt-btn-link" href="/forgot-password">
-                  Lost your password?
-                </Link>
+              <div className={styles.formGroup}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  className={`${styles.input} ${styles.requiredField} ${hasError.password ? styles.error : ""}`}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <span className={styles.asterisk}>*</span>
+                <i 
+                  onClick={() => setShowPassword(!showPassword)} 
+                  className={`feather-eye ${styles.passwordToggle}`}
+                />
               </div>
-            </div>
-          </div>
-          {errorMessage && (
-            <span className="errorMessage">{errorMessage}</span>
-          )}
-          <div className="form-submit-group">
-            <button
-              type="submit"
-              className="btn w-100 text-light"
-              style={{
-                height: "50px",
-                fontSize: "18px",
-                backgroundColor: "#24345C",
-              }}
-            >
-              {isLoading ? (
-                <div className="spinner-grow text-light" role="status" />
-              ) : (
-                "Sign in"
+              {errorMessage && (
+                <div className={styles.errorMessage}>
+                  {errorMessage}
+                </div>
               )}
-            </button>
+              <div className={styles.buttonGroup}>
+                <button 
+                  type="submit" 
+                  className={styles.signUpButton}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <div className="spinner-grow text-light" role="status" />
+                  ) : (
+                    "Login"
+                  )}
+                </button>
+                <div className={styles.recoverPassword}>
+                  <Link href="/forgot-password">Recover Password</Link>
+                </div>
+              </div>
+            </form>
           </div>
           {!isFreemium && (
-          <div className="auth-footer">
-            <p>Don&apos;t have an account? </p>
-            <Link style={{ color: "#2597ac" }} href="/register">
-              Register
-            </Link>
-          </div>
+            <div className={styles.signUpPrompt}>
+              Don&apos;t have an account yet? <Link href="/register">Sign Up</Link>
+            </div>
           )}
-        </form>
+        </div>
       </div>
     </div>
     </>
