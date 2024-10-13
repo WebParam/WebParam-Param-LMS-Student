@@ -210,6 +210,8 @@ function TakeLesson() {
             handleSubTopicClick(subTopic, index); // Select the last watched video
             setCurrentIndex(index);
           }
+        } else {
+          setCheckingWatchedVideos(false);
         }
       }
     } catch (error) {
@@ -317,7 +319,6 @@ function TakeLesson() {
 
 
 
- 
 
   if (error) return (
     <div className="error-area">
