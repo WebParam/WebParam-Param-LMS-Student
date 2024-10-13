@@ -339,7 +339,7 @@ const FileUpload: React.FC = () => {
             <ZoomInButton />
           </div>
           <Viewer
-            fileUrl={`${readUserData}/api/v1/Documents/PreviewDocument/${documentToView}`}
+            fileUrl={`${readUserData}/api/v1/Documents/PreviewDocument/66f46f78232ea8ca61baeecd`}
             plugins={[thumbnailPluginInstance, zoomPluginInstance]}
             defaultScale={isMobile ? .3 : .9}  
             />
