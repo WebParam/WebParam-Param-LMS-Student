@@ -178,6 +178,7 @@ const FileUpload: React.FC = () => {
         const response = await axios.post(`${writeUserData}/api/v1/Profile/SubmitDocument`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
+            'ClientKey':process.env.NEXT_PUBLIC_CLIENTKEY,
           },
         });
         if (response.status === 200) {

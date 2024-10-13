@@ -144,6 +144,7 @@ export default function Profile({ student }: any) {
                 const response = await axios.post(`${readUserData}/api/v1/Profile/UploadProfilePicture/${user?.data?.id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
+                        'ClientKey':process.env.NEXT_PUBLIC_CLIENTKEY,
                     },
                 });
                 console.log('Profile picture updated:', response.data);
