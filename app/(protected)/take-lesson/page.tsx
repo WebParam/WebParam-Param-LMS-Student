@@ -184,7 +184,7 @@ function TakeLesson() {
           debugger;
           if (subTopic) {
             handleSubTopicClick(subTopic, index); // Select the last watched video
-            setCurrentIndex(0);
+            setCurrentIndex(index);
           }
         }
       }
@@ -225,12 +225,6 @@ function TakeLesson() {
     setCurrentIndex(index);
     setVideoEnded(false); // Reset videoEnded state when a new video is selected
     setVideoLoader(false);
-
-    debugger;
-    const questions = getQuizQuestions(subTopic.id);
-    
-
-    // setExpandedTopicId(subTopic.id);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -262,7 +256,6 @@ function TakeLesson() {
   const handleNext = () => {
 
     console.log("Current index before next:", currentIndex);  // Debugging log
-  
     if (!videoEnded) {
       setVideoEnded(true); // Show quiz first
       return;
@@ -270,10 +263,8 @@ function TakeLesson() {
   
     const currentTopicSubTopics = expandedTopics[currentVideo.topicId];
 
-    if (currentTopicSubTopics) {
-      
-    }
-    if (currentIndex <= currentTopicSubTopics.length - 1) {
+    
+    if (currentIndex < currentTopicSubTopics.length - 1) {
       const nextIndex = currentIndex + 1;
       console.log("Navigating to next index:", nextIndex);  // Debugging log
       const nextSubTopic = currentTopicSubTopics[nextIndex];
@@ -290,7 +281,20 @@ function TakeLesson() {
       }
     } else {
       debugger;
+      console.log('expandedTopics', knowledgeTopics)
+      const nextTopic = knowledgeTopics.findIndex(topic => topic.id == currentVideo.topicId);
+      handleExpandClick(knowledgeTopics[nextTopic + 1].id);
+    
+      // const currentTopicIndex = topicIds.indexOf(currentVideo.topicId);
+      // handleExpandClick(); // make it go to the next topic
+     
+     
     }
+
+    // if (currentIndex > expandedTopics[currentVideo?.topicId]?.length - 1) {
+    //   alert('No more topics to watch')
+    //   return;
+    // }
   };
 
   const handleVideoEnd = () => {
