@@ -284,17 +284,8 @@ function TakeLesson() {
       console.log('expandedTopics', knowledgeTopics)
       const nextTopic = knowledgeTopics.findIndex(topic => topic.id == currentVideo.topicId);
       handleExpandClick(knowledgeTopics[nextTopic + 1].id);
-    
-      // const currentTopicIndex = topicIds.indexOf(currentVideo.topicId);
-      // handleExpandClick(); // make it go to the next topic
-     
-     
     }
 
-    // if (currentIndex > expandedTopics[currentVideo?.topicId]?.length - 1) {
-    //   alert('No more topics to watch')
-    //   return;
-    // }
   };
 
   const handleVideoEnd = () => {
