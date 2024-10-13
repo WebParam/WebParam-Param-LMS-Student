@@ -8,7 +8,7 @@ import QuestionAndAnswers from "@/ui/lesson/question-answers/question-answer";
 import Overview from "@/ui/overview/overview";
 import Transcript from "@/ui/transcript/transcript";
 import Link from "next/link";
-import { useEffect, useState, useRef, Suspense } from "react";
+import { useEffect, useState, useRef, Suspense, use } from "react";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import LessonQuiz from "../lesson/quiz/page";
@@ -19,6 +19,8 @@ import Cookies from "universal-cookie";
 import { useCourseId } from "@/context/courseId-context/courseId-context";
 import { POST } from "@/app/lib/api-client";
 import { rDocumentParaphraseUrl } from "@/app/lib/endpoints";
+import imageBg from './oc-lost.svg'
+import Modal from "react-responsive-modal";
 
 function TakeLesson() {
   const [currentVideo, setCurrentVideo] = useState<any>();
@@ -37,6 +39,8 @@ function TakeLesson() {
   const [videoEnded, setVideoEnded] = useState<boolean>(false);
   const [videosWatched, setVideosWatched] = useState<any[]>([]);
   const [currentQuiz, setCurrentQuiz] = useState<IQuizQuestion[]>([]);
+  const [hasCheckedWatchedVideos, setHasCheckedWatchedVideos] = useState(false);
+  const [checkingWatchedVideos, setCheckingWatchedVideos] = useState(true);
   const cookies = new Cookies();
   const loggedInUser = cookies.get('loggedInUser');
   const userID = cookies.get('userID');
@@ -75,9 +79,6 @@ function TakeLesson() {
     } finally {
       setLoading(false);
       }
-
-    
-    
   }
 
   const getQuizQuestions = async (videoId:string) => {
@@ -139,7 +140,7 @@ function TakeLesson() {
 
       if (res?.data) {
         setVideosWatched((prev) => [...prev, res.data]);
-        updateVideoWatched(res.data);
+        // updateVideoWatched(res.data);
       }
       return res?.data
     } catch (error) {
@@ -164,10 +165,33 @@ function TakeLesson() {
     console.log("expanded topics:", filteredTopics.some(topic => topic));
   }, [currentVideo]);
 
-  function updateVideoWatched(payload: any) {
-    videosWatched.push(payload);
-    localStorage.setItem("videosWatched", JSON.stringify(videosWatched));
-  }
+  useEffect(() => {
+    if (videosWatched.length > 0 && !hasCheckedWatchedVideos) {
+      const currentTopic = expandedTopics[currentVideo?.topicId];
+      console.log('videosWatched', videosWatched);
+      console.log('currentTopic', currentTopic);
+
+      // Check if all videos in the currentTopic exist in videosWatched
+      if (currentTopic && videosWatched.length) {
+        const allWatched = currentTopic.every(subTopic => videosWatched.some(video => video.elementId === subTopic.id));
+
+        if (allWatched) {
+          const nextTopicIndex = knowledgeTopics.findIndex(topic => topic.id == currentVideo.topicId);
+          if (nextTopicIndex + 1 < knowledgeTopics.length) { // Ensure there is a next topic
+            handleExpandClick(knowledgeTopics[nextTopicIndex + 1].id);
+          }
+          
+          return;
+        }
+        console.log('All videos in current topic watched:', allWatched);
+      }
+
+      // Mark as checked so that this block won't run again on subsequent updates
+      setHasCheckedWatchedVideos(true);
+      setCheckingWatchedVideos(false);
+    }
+  }, [videosWatched, hasCheckedWatchedVideos]);
+
   
   async function getWatchedVideos() {
     try {
@@ -178,10 +202,10 @@ function TakeLesson() {
         // Automatically select the last watched video
         const lastWatchedVideo = res.data[res.data.length - 1]; // Get the last watched video
         if (lastWatchedVideo) {
+
           const subTopic = expandedTopics[lastWatchedVideo.topicId]?.find((video) => video.id === lastWatchedVideo.elementId);
           const index = expandedTopics[lastWatchedVideo.topicId]?.findIndex((video) => video.id === lastWatchedVideo.elementId);
-          setCurrentIndex(index);
-          debugger;
+          
           if (subTopic) {
             handleSubTopicClick(subTopic, index); // Select the last watched video
             setCurrentIndex(index);
@@ -242,7 +266,7 @@ function TakeLesson() {
         setCurrentVideo(previousSubTopic);
         setCurrentQuiz([]);
 
-        const questions = getQuizQuestions(previousSubTopic.id);
+        // const questions = getQuizQuestions(previousSubTopic.id);
         setCheckedSubTopics((prev) => ({
           ...prev,
           [previousSubTopic.id]: true,
@@ -280,8 +304,7 @@ function TakeLesson() {
         setVideoEnded(false);
       }
     } else {
-      debugger;
-      console.log('expandedTopics', knowledgeTopics)
+    
       const nextTopic = knowledgeTopics.findIndex(topic => topic.id == currentVideo.topicId);
       handleExpandClick(knowledgeTopics[nextTopic + 1].id);
     }
@@ -319,11 +342,44 @@ function TakeLesson() {
   console.log(`topics:`,expandedTopics)
 
   return (
+    <>
+    <Modal 
+    open={checkingWatchedVideos} 
+    onClose={() => setCheckingWatchedVideos(false)}
+    center
+    closeOnOverlayClick={false}
+    closeOnEsc={false}
+    styles={{
+      overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.9)'
+      },
+      modal: {
+        borderRadius: '10px',
+        padding: '20px',
+        width: '80%',
+        height: '60%',
+        backgroundImage: `url(${imageBg.src})`,
+        backgroundSize: '50%',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'bottom left',
+        // display: 'flex',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        backgroundColor: 'white',
+      }
+    }}
+    >
+      <div className="d-flex flex-column justify-content-center align-items-center h-100 w-100">
+        <h1><div className="d-flex justify-content-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div></h1>
+        <h6>Navigating you to your last lesson...</h6>
+      </div>
+    </Modal>
     <div className="rbt-lesson-area bg-color-white">
       <div className="rbt-lesson-content-wrapper">
-        {/* Sidebar */}
-
-        
         <div id="sidebar-desktop" className="rbt-lesson-leftsidebar">
           <div className="rbt-course-feature-inner rbt-search-activation">
             <div className="section-title" style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'0 5px'}}>
@@ -737,6 +793,7 @@ function TakeLesson() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
