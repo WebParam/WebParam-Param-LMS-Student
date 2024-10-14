@@ -15,7 +15,7 @@ import { GET } from '@/app/lib/api-client';
 import MaintenanceModal from '@/ui/banner/MaintanceModal';
 import { useProgressContext } from '@/context/progress-card-context/progress-context';
 
-export default function Profile({ student }: any) {
+export default function Profile({ student, codes }: any) {
   const [firstName, setFirstName] = useState("");
   const [surname, setSurname] = useState("");
   const [idNumber, setIdNumber] = useState("");
@@ -31,8 +31,8 @@ export default function Profile({ student }: any) {
   const [coverImage, setCoverImage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [id, setId] = useState("");
-  const [codes, setCodes] = useState<any>();
   const [uploadingPic, setUploadingPic] = useState(false);
+  const [genderCodes, setGenderCodes] = useState<any>();
   const cookies = new Cookies();
   const user = cookies.get("loggedInUser");
   const router = useRouter();
@@ -43,28 +43,24 @@ export default function Profile({ student }: any) {
         getUserProfile();
     }, [profilePic]);
 
-    async function getInputCodes() {
-        // const res = await axios.get(`${readUserData}/api/v1/Student/GetCodes`);
-        const res = await GET(`${readUserData}/api/v1/Student/GetCodes`);
-        console.log('codes:', res?.data.data);
-        setCodes(res?.data.data);
-    }
     
     useEffect(() => {
         
         getUserProfile();
     },[profilePic])
     
-
+    
     useEffect(() => {
         getUserProfile();
         setProvince(student?.data?.country)
-        getInputCodes();
+        console.log("codes index 4:", codes.filter((code:any)=>code.Type===4)[0]?.Codes)
+        setGenderCodes(codes.filter((code:any)=>code.Type===4)[0]?.Codes)
         calculateEmptyFieldsPercentage();
 
         if (user) {
             setEmail(user?.data?.email)
         }
+
     }, []);
 
   async function getUserProfile() {
@@ -394,8 +390,8 @@ export default function Profile({ student }: any) {
                             className="w-100">                                
                             <option value={""} >Select</option>
                             {
-                            codes && codes[4]?.codes?.map((item:any, index:number) => (
-                                <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
+                            genderCodes && genderCodes?.map((item:any, index:number) => (
+                                <option key={index} value={`${item.Code}`} className="text-dark">{item.Description}</option>
                             ))
                             }
                         </select>
