@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-// import logo from "./logo.svg";
+import logo from "./logo.svg";
 import Image from "next/image";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -56,14 +56,14 @@ const LoginNav = () => {
                     color: "#333",
                   }}
                 >
-                  {/* <Image
-                    // src={logo} // Replaced placeholder text with logo image
+                  <Image
+                    src={logo} // Replaced placeholder text with logo image
                     alt="Logo"
                     style={{
                       height: "24px", // Adjust height as needed
                       marginRight: "5px", // Add margin for spacing
-                    }} */}
-                  {/* /> */}
+                    }}
+                  />
                 </span>{" "}
                 {/* Placeholder for Logo */}
               </Link>

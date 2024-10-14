@@ -16,7 +16,7 @@
       "icon": "bi bi-car-front"
     },
     {
-      "link": "/student/manage-documents",
+      "link": "/student/documents",
       "text": "Manage Documents",
       "icon": "feather-folder"
     },

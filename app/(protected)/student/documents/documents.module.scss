@@ -2,13 +2,13 @@
     padding: 20px;
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 210px; // Add top margin to move content down
-    // border: 1px solid red;
+    box-shadow: 0 2px 4px transparent;
+    margin-top: 15px; // Reduced top margin to move the container up
     max-width: 950px; // Decreased the width of the container
-    margin-left: 0; // Changed from auto to 0 to move container to the left
+    margin-left: 60px; // Changed frmom auto to 0 to move container to the left
     margin-right: auto;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif!important;
+    // border: 1px solid red;
 
     .content-wrapper {
         max-width: 100%; // Changed from 1200px to 100% to fit the new container width
