@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=detailsCard:wght@400;600&display=swap");
+
 $font-family: "Montserrat", sans-serif;
 $primary-color: #ffffff;
 $secondary-color: #fe457a;
@@ -36,11 +38,19 @@ $padding-mobile: '1.25rem';
             justify-content: space-between;
             align-items: center;
 
-            h1 {
+            .heading {
+                position: relative;
+                z-index: 1;
                 font-size: $font-size-large;
                 color: $primary-color;
                 font-weight: 800;
+                max-width: 584px;
                 margin: 0;
+
+                .underLineIcon {
+                    position: absolute;
+                    top: 22px;
+                }
             }
 
             p {
@@ -66,9 +76,23 @@ $padding-mobile: '1.25rem';
                 margin-left: auto;
                 margin-top: 3.375rem;
             }
+
+            .iconContainerHalf {
+                z-index: 0;
+                position: absolute;
+                display: flex;
+                align-items: center;
+                margin-left: auto;
+                margin-top: 3.375rem;
+                margin-right: 0px;
+                right: 0px;
+                top: 40px;
+            }
         }
 
         .bodyContainer {
+            position: relative;
+            z-index: 10;
             background-color: $primary-color;
             padding: 2.5rem;
             border-radius: $border-radius;
@@ -128,6 +152,7 @@ $padding-mobile: '1.25rem';
                     color: $text-color;
                     list-style-type: decimal;
                     counter-reset: item;
+                    white-space: wrap;
 
                     li {
                         font-size: 1.125rem;
@@ -135,7 +160,7 @@ $padding-mobile: '1.25rem';
                         padding: 0.25rem 0;
                         color: darken($text-color, 20%);
                         list-style-position: inside;
-                        white-space: nowrap;
+                        white-space: wrap;
                     }
                 }
             }
@@ -257,6 +282,9 @@ $padding-mobile: '1.25rem';
                         }
                     }
                 }
+                .feedbackReactStart{
+                    justify-content: start !important;
+                }
 
                 .matchYourJobSection {
                     display: flex;
@@ -293,6 +321,9 @@ $padding-mobile: '1.25rem';
                     }
                 }
 
+                .matchYourJobStart{
+                    justify-content: start !important;
+                }
 
                 .workLoadSection {
                     display: flex;
@@ -302,7 +333,8 @@ $padding-mobile: '1.25rem';
                     gap: 33px;
                     margin-bottom: 63px;
 
-                    .workLoadButton {  
+                    .workLoadButton {
+                        text-align: center;
                         background-color: transparent;
                         border: 1px solid #C4C4C4;
                         padding: 6px 14px;
@@ -312,6 +344,84 @@ $padding-mobile: '1.25rem';
                         border-radius: 50px;
                     }
                 }
+
+                .progressContainer {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+
+                    .progressIndicator {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        position: relative;
+                        width: 80%;
+
+                        .circle {
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 50%;
+                            background-color: #d3d3d3;
+                            position: relative;
+                            z-index: 1;
+
+                            &.active {
+                                background-color: $text-color !important;
+                            }
+                        }
+
+                        &::before {
+                            content: '';
+                            position: absolute;
+                            top: 50%;
+                            left: 0;
+                            right: 0;
+                            height: 2px;
+                            background-color: #d3d3d3;
+                            z-index: 0;
+                        }
+
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            top: 50%;
+                            left: 0;
+                            height: 2px;
+                            width: calc((100% / 7) * (currentProgressStep - 1));
+                            background-color: #555;
+                            z-index: 0;
+                            transition: width 0.3s ease;
+                        }
+                    }
+                }
+
+                .mySuggestions {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+                    margin-bottom: 60px;
+
+                    .suggestions {
+                        width: 100px;
+                        flex-wrap: wrap;
+                        font-size: 12px;
+                        font-weight: 400;
+                        color: $text-color;
+                        text-align: center;
+                    }
+                }
+
+                .textArea {
+                    background-color: #F6F6F6;
+                    border-color: transparent;
+                    border-radius: 40px;
+                    padding: 31px 50px !important;
+                    color: #000000;
+                    font-size: 18px;
+                    font-weight: 400;
+                }
+
 
             }
 
@@ -347,40 +457,42 @@ $padding-mobile: '1.25rem';
                 }
 
             }
+
             .formFooter {
                 display: flex;
                 width: 100%;
                 align-items: center;
                 justify-content: space-between;
-              
-                .prevButton, .nextButton {
-                  display: flex;
-                  align-items: center;
-                  gap: 1rem;
-                  padding: 0.8rem 1.2rem;
-                  background-color: transparent;
-                  border: none;
-                  font-size: 18px;
-                  color: #D3D3D3;
-                  outline: none;
-                  cursor: pointer;
-              
-                  &:active {
-                    color: #FE457A;
-                  }
-                }
-              
-                .prevButton {
-                  justify-content: flex-start;
-                }
-              
+
+                .prevButton,
                 .nextButton {
-                  margin-left: auto;
-                  justify-content: flex-end;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    padding: 0.8rem 1.2rem;
+                    background-color: transparent;
+                    border: none;
+                    font-size: 18px;
+                    color: #D3D3D3;
+                    outline: none;
+                    cursor: pointer;
+
+                    &:active {
+                        color: #FE457A;
+                    }
                 }
-              }
-              
-              
+
+                .prevButton {
+                    justify-content: flex-start;
+                }
+
+                .nextButton {
+                    margin-left: auto;
+                    justify-content: flex-end;
+                }
+            }
+
+
         }
     }
 }
@@ -418,6 +530,10 @@ $padding-mobile: '1.25rem';
         .bodyContainer {
             padding: 0 2.5rem 2.5rem 2.5rem !important;
 
+            .detailsCard {
+                padding: 3.8rem !important;
+            }
+
             .stepsContainer {
                 justify-content: center !important;
                 gap: 6rem !important;
@@ -425,6 +541,22 @@ $padding-mobile: '1.25rem';
 
                 .stepItem {
                     margin-right: 2rem !important;
+                }
+            }
+
+            .formContainer {
+                gap: 10px !important;
+
+                .formRow {
+                    .fields {
+                        flex: 0 0 100% !important;
+                    }
+                }
+            }
+
+            .workExperienceBody {
+                .matchYourJobSection {
+                    gap: 4px !important
                 }
             }
 
@@ -471,6 +603,14 @@ $padding-mobile: '1.25rem';
         .bodyContainer {
             padding: 1.25rem;
 
+            .detailsCard {
+                padding: 3rem !important;
+
+                .stepTitle {
+                    font-size: 16px !important;
+                }
+            }
+
             .stepsContainer {
                 justify-content: flex-start !important;
                 flex-wrap: wrap !important;
@@ -513,7 +653,7 @@ $padding-mobile: '1.25rem';
                 }
 
                 .feedbackReactSection {
-                    gap: 90px !important;
+                    gap: 30px !important;
                     margin-bottom: 35px !important;
 
                     .feedbackReact {
@@ -535,9 +675,8 @@ $padding-mobile: '1.25rem';
                         }
 
                         .title {
+                            height: 25px !important;
                             font-size: 16px !important;
-                            font-weight: 400;
-                            width: 90px;
                         }
                     }
                 }
@@ -547,12 +686,29 @@ $padding-mobile: '1.25rem';
                     gap: 10px !important;
                     margin-bottom: 63px;
 
-                    .workLoadButton {  
+                    .workLoadButton {
                         padding: 4px 12px !important;
-                        font-size: 16px;
+                        font-size: 14px !important;
                     }
-                    .empty{
+
+                    .empty {
                         display: none !important;
+                    }
+                }
+
+                .progressContainer {
+                    .progressIndicator {
+                        width: 100% !important;
+                    }
+                }
+
+                .mySuggestions {
+                    width: 100%;
+                    margin-bottom: 30px;
+
+                    .suggestions {
+                        width: 60px !important;
+                        font-size: 10px !important;
                     }
                 }
 
@@ -570,6 +726,22 @@ $padding-mobile: '1.25rem';
                     display: none !important;
                 }
 
+            }
+            .listContainer {
+                .list {
+                    padding-left: 0rem !important;
+                    padding-top: 2.5rem !important;
+                    white-space: wrap;
+
+                    li {
+                        font-size: 1rem !important;
+                        font-weight: 400;
+                        padding: 0.2rem 0 !important;
+                        color: darken($text-color, 20%);
+                        list-style-position: inside;
+                        white-space: wrap;
+                    }
+                }
             }
         }
     }
@@ -603,6 +775,14 @@ $padding-mobile: '1.25rem';
         .bodyContainer {
             padding: 0.625rem;
 
+            .detailsCard {
+                padding: 1.5rem !important;
+
+                .stepTitle {
+                    font-size: 14px !important;
+                }
+            }
+
             .stepsContainer {
                 flex-direction: column;
                 align-items: center;
@@ -624,6 +804,74 @@ $padding-mobile: '1.25rem';
             .formList {
                 li {
                     font-size: 1rem !important;
+                }
+            }
+
+            .workExperienceBody {
+                .questionSection {
+                    gap: 4px !important;
+                    margin-bottom: 4px !important;
+
+                    .questionNo {
+                        font-size: 14px !important;
+                    }
+
+                    .question {
+                        font-size: 14px !important;
+                    }
+                }
+
+                .feedbackReactSection {
+                    gap: 16px !important;
+                    margin-bottom: 25px !important;
+
+                    .feedbackReact {
+                        .title {
+                            font-size: 14px !important;
+                        }
+                    }
+                }
+
+                .matchYourJobSection {
+                    flex-wrap: wrap !important;
+                    gap: 16px !important;
+                    margin-bottom: 25px !important;
+
+                    .matchYourJob {
+                        .reactButton {
+                            font-size: 14px !important;
+                        }
+
+                        .title {
+                            height: 20px !important;
+                            font-size: 12px !important;
+                        }
+                    }
+                }
+
+
+                .workLoadSection {
+                    gap: 6px !important;
+                    margin-bottom: 25px;
+
+                    .workLoadButton {
+                        padding: 4px 12px !important;
+                        font-size: 12px !important;
+                    }
+                }
+
+            }
+
+            .listContainer {
+                .list {
+                    padding-top: 2rem !important;
+                    white-space: wrap;
+
+                    li {
+                        font-size: 1rem !important;
+                        font-weight: 400;
+                        padding: 0.1rem 0 !important;
+                    }
                 }
             }
         }

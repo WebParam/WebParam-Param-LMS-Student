@@ -16,8 +16,8 @@ const stepTitles: Record<StepNumber, string> = {
 
 export default function StepComponent({ step }: StepComponentProps) {
     return (
-        <div>
-            <h2>{`Step ${step}: ${stepTitles[step]}`}</h2>
+        <div >
+            <h2>{`Step ${step}:`}</h2>
         </div>
     );
 }

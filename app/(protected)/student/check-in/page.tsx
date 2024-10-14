@@ -9,6 +9,10 @@ import StepComponent from "./components/StepComponent";
 import WorkExperience from "./components/WorkExperience";
 import NextDefaultIcon from "./svg/NextDefaultIcon";
 import BackDefaultIcon from "./svg/BackDefaultIcon";
+import UnderLineIcon from "./svg/UnderLineIcon";
+import Learning from "./components/Learning";
+import OverallReView from "./components/OverallView";
+import SubmitIcon from "./components/SubmitIcon";
 
 export interface StepProps {
   step: number;
@@ -19,7 +23,7 @@ export default function CheckIn() {
   const [step, setStep] = useState<number>(0);
 
   const nextStep = () => {
-    if (step < 3) setStep((prevStep) => prevStep + 1);
+    if (step < 4) setStep((prevStep) => prevStep + 1);
   };
 
   const prevStep = () => {
@@ -37,9 +41,19 @@ export default function CheckIn() {
           <div className="d-flex flex-column">
             <h1>Youth Programme Monthly Check-in 2024</h1>
             <p>This survey will take approximately 8 minutes to complete</p>
+            <h1 className={styles.heading}>
+              Youth Programme Monthly Check-in 2023
+              {(step === 2 || step === 3) &&
+                <div className={styles.underLineIcon}>
+                  <UnderLineIcon />
+                </div>
+              }
+            </h1>
+
+            {!(step === 2 || step === 3) && <p>This survey will take approximately 8 minutes to complete</p>}
           </div>
           <button className={styles.closeButton}>✕</button>
-          <div className={styles.iconContainer}>
+          <div className={(step == 2 || step === 3) ? styles.iconContainerHalf : styles.iconContainer}>
             <CheckInIcon />
           </div>
         </div>
@@ -48,7 +62,9 @@ export default function CheckIn() {
           {step === 0 && <StepsAndForm step={step} goToStep={goToStep} />}
           {step === 1 && <YouthDetails step={step} goToStep={goToStep} stepTitle={'Let’s Start...'} heading={'Youth Details'} />}
           {step === 2 && <WorkExperience step={step} goToStep={goToStep} stepTitle={'Tell us about work...'} heading={'Work Experience'} />}
-          {step > 2 && <StepComponent step={step as 3 | 4} />}
+          {step === 3 && <Learning step={step} goToStep={goToStep} stepTitle={'One more...'} heading={'Learning'} />}
+          {step === 4 && <OverallReView step={step} goToStep={goToStep} stepTitle={'And we are done...'} heading={'Overall View'} />}
+          {step > 4 && <StepComponent step={step} />}
           <div className={styles.formFooter}>
             {step > 0 && (
               <button type="submit" className={`${styles.prevButton}`} onClick={() => prevStep()}>
@@ -56,10 +72,16 @@ export default function CheckIn() {
                 {'BACK'}
               </button>
             )}
-            {step < 3 && (
+            {step < 4 && (
               <button type="submit" className={`${styles.nextButton}`} onClick={() => nextStep()}>
                 {'NEXT'}
                 <NextDefaultIcon />
+              </button>
+            )}
+            {step === 4 && (
+              <button type="submit" className={`${styles.nextButton}`} onClick={() => nextStep()}>
+                {'SUBMIT'}
+                <SubmitIcon />
               </button>
             )}
           </div>
