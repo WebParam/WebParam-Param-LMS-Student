@@ -9,6 +9,7 @@ import StepComponent from "./components/StepComponent";
 import WorkExperience from "./components/WorkExperience";
 import NextDefaultIcon from "./svg/NextDefaultIcon";
 import BackDefaultIcon from "./svg/BackDefaultIcon";
+import UnderLineIcon from "./svg/UnderLineIcon";
 
 export interface StepProps {
   step: number;
@@ -19,7 +20,7 @@ export default function CheckIn() {
   const [step, setStep] = useState<number>(0);
 
   const nextStep = () => {
-    if (step < 3) setStep((prevStep) => prevStep + 1);
+    if (step < 4) setStep((prevStep) => prevStep + 1);
   };
 
   const prevStep = () => {
@@ -35,11 +36,19 @@ export default function CheckIn() {
       <div className={styles.cardContainer}>
         <div className={styles.cardHeader}>
           <div className="d-flex flex-column">
-            <h1>Youth Programme Monthly Check-in 2023</h1>
-            <p>This survey will take approximately 8 minutes to complete</p>
+            <h1 className={styles.heading}>
+              Youth Programme Monthly Check-in 2023
+              {(step === 2 || step === 3) &&
+                <div className={styles.underLineIcon}>
+                  <UnderLineIcon />
+                </div>
+              }
+            </h1>
+
+            {!(step === 2 || step === 3) && <p>This survey will take approximately 8 minutes to complete</p>}
           </div>
           <button className={styles.closeButton}>✕</button>
-          <div className={styles.iconContainer}>
+          <div className={(step == 2 || step === 3) ? styles.iconContainerHalf : styles.iconContainer}>
             <CheckInIcon />
           </div>
         </div>
@@ -56,7 +65,7 @@ export default function CheckIn() {
                 {'BACK'}
               </button>
             )}
-            {step < 3 && (
+            {step < 4 && (
               <button type="submit" className={`${styles.nextButton}`} onClick={() => nextStep()}>
                 {'NEXT'}
                 <NextDefaultIcon />

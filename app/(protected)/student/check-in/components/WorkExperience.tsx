@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import styles from '../CheckIn.module.scss'
 import { StepProps } from '../page';
 import HappyDefaultIcon from '../svg/HappyDefaultIcon';
 import OkayDefualtIcon from '../svg/OkayDefualtIcon';
 import UnhappyDefaultIcon from '../svg/UnhappyDefaultIcon';
 import ProgressBar from './ProgressBar';
+import ProgressIndicator from './ProgressIndicator';
 
 interface WorkExperienceProps extends StepProps {
     heading: string;
@@ -11,7 +13,8 @@ interface WorkExperienceProps extends StepProps {
 }
 
 export default function WorkExperience({ step, goToStep, stepTitle, heading }: WorkExperienceProps) {
-
+    const [currentProgressStep, setCurrentProgressStep] = useState(4);
+    const totalSteps = 10;
     return (
         <div className={styles.detailsCard}>
             <h3 className={styles.stepTitle}>{stepTitle}</h3>
@@ -114,6 +117,17 @@ export default function WorkExperience({ step, goToStep, stepTitle, heading }: W
                         My workload is overwhelming
                     </div>
                 </div>
+
+                <div className={styles.questionSection}>
+                    <div className={styles.questionNo}>
+                        4.
+                    </div>
+                    <div className={styles.questionSection}>
+                        On a scale how often does your supervisor listen and appreciate your suggestions?
+                    </div>
+                </div>
+                <ProgressIndicator progressSteps={Array.from({ length: totalSteps })} currentProgressStep={currentProgressStep} />
+
 
             </div>
         </div>

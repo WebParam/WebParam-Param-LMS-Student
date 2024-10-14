@@ -58,7 +58,7 @@ const LoginPage = () => {
               color: "white",
             }}
           >
-            Don't have an account yet?{" "}
+            {`Don't have an account yet?`}
             <a
               href="/register"
               style={{ color: "#FE457A", textDecoration: "underline" }}

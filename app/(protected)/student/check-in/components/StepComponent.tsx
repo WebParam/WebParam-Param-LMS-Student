@@ -6,7 +6,7 @@ export default function StepComponent({ step }: { step: number }) {
 
     return (
         <div >
-            <h2>{`Step ${step}: ${stepTitles[step]}`}</h2>
+            <h2>{`Step ${step}:`}</h2>
         </div>
     );
 }
