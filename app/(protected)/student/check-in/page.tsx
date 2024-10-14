@@ -48,7 +48,7 @@ export default function CheckIn() {
           {step === 0 && <StepsAndForm step={step} goToStep={goToStep} />}
           {step === 1 && <YouthDetails step={step} goToStep={goToStep} stepTitle={'Let’s Start...'} heading={'Youth Details'} />}
           {step === 2 && <WorkExperience step={step} goToStep={goToStep} stepTitle={'Tell us about work...'} heading={'Work Experience'} />}
-          {step > 2 && <StepComponent step={step} />}
+          {step > 2 && <StepComponent step={step as 3 | 4} />}
           <div className={styles.formFooter}>
             {step > 0 && (
               <button type="submit" className={`${styles.prevButton}`} onClick={() => prevStep()}>
