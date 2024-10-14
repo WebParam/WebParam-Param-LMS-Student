@@ -6,7 +6,7 @@ $primary-color: #FE457A;
   flex-direction: column;
   background-size: cover;
   background-position: center;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/login/image.jpg') !important;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../public/login/image.jpg') !important;
 }
 
 .loginContainer {

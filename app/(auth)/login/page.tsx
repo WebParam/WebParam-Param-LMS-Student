@@ -221,7 +221,7 @@ export default function LoginPage() {
           </div>
           {!isFreemium && (
             <div className={styles.signUpPrompt}>
-              Don&apos;t have an account yet? <Link href="/register">Sign Up</Link>
+              <span style={{ color: 'white !important' }}>Don&apos;t have an account yet? <Link href="/register" style={{ color: 'white !important', fontSize: '16px' }}>Sign Up</Link></span>
             </div>
           )}
         </div>
