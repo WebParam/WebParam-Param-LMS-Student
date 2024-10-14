@@ -20,7 +20,7 @@ const WorkBooks: React.FC = () => {
   };
 
   return (
-      <table className="rbt-table table table-borderless">
+      <table className="rbt-table table table-borderless" style={{minWidth:'10px'}}>
         <thead className='thead-light'>
           <tr>
             <th scope="col">WorkBooks</th>

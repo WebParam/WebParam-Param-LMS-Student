@@ -87,7 +87,7 @@ export default function Statistics() {
 
           <div className="col-lg-6 col-md-12 card-group-row__col">
            
-          <BarGraph/>
+          {/* <BarGraph/> */}
           </div>
         </>
       )}
@@ -102,9 +102,9 @@ export default function Statistics() {
         <LineChart/>
           </div>
 
-          <div className="col-lg-6 col-md-12 card-group-row__col">
+          {/* <div className="col-lg-6 col-md-12 card-group-row__col">
            <LineChart/>
-          </div>
+          </div> */}
         </>
       )}
     </div>

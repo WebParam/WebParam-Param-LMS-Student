@@ -1,46 +1,53 @@
 'use client';
-import React, { useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useAssessmentContext } from '../(context)/AssessmentContext';
 import { Modal } from 'react-bootstrap';
 import Link from 'next/link';
+import styles from '../../../styles/assessment/assessment.module.css'
+import { GET } from '@/app/lib/api-client';
+import Cookies from 'universal-cookie';
+import { useSearchParams } from 'next/navigation';
+import { rAssessmentUrl } from '@/app/lib/endpoints';
 
-const summativeData = [
-  {
-    id: 1,
-    title: "Write a short essay on yourself",
-    course: "Fundamentals 101",
-    submissions: 2,
-    link: "#",
-  },
-  {
-    id: 2,
-    title: "Speaking Korean for Beginners",
-    course: "Speaking 101",
-    submissions: 3,
-    link: "#",
-  },
-];
+type Assessment = {
+    mark: number;
+    assessment: {
+      title: string;
+      courseId: string;
+      type: number;
+      totalMarks: number;
+      dueDate: string;
+      id: string;
+      state: number;
+    }
+  }
 
-const formativeData = [
-  {
-    id: 3,
-    title: "Conflict Resolution Strategies",
-    course: "Communication 103",
-    submissions: 6,
-    link: "#",
-  },
-  {
-    id: 4,
-    title: "Active Listening Skills",
-    course: "Communication 104",
-    submissions: 9,
-    link: "#",
-  },
-];
-
-export default function CompletedAssessment() {
+function CompletedAssessment() {
   const [showDownload, setShowDownload] = useState(false);
+  const [filteredAssessments, setFilteredAssessments] = useState<Assessment[]>([]);
+  const [assessments, setAssessments] = useState<Assessment[]>([]);
+ 
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get('loggedInUser');
+  const userID = cookies.get('userID');
 
+  const searchParams = useSearchParams();
+  const type = searchParams.get('type');
+
+  useEffect(() => {
+    fetchAssessments();
+  }, []);
+
+  async function fetchAssessments() {
+    try {
+      const response = await GET(`${rAssessmentUrl}/api/v1/StudentAnswers/GetStudentAssessments/${userID || loggedInUser?.userId}`);
+      debugger;
+      setAssessments(response?.data?.data);
+    } catch (error) {
+      console.error("Error fetching assessments:", error);
+    }
+  }
+  
   function handleDownload() {
     setShowDownload(true);
     setTimeout(() => {
@@ -48,8 +55,14 @@ export default function CompletedAssessment() {
     }, 700);
   }
 
-  const { assessmentType } = useAssessmentContext();
-  const data = assessmentType === "summative" ? summativeData : formativeData;
+  useEffect(() => {
+    if(assessments.length > 0){    
+      debugger;
+    const filteredAssessments = assessments?.filter((assessment: Assessment) => assessment?.assessment?.type === (type === 'summative' ? 0:1));
+    setFilteredAssessments(filteredAssessments);
+    }
+  }, [assessments]);
+
 
   return (
     <>
@@ -70,32 +83,32 @@ export default function CompletedAssessment() {
         </div>
       </Modal>
 
-      <table className="rbt-table table table-borderless">
+      <table className="rbt-table table table-borderless" style={{minWidth:'10px'}}>
         <thead>
           <tr>
-            <th colSpan={2} className="fontSize12">Assessment (marks)</th>
-            <th className="fontSize12">Submissions</th>
+            <th colSpan={2} className="fontSize12">Assessment</th>
+            <th className="fontSize12">Marks</th>
             <th className="fontSize12" style={{ textAlign: 'right', paddingRight: '60px' }}>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((assessment) => (
+          {filteredAssessments.length > 0 ? filteredAssessments.map((assessment:any) => (
             <tr key={assessment.id}>
               <th colSpan={2}>
-                <span className="h6 mb--5">{assessment.title}</span>
+                {/* <span className="h6 mb--5">{assessment.title}</span> */}
                 <p className="b3">
-                  Course: <a href={assessment.link}>{assessment.course}</a>
+                  <span>{assessment?.assessment?.title}</span>
                 </p>
               </th>
               <td>
-                <p className="b3 text-align-center" style={{ textAlign: 'center' }}>{assessment.submissions}</p>
+                <p className="b3 text-align-center" style={{ textAlign: 'left' }}>{assessment?.mark}</p>
               </td>
               <td>
-                <div className="rbt-button-group justify-content-end">
+                <div className={`rbt-button-group justify-content-end ${styles.container}`}>
                   <Link
-                    className="rbt-btn btn-xs bg-primary-opacity radius-round"
+                    className={`rbt-btn btn-xs bg-primary-opacity radius-round ${styles.ViewLink}`}
                     title="View"
-                    href={`/student/assessments/marked-assessment?id=${assessment.id}`}
+                    href={`/student/assessments/marked-assessment?id=${assessment?.assessment?.id}`}
                   >
                     <i className="float-left bi bi-eye pl--0" />
                     <span className="viewButtonText">View</span>
@@ -103,7 +116,7 @@ export default function CompletedAssessment() {
                   <Link
                     className="rbt-btn btn-xs bg-dark-opacity radius-round"
                     title="Download assessment"
-                    href={`https://khumla-dev-assessment-read.azurewebsites.net/api/v1/StudentAnswers/DownloadStudentAssignment/${assessment.id}`}
+                    href={`https://khumla-dev-assessment-read.azurewebsites.net/api/v1/StudentAnswers/DownloadStudentAssignment/${assessment?.assessment?.id}`}
                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     onClick={handleDownload}
                   >
@@ -112,9 +125,15 @@ export default function CompletedAssessment() {
                 </div>
               </td>
             </tr>
-          ))}
+          )) : <tr><td colSpan={4} className="text-center">No assessments found</td></tr>}
         </tbody>
       </table>
     </>
   );
+}
+
+export default function CompletedAssessmentPage() {
+  return <Suspense fallback={<div>Loading...</div>}>
+    <CompletedAssessment />
+  </Suspense>
 }

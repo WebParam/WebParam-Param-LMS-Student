@@ -2342,18 +2342,21 @@ input:-moz-placeholder,
 textarea:-moz-placeholder {
   opacity: 1;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 }
 
 input::-webkit-input-placeholder,
 textarea::-webkit-input-placeholder {
   opacity: 1;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 }
 
 input::-moz-placeholder,
 textarea::-moz-placeholder {
   opacity: 1;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 }
 
 input:-ms-input-placeholder,
@@ -9247,6 +9250,7 @@ button,
 [type=reset],
 [type=submit] {
   -webkit-appearance: button;
+  appearance: button;
 }
 
 input,
@@ -12792,6 +12796,15 @@ ul.rbt-dropdown-menu.currency-menu li .sub-menu {
 .rbt-header {
   position: relative;
   z-index: 99;
+
+  @media (max-width: 769px) {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 80px;
+    padding: 0 !important;
+  }
 }
 
 .rbt-header .logo a img {
@@ -12829,6 +12842,7 @@ ul.rbt-dropdown-menu.currency-menu li .sub-menu {
   .rbt-header .rbt-header-wrapper {
     padding-top: 15px;
     padding-bottom: 15px;
+    height: 80px;
   }
 }
 
@@ -15178,7 +15192,6 @@ a.btn-underline-gradient,
 button.btn-underline-gradient {
   background-clip: text !important;
   -webkit-background-clip: text !important;
-  text-fill-color: transparent !important;
   -webkit-text-fill-color: transparent !important;
   background: linear-gradient(to right, var(--color-primary) 0%, var(--color-secondary) 100%);
   display: inline-block;
@@ -20961,7 +20974,7 @@ span.transparent-button:hover i {
 /*-------------------------
     Back To Top  
 ---------------------------*/
-@-webkit-keyframes border-transform {
+@keyframes border-transform {
 
   0%,
   100% {
@@ -21054,6 +21067,7 @@ span.transparent-button:hover i {
   opacity: 0;
   background: #0d0d12;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   left: 0;
   top: 0;
@@ -25246,6 +25260,7 @@ body.modal-open {
 .mfp-with-zoom.mfp-bg {
   opacity: 0;
   -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   -webkit-transition: all 0.3s ease-out;
   -moz-transition: all 0.3s ease-out;
   -o-transition: all 0.3s ease-out;

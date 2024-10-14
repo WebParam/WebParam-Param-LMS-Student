@@ -51,7 +51,7 @@ const PracticalSkillsModules: React.FC = () => {
     <div className="d-flex justify-content-between align-items-center w-100 p-2">
         <h5>Practical Skills Modules</h5>
       </div>
-      <table className="rbt-table table table-borderless">
+      <table className="rbt-table table table-borderless" style={{minWidth:'10px'}}>
         <thead className='thead-light'>
           <tr>
           <th >Date</th>

@@ -1,122 +1,412 @@
-/* components/uploadDocs.scss */
-.requiredDocs {
+
+
+@media (min-width: 768px) {
+.documents-container {
     display: flex;
-    flex-wrap: wrap;
-    position: relative;
-
-    justify-content: center;
-}
-
-.docContainer {
-    border: 2px dashed #ccc;
-    padding: 20px;
-    text-align: center;
-    width: 250px;
-    margin: 10px;
-    position: relative;
-    box-sizing: border-box;
-    transition: background-color 0.3s;
-
-    // &.uploaded {
-        // background-color: #e9dbdc;
-        // border: 2px dashed #ccc;
-    // }
-
-    & > span {
-        cursor: pointer;
-    }
-}
-
-.docContainer h3 {
-    margin: 10px 0;
-    font-size: 16px;
-}
-
-.docContainer i {
-    font-size: 24px;
-    color: #ffffff;
-    background-color:#24345c ;
-   padding: 10px 15px;
-   border-radius: 50%;
-}
-
-.docContainer h5 {
-    margin: 10px 0;
-}
-
-.docContainer input[type="file"] {
-    display: none;
-}
-
-.docContainer label {
-    background:#24345c;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.docContainer .fileName {
-    margin: 10px 0;
-    font-style: italic;
-}
-
-.docContainer.dragover {
-    background-color: #24345c;
-    border-color: #24345c;
-}
-
-.modalContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    min-height: 200px;
-    transition: .5s all;
-
-    & p {
-        color: #24345c;
-    }
-
-    & button {
-        width: 200px;
-        height: 50px;
-        border: none;
-        border-radius: 8px;
-        background-color: #24345c;
-        outline: none;
-    }
-}
-
-.successUpload {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    min-height: 200px;
-
-    & > :first-child {
-        transform: scale(4);
-        color: #24345c;
-    }
-
-    & button {
-        width: 200px;
-        height: 50px;
-        border: none;
-        border-radius: 8px;
-        background-color: #24345c;
-        outline: none;
-        margin-top: 40px;
-    }
-}
-
-.fileName {
-    font-size: 12px;
+    height: 100dvh !important;
+    background-color: #f5f5f5;
     width: 100%;
-    text-wrap: wrap;
-    max-width: 100%;
-    overflow-x: hidden;
+    gap: 5px;
+    padding: 20px;
+
+        * {
+            overflow: hidden !important;
+        }
+    }
+
+    .document-name-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 25%;
+        padding-top: 5px;
+        border: none;
+
+        & ul {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding-left: 3px;
+            width: 100%;
+
+            & li {
+                display: flex;
+                align-items: center;
+                padding-left: 10px;
+                cursor: pointer;
+
+                & i {
+                    transform: scale(2);
+                    color: rgb(36, 52, 92);
+                }
+
+                & > div {
+                    display: flex;
+                
+                    align-items: center;
+                    
+                    & div {
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+
+                &.active {
+                    border-left: 4px solid #5a7dd4;
+                    padding-left: 5px;
+                    color: #5a7dd4;
+                }
+            }
+
+            
+        }
+    }
+
+    .document-preview {
+        border: none;
+        width: 65%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+
+        &-container {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .document-upload-container {
+        width: 15%;
+        border: none;
+    }
+
+    .top-controlls {
+        height: 50px;
+        margin: 0;
+        margin-bottom: 5px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & h6 {
+            margin: 0;
+        }
+
+        & > div {
+            display: flex;
+            gap: 10px;
+
+            & button {
+                height: 40px;
+                width: 100px;
+                border: none;
+                transition: .5s all;
+            }
+        }
+    }
+
+
+    .document-preview-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .upload-container {
+        box-shadow:  0px 6px 34px rgba(215, 216, 222, .41);
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 20px;
+
+        & h5 {
+            width: 100%;
+        }
+
+        & form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            
+            & > div:nth-child(1) {
+                border: 1px dashed #252525;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                width: 100%;
+            
+                
+            & .icon-upload {
+                font-size: 100px;
+                color: rgb(36, 52, 92);
+                margin: 0;
+            }
+
+            & p {
+                text-align: center;
+                margin: 0;
+
+            }
+
+            & label {
+                width: 100px;
+                font-size: 14px;
+                background-color: rgb(36, 52, 92);
+                color: white;
+            }
+            }
+        
+
+            & > div:nth-child(2) {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 5px;
+                align-items: center;
+                width: 100%;
+
+                & p {
+                    font-size: 12px;
+                    margin: 0;
+                }
+
+            }
+
+            & > div:nth-child(4) {
+                display: flex;
+                justify-content: flex-end;
+                margin-top: 5px;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
+
+                & button {
+                    width: 100px;
+                    height: 40px;
+                    font-size: 14px;
+                }
+
+            }
+        }
+    }
+
+    .file-name {
+        box-shadow:  0px 6px 34px rgba(215, 216, 222, .41);
+        width: 100%;
+        display: flex;
+        border:1px solid lightgray;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        margin: 20px;
+
+        & p {
+            margin: 0;
+            text-wrap: wrap;
+            width: 100%;
+            text-align: center;
+        }
+    }
 }
+
+
+
+    @media (max-width: 768px) {
+        .top-controlls {
+            height: 70px;
+            margin-bottom: 30px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap:10px;
+    
+            & h6 {
+                margin: 0;
+                text-align: center;
+            }
+    
+            & > div {
+                display: flex;
+                gap: 10px;
+    
+                & button {
+                    height: 30px;
+                    width: 100px;
+                    border: none;
+                    transition: .5s all;
+                }
+            }
+        }
+
+        .documents-container {
+            display: flex;
+            flex-direction: column;
+            height: 100dvh !important;
+            background-color: #f5f5f5;
+            width: 100%;
+            gap: 15px;
+            padding: 10px;
+        
+              
+            }
+        
+            .document-name-list {
+                display: flex;
+                align-items: center;
+                border: 1px solid red;
+                width: 100%;
+                padding-top: 5px;
+                border: none;
+                overflow-x: auto;
+        
+                & ul {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    padding-left: 3px;
+                    width: 100%;
+        
+                    & li {
+                        display: flex;
+                        align-items: center;
+                        padding-left: 10px;
+                        cursor: pointer;
+        
+                        & i {
+                            transform: scale(2);
+                            color: rgb(36, 52, 92);
+                        }
+        
+                        & > div {
+                            display: flex;
+                        
+                            align-items: center;
+                            
+                            & div {
+                                display: flex;
+                                align-items: center;
+                            }
+                        }
+        
+                        &.active {
+                            border-left: 4px solid #5a7dd4;
+                            padding-left: 5px;
+                            color: #5a7dd4;
+                        }
+                    }
+        
+                    
+                }
+            }
+        
+            .upload-container {
+                box-shadow:  0px 6px 34px rgba(215, 216, 222, .41);
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+                padding: 5px;
+        
+                & h5 {
+                    width: 100%;
+                }
+        
+                & form {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 100%;
+                    
+                    & > div:nth-child(1) {
+                        border: 1px dashed #252525;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 10px;
+                        width: 100%;
+                    
+                        
+                    & .icon-upload {
+                        font-size: 100px;
+                        color: rgb(36, 52, 92);
+                        margin: 0;
+                    }
+        
+                    & p {
+                        text-align: center;
+                        margin: 0;
+        
+                    }
+        
+                    & label {
+                        width: 100px;
+                        font-size: 14px;
+                        background-color: rgb(36, 52, 92);
+                        color: white;
+                    }
+                    }
+                
+        
+                    & > div:nth-child(2) {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-top: 5px;
+                        align-items: center;
+                        width: 100%;
+        
+                        & p {
+                            font-size: 12px;
+                            margin: 0;
+                        }
+        
+                    }
+        
+                    & > div:nth-child(4) {
+                        display: flex;
+                        justify-content: flex-end;
+                        margin-top: 5px;
+                        align-items: center;
+                        gap: 10px;
+                        width: 100%;
+        
+                        & button {
+                            width: 100px;
+                            height: 40px;
+                            font-size: 14px;
+                        }
+        
+                    }
+                }
+            }
+        
+            .document-upload-container {
+                display: none;
+            }
+
+            .no-document-selected {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 10px;
+
+                & h5 {
+                    margin: 0;
+                    text-align: center;
+                }
+            }
+    }

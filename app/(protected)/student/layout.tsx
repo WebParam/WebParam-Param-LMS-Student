@@ -1,12 +1,21 @@
+"use client";
+
 import StudentDashboardSidebar from "@/ui/student/student-enrolled-courses/student-sidebar";
 import styles from "@/styles/side-bar/side-bar-hide.module.css";
 import InstructorDashboardHeader from "@/ui/dashboard/dashboard-wrapper";
+import { CourseIdProvider } from "@/context/courseId-context/courseId-context";
+import MaintenanceModal from '@/ui/banner/MaintanceModal';
+import { useState, useEffect } from 'react';
 
 export default function StudentLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
+
+
+  
 
   return (
     <>
@@ -23,12 +32,19 @@ export default function StudentLayout({
                 <div className={`col-lg-3 ${styles.sidebarHiddenOnMobile}`}>
                   <StudentDashboardSidebar />
                 </div>
-                <div className="col-lg-9">{children}</div>
+                <div className="col-lg-9">
+                  {children}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <MaintenanceModal 
+        show={showMaintenanceModal} 
+        onHide={() => setShowMaintenanceModal(false)} 
+      />
     </>
   );
 }

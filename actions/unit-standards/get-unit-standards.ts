@@ -1,3 +1,4 @@
+import { GET } from "@/app/lib/api-client";
 import { rCourseUrl } from "@/app/lib/endpoints";
 import {
   UnitStandardData,
@@ -8,17 +9,9 @@ export const getAlltUnitStandards = async (
   courseId: string
 ): Promise<UnitStandardData[]> => {
   try {
-    const response = await fetch(
-      `${rCourseUrl}/api/v1/KnowledgeModules/GetKnowledgeModules/${courseId}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
-
-    const responseData: ApiResponse = await response.json();
+    const response = await GET(`${rCourseUrl}/api/v1/KnowledgeModules/GetKnowledgeModules/${courseId}`);
+    debugger;
+    const responseData= response.data;
 
     if (responseData.error) {
       throw new Error(

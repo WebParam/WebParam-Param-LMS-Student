@@ -20,9 +20,11 @@ import "@/public/scss/styles.scss";
 import { UserProvider } from "@/context/user-context/user-context";
 import { LessonProvider } from "@/context/lesson-context/lesson-context";
 import { Provider } from "./providers";
+import { CourseIdProvider } from "@/context/courseId-context/courseId-context";
+import { ProgressContextProvider } from "@/context/progress-card-context/progress-context";
+// import FlagSmithProvider from "./FlagSmithProvider";
 
 const inter = Inter({ subsets: ["latin"] });
-
 
 const APP_NAME = "Thooto";
 const APP_DESCRIPTION = "Supercharge your learning. 🚀🚀";
@@ -49,25 +51,30 @@ export const metadata: Metadata = {
   },
 };
 
-
 export const viewport: Viewport = {
   themeColor: "#FFFFFF",
 };
 
-export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
-
-
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <UserProvider>
           <LessonProvider>
             <Provider>
-              <Navbar />
-            {children}
+              <CourseIdProvider>
+              <ProgressContextProvider>
+                  <Navbar />
+                  {/* <FlagSmithProvider> */}
+                  <>{children}</>
+                  {/* </FlagSmithProvider> */}
+                </ProgressContextProvider>
+                </CourseIdProvider>
             </Provider>
             <BootstrapClient />
-           
+
             <ToastContainer />
           </LessonProvider>
         </UserProvider>

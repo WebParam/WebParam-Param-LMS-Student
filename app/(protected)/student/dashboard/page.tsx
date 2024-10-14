@@ -6,6 +6,8 @@ import Analytics from "./analytics/page";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect } from "react";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 function PageContent() {
   const searchParams = useSearchParams();
@@ -18,8 +20,15 @@ function PageContent() {
     }
   }, [searchParams, router]);
 
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+  }, []);
+
   return (
-    <div className="content">
+    <div className="content" data-aos="fade-down">
       <div className="section-title">
         <ul
           className="nav nav-tabs tab-button-style-2 justify-content-start"

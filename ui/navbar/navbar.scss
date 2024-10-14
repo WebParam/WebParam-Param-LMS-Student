@@ -1,4 +1,5 @@
 
+
 .humburger-menu {
     height: 3px;
     width: 30px;
@@ -10,23 +11,27 @@
     cursor: pointer;
     transition: .5s;
 
+    @media (min-width: 768px) {
+        display: none;
+    }
+
 
     &::before {
         transition: .5s;
         position: absolute;
         content: '';
-        height: 2px;
+        height: 3px;
         width: 30px;
         border-radius: 3px;
         margin: 0 auto;
         background: black;
-        transform: translateY(-5px);
+        transform: translateY(-6px);
     }
 
     &::after {
         position: absolute;
         content: '';
-        height: 2px;
+        height: 3px;
         width: 30px;
         border-radius: 3px;
         margin: 0 auto;
@@ -39,7 +44,6 @@
 .humburger-menu.active {
     height: 3px;
     width: 30px;
-    // opacity: 0;
     background: transparent;
     position: relative;
     display: flex;
@@ -78,4 +82,18 @@
     z-index: 10;
     box-shadow: 0px 6px 34px rgba(215, 216, 222, 0.41);;
     border-radius: 0 0 0 8px;
+}
+
+.rbt-header {
+    position: relative;
+    z-index: 99;
+
+    @media (min-width: 768px) {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 80px;
+        padding: 0 !important;
+    }
 }

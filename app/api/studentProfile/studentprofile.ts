@@ -1,11 +1,12 @@
+import { GET, PUT } from "@/app/lib/api-client";
 import { rCourseUrl, readUserData, writeUserData } from "@/app/lib/endpoints";
 import axios from "axios";
 
 
 export async function StudentProfile(payload: any) {
     try {
-        const register = await axios.put(`${writeUserData}/api/v1/Profile/UpdateProfile`,payload);
-        return register;
+        const res = await PUT( payload,`${writeUserData}/api/v1/Profile/UpdateProfile`,);
+        return res;
     } catch (error: any) {
         console.log(error);
     }
@@ -13,7 +14,7 @@ export async function StudentProfile(payload: any) {
 
 export async function updateDemographicsInformation(payload: any) {
     try {
-        const res = await axios.put(`${writeUserData}/api/v1/Student/UpdateStudentDemographicsInformation`,payload);
+        const res = await PUT(payload,`${writeUserData}/api/v1/Student/UpdateStudentDemographicsInformation`, );
         return res;
     } catch (error: any) {
         console.log(error);
@@ -22,7 +23,8 @@ export async function updateDemographicsInformation(payload: any) {
 
 export async function updateContactInformation(payload: any) {
     try {
-        const res = await axios.put(`${writeUserData}/api/v1/Student/UpdateStudentContactInformation`,payload);
+ 
+        const res = await PUT( payload,`${writeUserData}/api/v1/Student/UpdateStudentContactInformation`);
         return res;
     } catch (error: any) {
         console.log(error);
@@ -31,7 +33,8 @@ export async function updateContactInformation(payload: any) {
 
 export async function updateEmployeeInformation(payload: any) {
     try {
-        const res = await axios.put(`${writeUserData}/api/v1/Student/UpdateStudentEmployeeInformation`,payload);
+  
+        const res = await PUT(payload,`${writeUserData}/api/v1/Student/UpdateStudentEmployeeInformation`);
         return res;
     } catch (error: any) {
         console.log(error);
@@ -40,7 +43,7 @@ export async function updateEmployeeInformation(payload: any) {
 
 export async function updateRegionalInformation(payload: any) {
     try {
-        const res = await axios.put(`${writeUserData}/api/v1/Student/UpdateStudentRegionalInformation`,payload);
+        const res = await PUT( payload,`${writeUserData}/api/v1/Student/UpdateStudentRegionalInformation`,);
         return res;
     } catch (error: any) {
         console.log(error);
@@ -48,43 +51,39 @@ export async function updateRegionalInformation(payload: any) {
 }
 
 export async function getStudentProfile(userId: any) {
-  try {
-    const register = await axios.get(`${readUserData}/api/v1/Profile/GetUserProfile/${userId}`
-    );
-    return register;
-  } catch (error: any) {
-    console.log(error);
-  }
+    try {
+        const res = await GET(`${readUserData}/api/v1/Profile/GetUserProfile/${userId}`);
+        return res;
+    } catch (error: any) {
+        console.log(error);
+    }
 }
 
 export const getStudentData = async (studentId: string) => {
-    const resp = await axios.get(`${readUserData}/api/v1/Student/GetStudentInformation/${studentId} `)
-    return resp.data
-  }
-  
+    // const resp = await axios.get(`${readUserData}/api/v1/Student/GetStudentInformation/${studentId} `)
+    const res = await GET(`${readUserData}/api/v1/Student/GetStudentInformation/${studentId} `);
+    return res.data
+}
 
-export async function getStudentDocuments(userId:any) {
+
+export async function getStudentDocuments(userId: any) {
     try {
-        const register = await axios.get(`${readUserData}/api/v1/Documents/GetDocuments/${userId}`);
-        return register;
 
-    } catch(error: any) {
+        const res = await GET(`${readUserData}/api/v1/Documents/GetDocuments/${userId}`);
+        return res;
+
+    } catch (error: any) {
         console.log(error);
     }
 }
 
 
-
-
-export async function getDocumentsByCourseId(courseId:any) {
+export async function getDocumentsByCourseId(courseId: any) {
     try {
-        //TODO: BRAD: Pass in id from env for boundlesss
-        //  const register = await axios.get(`https://khumla-prod-newcourse-read.azurewebsites.net/api/v1/Document/GetCourseDocuments/66aa8c8245223bcb337a9641`);
+        const res = await GET(`${readUserData}/api/v1/Documents/GetDocuments/${courseId}`);
+        return res;
 
-        const register = await axios.get(`${readUserData}/api/v1/Documents/GetDocuments/${courseId}`);
-        return register;
-
-    } catch(error: any) {
+    } catch (error: any) {
         console.log(error);
     }
 }

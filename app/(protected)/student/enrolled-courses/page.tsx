@@ -4,12 +4,9 @@ import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import Loader from "@/ui/loader/loader";
 import styles from "@/styles/enrolled-courses/enrolled-courses.module.css";
-import { getAlltUnitStandards } from "@/actions/unit-standards/get-unit-standards";
-import { UnitStandardData } from "@/interfaces/enrolled-unit-standards/unit-standards/unit-standards";
-import UnitStandardWidget from "@/ui/student/enrolled/sample-unit";
+import './course.scss';
 // import { isMobile } from "react-device-detect";
-import { getCourseId, getEnrolledCourse } from "@/app/api/my-courses/course";
-import courseImage from './courseImage.jpeg';
+
 import Cookies from "universal-cookie";
 import { isMobile } from "react-device-detect";
 import Active from "./active";
@@ -17,85 +14,60 @@ import Enrolled from "./enrolled";
 import Completed from "./completed";
 import SoftSkills from "./softSkills/soft-skills";
 import { useRouter, useSearchParams } from "next/navigation";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const EnrolledCourses = () => {
-  const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [unitStandards, setUnitStandards] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  const [isProgress, setIsProgress] = useState(true);
-  const [isCompleted, setIsCompleted] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [showDescription, setShowDescription] = useState(false);
-  const [showAuthor, setShowAuthor] = useState(false);
-  const [courseStyle, setCourseStyle] = useState("two");
   
   const cookies = new Cookies();
-
-  const user = cookies.get("loggedInUser");
+const access = process.env.NEXT_PUBLIC_ACCESS??"ALL_ACCESS";
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
-
-  const itemsPerPage = 3;
-  const startIndex = currentPage * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
-  const getUnitStandards = async (courseId: string) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const data = await getAlltUnitStandards(courseId);
-      setUnitStandards(data);
-      setLoading(false);
-    } catch (error: any) {
-      setError(error.message);
-      setLoading(false);
-    }
-  };
-
-  const getKnowledgeModules = async (userId:any) => {
-    if (userId) {
-        const courseId = await getCourseId(userId);
-        if (courseId?.data) {
-            const res = await getEnrolledCourse(courseId?.data);
-    
-            console.log("knowledge modules: ", res?.data.data);
-            if (res?.data) {
-                setUnitStandards(res.data.data);
-            }
-        }
-    }
-  }
+  const type = searchParams.get("type")??'KM';
 
   useEffect(() => {
-    
-    getKnowledgeModules(user.data.id||user.data.userId);
-
-    console.log("knowledge modules:", unitStandards);
-  }, []);
-
-  useEffect(() => {
-    if (tab == null) {
+    if (tab === null) {
       router.push('/student/enrolled-courses?tab=enrolled');
     }
-  }, [tab]);
+  }, [tab, router]);
+
+  useEffect(() => {
+    if (!type) {
+      router.push('/student/enrolled-courses?tab=enrolled&type=KM');
+    }
+  }, [type]);
+
+  useEffect(() => {
+    AOS.init({
+      once: true,
+      duration: 1500,
+    });
+  }, []);
 
   if (loading) {
     return <Loader />;
   }
 
   return (
-    <div className="rbt-dashboard-content bg-color-white rbt-shadow-box">
+    <div 
+      className="rbt-dashboard-content bg-color-white rbt-shadow-box"
+      data-aos="fade-right"
+    >
       <div className="content">
-        <div className="section-title">
-          <h4 className="get-4-color rbt-title-style-3">
+        <div className="section-title d-flex justify-content-between align-items-center nav-titles mb-5">
+          <h4 className="get-4-color rbt-title-style-3" style={{margin:'0', padding:'0'}}>
             <i className="bi bi-laptop "></i>
             <span className="style-3-left">My Courses</span>
           </h4>
+          <div>
+            <select className="form-select" value={type} onChange={(e) => router.push(`/student/enrolled-courses?tab=enrolled&type=${e.target.value}`)} style={{width:'200px', borderRadius:'5px', margin:'0'}}>
+              <option value="KM">Knowledge Modules</option>
+              <option value="PM">Practical Modules</option>
+            </select>
+          </div>
         </div>
         <div className={`advance-tab-button mb--30 ${styles.advanceTabButton}`}>
           <ul className={`nav nav-tabs tab-button-style-2 ${styles.navTabs}`} id="myTab-4" role="tablist">
@@ -114,7 +86,7 @@ const EnrolledCourses = () => {
                 <span className="title">Enrolled</span>
               </Link>
             </li>
-            <li role="presentation">
+            <li role="presentation" style={{pointerEvents:access=="COURSE_ONLY"?"none": "auto", opacity: access=="COURSE_ONLY"?"0.2":"1"}}>
               <Link
                 href="#"
                 className={`tab-button ${tab == "active" && "active"} ${styles.tabButton}`}
@@ -129,7 +101,7 @@ const EnrolledCourses = () => {
                 <span className="title">Active</span>
               </Link>
             </li>
-            <li role="presentation">
+            <li role="presentation" style={{pointerEvents:access=="COURSE_ONLY"?"none": "auto", opacity: access=="COURSE_ONLY"?"0.2":"1"}}>
               <Link
                 href="#"
                 className={`tab-button ${tab == "completed" && "active"} ${styles.tabButton}`}
@@ -144,7 +116,7 @@ const EnrolledCourses = () => {
                 <span className="title">Completed</span>
               </Link>
             </li>
-            <li role="presentation">
+            <li role="presentation"  style={{pointerEvents:access=="COURSE_ONLY"?"none": "auto", opacity: access=="COURSE_ONLY"?"0.2":"1"}}>
               <Link
                 href="#"
                 className={`tab-button ${tab == "softSkills" && "active"} ${styles.tabButton}`}

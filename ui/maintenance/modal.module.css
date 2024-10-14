@@ -1,0 +1,48 @@
+.imageWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+ 
+  .shakeAnimation {
+    animation: shake 3s ease-in-out infinite;
+    animation-delay: 1s; /* Delay the shake animation to start after fade-down */
+  }
+ 
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  .curvedBox {
+    border: 2px solid  rgb(36, 52, 92); /* Blue border color */
+    border-radius: 15px; /* Curved radius */
+    padding: 15px;
+    margin-top: 20px;
+    background-color: rgba(0, 123, 255, 0.05); /* Light blue background */
+  }
+ 
+  .curvedBox p {
+    margin-bottom: 10px;
+  }
+ 
+  .curvedBox p:last-child {
+    margin-bottom: 0;
+  }
+
+  .maintenanceImage {
+    animation: fadeDown 1s ease-out, gentleShake 3s ease-in-out infinite;
+    animation-delay: 0s, 1s;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes gentleShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+  }

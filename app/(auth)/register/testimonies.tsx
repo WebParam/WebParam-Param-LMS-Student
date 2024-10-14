@@ -74,10 +74,10 @@ export default function Testimonies() {
                 <div className="col-lg-12">
                 <div className="section-title text-center mb--10">
                     <span className="subtitle bg-primary-opacity">
-                    EDUCATION FOR EVERYONE
+                    {process.env.NEXT_PUBLIC_SITENAME ?? "EDUCATION FOR EVERYONE"}
                     </span>
                     <h4 className="title">
-                    People are supercharging their learning!
+                    {process.env.NEXT_PUBLIC_SITETAGLINE ?? "People are supercharging their learning!"}
                     </h4>
                 </div>
                 </div>

@@ -1,10 +1,13 @@
 "use client";
+import './notifications.scss';
 import { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { markNotificationRead } from "@/app/api/notifications/notification";
+import { getNotifications, markNotificationRead } from "@/app/api/notifications/notification";
 import { notificationType } from "@/app/Utils/notificationInterface";
+import moment from "moment";
 import Cookies from "universal-cookie";
 import NotificationsSkeleton from "./loading";
+import styles from "../../../../styles/modal/NotificationsModal.module.css"
 
 export default function Notifications() {
   const [showNotification, setShowNotification] = useState(false);
@@ -20,16 +23,10 @@ export default function Notifications() {
 
   async function fetchNotifications(userId: string) {
     try {
-      const dummyNotifications: notificationType[] = [
-        { id: '1', createdAt: '2024-08-01T09:00:00Z', message: 'New assignment: Project Charter due on 2024-08-15.', isRead: false, notificationId: '1', userId: 'user1', reminder: false, reminderTime: '2024-08-01T09:00:00Z' },
-        { id: '2', createdAt: '2024-08-02T14:30:00Z', message: 'Reminder: Team meeting scheduled for 2024-08-05 at 10:00 AM.', isRead: true, notificationId: '2', userId: 'user2', reminder: true, reminderTime: '2024-08-02T14:30:00Z' },
-        { id: '3', createdAt: '2024-08-03T08:45:00Z', message: 'Feedback received on your Project Scope Statement.', isRead: false, notificationId: '3', userId: 'user3', reminder: false, reminderTime: '2024-08-03T08:45:00Z' },
-        { id: '4', createdAt: '2024-08-04T12:00:00Z', message: 'New resource added: Risk Management Plan template.', isRead: true, notificationId: '4', userId: 'user4', reminder: false, reminderTime: '2024-08-04T12:00:00Z' },
-        { id: '5', createdAt: '2024-08-05T16:00:00Z', message: 'Your project proposal has been approved.', isRead: false, notificationId: '5', userId: 'user5', reminder: false, reminderTime: '2024-08-05T16:00:00Z' },
-      ];
-      setNotifications(dummyNotifications);
-      setLoading(false);
-      console.log("response: ", dummyNotifications);
+      const res = await getNotifications(userId);
+      console.log("response: ", res.data.data);
+      setNotifications(res.data.data);
+      setLoading(false); // Set loading to false once notifications are fetched
     } catch (error) {
       console.error("Error fetching notifications:", error);
       setLoading(false);
@@ -39,7 +36,7 @@ export default function Notifications() {
   useEffect(() => {
     if (user) {
       console.log("user", String(user.data.id));
-      fetchNotifications(user.data.id || user.data.userId);
+      fetchNotifications(user?.data?.id || user?.userId);
     }
 
     console.log("response: ", notifications);
@@ -112,17 +109,18 @@ export default function Notifications() {
         show={showNotification}
         onHide={() => setShowNotification(false)}
         centered
+        contentClassName={styles.customModalContent}
       >
         <Modal.Header className="modal-header">
           <h5 className="modal-title" id="staticBackdropLabel">
-            Received: <span style={{ fontWeight: "400", fontSize: "15px" }}>{notification?.createdAt.split("T")[0]}</span>
+            Received: <span style={{ fontWeight: "400", fontSize: "15px" }}>{moment(notification?.createdAt).fromNow()}</span>
           </h5>
           <button type="button" onClick={() => setShowNotification(false)} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </Modal.Header>
         {isReadLoader && notification?.isRead === false ? (
           <div style={{ height: "70px", width: "100%" }} className="d-flex justify-content-center align-items-center flex-column gap-2">
             <div className="spinner-border text-dark" role="status" />
-            <p>opening message...</p>
+            <p>unboxing message...</p>
           </div>
         ) : (
           <>
@@ -169,9 +167,14 @@ export default function Notifications() {
                   </thead>
                   <tbody>
                     {notifications.length > 0 ? (
-                      notifications.map((alert) => (
-                        <tr key={alert.id} onClick={() => handleShowNotification(alert)} style={{ cursor: "pointer" }}>
-                          <td>{alert.createdAt.split("T")[0]}</td>
+                      notifications.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((alert) => (
+                        <tr 
+                        key={alert.id} 
+                        onClick={() => handleShowNotification(alert)} 
+                        style={{ cursor: "pointer"}}
+                        className={`${alert.isRead ? "" : "unread"}`}
+                        >
+                          <td>{moment(alert.createdAt).fromNow()}</td>
                           <td>
                             <p className="b2" style={{ fontWeight: `${alert.isRead ? "400" : "700"}` }}>{alert.message}</p>
                           </td>

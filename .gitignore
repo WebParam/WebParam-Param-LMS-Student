@@ -27,6 +27,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
@@ -37,4 +38,13 @@ next-env.d.ts
 /public/*.js
 /public/*.map
 /public/sw.js
+public/sw.js
+/.env.development
+/.env
+/.env
+/.env.development
+/public/sw.js
+/.env
+public/sw.js
+public/sw.js
 public/sw.js

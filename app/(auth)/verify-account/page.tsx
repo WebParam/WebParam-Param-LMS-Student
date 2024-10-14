@@ -4,16 +4,20 @@ import Image from 'next/image';
 import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import imageCover from "./verify.svg";
-import { LoginUser, verifyUserAccount } from '@/app/api/auth/auth';
+import { LoginUser, ResendSMS, verifyUserAccount } from '@/app/api/auth/auth';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
+import { isMobile } from 'react-device-detect';
+import { POST } from '@/app/lib/api-client';
 
 
 
 export default function VerifyPage() {
+  // const imageCover = process.env.NEXT_PUBLIC_LOGIN_IMAGE;
     const [otpValues, setOtpValues] = useState(['', '', '', '', '']);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
+    const [resending, setResending] = useState(false);
     const[otp, setOtp] = useState<Number>(0);
     const inputRefs = [
         useRef<HTMLInputElement>(null),
@@ -56,6 +60,25 @@ export default function VerifyPage() {
         }
       };
 
+      async function resend(){
+      setResending(true);
+        var contact = cookies.get('userPhone');
+        debugger;
+        var payload = {
+          phoneNumber:contact
+        }
+
+        const res = await ResendSMS(payload);
+        if(res.status ==200 ){
+          setTimeout(()=>{
+            setResending(false);
+          },10000)
+        }else{
+          setResending(false)
+        }
+        
+      }
+
       async function handleVerify(e:any) {
         e.preventDefault();
         setIsSubmitted(true);
@@ -66,14 +89,16 @@ export default function VerifyPage() {
         }
 
         const res = await verifyUserAccount(payload);
-        debugger;
+        
         if (res) {
             console.log(res);
             setIsSubmitted(false);
             // const user = await 
             cookies.set("loggedInUser", res?.data);
             localStorage.setItem("loggedInUser", res?.data)
-            router.push('/student/student-profile')
+            const redirectPath = process.env.NEXT_PUBLIC_FREEMIUM === 'true' ? "/student/projects?tab=enrolled" : "/student/student-profile";
+
+            router.push(redirectPath)
         } else {
             setIsSubmitted(false);
             setErrorMessage(true)
@@ -82,22 +107,35 @@ export default function VerifyPage() {
     return (
         <div className="login-container">
             <div 
-                className='left-container'
+                className="left-container"
                 data-aos="zoom-out-right"
+                style={{
+                  backgroundImage: !isMobile? `url(${imageCover.src})`:"none",
+                  backgroundSize: '60%',                
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  filter:"none !important",
+                //   backgroundColor:"#24345C;",
+                  boxShadow: 'inset 0 0 100px rgba(0,0,0,0.5)',
+                }}
                 >
-                    <div className='verify-card'>
+                    {/* <div className='verify-card'>
                         <Image src={imageCover.src} alt="verify" width={200} height={200}/>
                         <p className='text-center'>We sent an OTP to the phone number you provided.
                         Check your inbox and enter the 5 digit code.</p>
-                    </div>
+                    </div> */}
             </div>
-           <div className="login-inner" data-aos="zoom-out-left">
+           <div className="login-inner" style={{filter:"none !important"}} data-aos="zoom-out-left">
            <div className="verify">
-            <h1>Confirm  your Phone Number</h1>
-            <p className='text-center para-text'>We sent an OTP to the phone number you provided.
-            Check your inbox and enter the 5 digit code.</p>
+            <h1 style={{color:"white"}}>Confirm  your Phone Number</h1>
+            {/* <p className='text-center'>We sent an OTP to the phone number you provided.
+            Check your inbox and enter the 5 digit code.</p> */}
+           <small>We sent an OTP to the phone number you provided.
+           Check your inbox and enter the 5 digit code.</small><br/>
             <form onSubmit={handleVerify}>
+           
                 <div className="otpContainer">
+               
                     {inputRefs.map((ref, index) => (
                     <input
                       key={index}
@@ -117,10 +155,12 @@ export default function VerifyPage() {
                         {isSubmitted ? <div className="spinner-grow text-light" role="status" /> : 'Confirm'}
                     </button>
                 </div>
-                <div className="account">
-                    <p>Already have an account?
-                    <Link href='/login'> Log in</Link></p>
-                </div>
+                <div className="auth-footer">
+            <p style={{marginRight:"10px"}}> <small>Didn&#39;t receive a message?</small></p>
+           
+              <p style={{cursor: resending?"none":"pointer", color:resending?"grey":"", pointerEvents:resending?"none":"all"}}  onClick={()=>resend()}><b> {resending?"Sending SMS..": "Resend SMS"} </b></p>
+          
+          </div>
             </form>
         </div>
             </div>

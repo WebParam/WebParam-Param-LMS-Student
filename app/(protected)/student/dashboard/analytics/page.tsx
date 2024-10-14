@@ -1,12 +1,9 @@
 'use client'
-
-import './analytics.scss'
 import { leaderboard } from './data';
 import { Modal } from "react-bootstrap";
 import { useState } from "react";
-
-// import LineChart from "@/ui/charts/lineGraph";
-// import BarGraph from "@/ui/charts/barGraph";
+import LineChart from "@/ui/charts/lineGraph";
+import BarGraph from "@/ui/charts/barGraph";
 import DoubleLineGraph from "@/ui/charts/doubleLineGraph";
 import PieChart from "@/ui/charts/pieChart";
 import Sparkline from '@/ui/charts/sparkline';
@@ -18,10 +15,10 @@ export default function Analytics() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Calculate the number of pages
+ 
   const totalPages = Math.ceil(leaderboard.length / itemsPerPage);
 
-  // Calculate the current page items
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = leaderboard.slice(startIndex, startIndex + itemsPerPage);
 

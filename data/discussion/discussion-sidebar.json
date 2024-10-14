@@ -1,55 +1,70 @@
 {
-    "siderbar": [
+  "ALL_ACCESS": [
+    {
+      "link": "/student/dashboard",
+      "text": "Dashboard",
+      "icon": "bi bi-grid-fill"
+    },
+    {
+      "link": "/student/enrolled-courses",
+      "text": "My Courses",
+      "icon": "bi bi-laptop-fill"
+    },
+    {
+      "link": "/student/assessments",
+      "text": "Assessments",
+      "icon": "feather-message-square"
+    },
+    {
+      "link": "/student/assignments",
+      "text": "Assignments",
+      "icon": "feather-menu"
+    },
+    {
+      "link": "/student/logbook",
+      "text": "Logbook",
+      "icon": "bi bi-journal-bookmark"
+    },
+    {
+      "link": "/classes",
+      "text": "Classes",
+      "icon": "bi bi-calendar-event"
+    },
+    {
+      "link": "/student/notifications",
+      "text": "Notifications",
+      "icon": "feather-volume-2"
+    }
+  ],
+  "FREEMIUM": [
       {
-        "link": "#",
-        "text": "Dashboard",
-        "icon": "bi bi-grid-fill"
-      },
-      {
-        "link": "#",
-        "text": "My Profile",
-        "icon": "feather-user"
-      },
-      {
-        "link": "/student/student-enrolled-courses",
-        "text": "My Courses",
-        "icon": "bi bi-laptop-fill"
-      },
-      {
-        "link": "/discussions",
-        "text": "Discussions",
-        "icon": "bi bi-chat-dots-fill"
-      },
-      {
-        "link": "#",
-        "text": "My Progress",
-        "icon": "bi bi-graph-up-arrow"
-      },
-      {
-        "link": "#",
-        "text": "Announcements",
-        "icon": "bi bi-volume-up"
-      },
-      {
-        "link": "#",
-        "text": "Assessment",
-        "icon": "bi bi-clipboard2-plus-fill"
-      },
-      {
-        "link": "#",
-        "text": "Assignments",
-        "icon": "bi bi-clipboard2-check-fill"
-      },
-      {
-        "link": "#",
-        "text": "Settings",
-        "icon": "bi bi-gear-fill"
-      },
-      {
-        "link": "/",
-        "text": "Logout",
-        "icon": "feather-log-out"
-      }
-    ]
-  }
+      "link": "/student/projects?tab=enrolled",
+      "text": "My Projects",
+      "icon": "bi bi-laptop-fill"
+    },
+    {
+      "link": "/student/notifications",
+      "text": "Notifications",
+      "icon": "feather-volume-2"
+    }
   
+  ],
+  "COURSE_ONLY": [
+    {
+      "link": "/student/enrolled-courses",
+      "text": "My Courses",
+      "icon": "bi bi-laptop-fill"
+    },
+    {
+      "link": "/classes",
+      "text": "Classes",
+      "icon": "bi bi-calendar-event"
+    },
+    {
+      "link": "/student/notifications",
+      "text": "Notifications",
+      "icon": "feather-volume-2"
+    }
+  ]
+
+}
