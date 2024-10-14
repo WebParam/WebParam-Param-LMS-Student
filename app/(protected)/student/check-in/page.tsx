@@ -8,6 +8,7 @@ import YouthDetails from "./components/YouthDetails";
 import StepComponent from "./components/StepComponent";
 import WorkExperience from "./components/WorkExperience";
 import NextDefaultIcon from "./svg/NextDefaultIcon";
+import BackDefaultIcon from "./svg/BackDefaultIcon";
 
 export interface StepProps {
   step: number;
@@ -51,8 +52,8 @@ export default function CheckIn() {
           <div className={styles.formFooter}>
             {step > 0 && (
               <button type="submit" className={`${styles.prevButton}`} onClick={() => prevStep()}>
-                {'PREVIOUS'}
-                <NextDefaultIcon />
+                <BackDefaultIcon />
+                {'BACK'}
               </button>
             )}
             {step < 3 && (
