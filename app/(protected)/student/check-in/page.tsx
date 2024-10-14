@@ -35,7 +35,7 @@ export default function CheckIn() {
       <div className={styles.cardContainer}>
         <div className={styles.cardHeader}>
           <div className="d-flex flex-column">
-            <h1>Youth Programme Monthly Check-in 2023</h1>
+            <h1>Youth Programme Monthly Check-in 2024</h1>
             <p>This survey will take approximately 8 minutes to complete</p>
           </div>
           <button className={styles.closeButton}>✕</button>

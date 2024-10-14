@@ -75,10 +75,10 @@ export default function LoginPage() {
               console.log("Cookies set:", cookies.getAll());
               
               if(process.env.NEXT_PUBLIC_FREEMIUM){
-                const redirectPath = "/student/projects";
+                const redirectPath = "/student/check-in";
                 router.push(redirectPath)
               }else{
-              const redirectPath = "/student/enrolled-courses?tab=enrolled";
+              const redirectPath = "/student/check-in";
               router.push(redirectPath)
               }
                 
