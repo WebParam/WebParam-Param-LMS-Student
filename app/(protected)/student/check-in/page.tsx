@@ -10,6 +10,9 @@ import WorkExperience from "./components/WorkExperience";
 import NextDefaultIcon from "./svg/NextDefaultIcon";
 import BackDefaultIcon from "./svg/BackDefaultIcon";
 import UnderLineIcon from "./svg/UnderLineIcon";
+import Learning from "./components/Learning";
+import OverallReView from "./components/OverallView";
+import SubmitIcon from "./components/SubmitIcon";
 
 export interface StepProps {
   step: number;
@@ -57,7 +60,9 @@ export default function CheckIn() {
           {step === 0 && <StepsAndForm step={step} goToStep={goToStep} />}
           {step === 1 && <YouthDetails step={step} goToStep={goToStep} stepTitle={'Let’s Start...'} heading={'Youth Details'} />}
           {step === 2 && <WorkExperience step={step} goToStep={goToStep} stepTitle={'Tell us about work...'} heading={'Work Experience'} />}
-          {step > 2 && <StepComponent step={step} />}
+          {step === 3 && <Learning step={step} goToStep={goToStep} stepTitle={'One more...'} heading={'Learning'} />}
+          {step === 4 && <OverallReView step={step} goToStep={goToStep} stepTitle={'And we are done...'} heading={'Overall View'} />}
+          {step > 4 && <StepComponent step={step} />}
           <div className={styles.formFooter}>
             {step > 0 && (
               <button type="submit" className={`${styles.prevButton}`} onClick={() => prevStep()}>
@@ -69,6 +74,12 @@ export default function CheckIn() {
               <button type="submit" className={`${styles.nextButton}`} onClick={() => nextStep()}>
                 {'NEXT'}
                 <NextDefaultIcon />
+              </button>
+            )}
+            {step === 4 && (
+              <button type="submit" className={`${styles.nextButton}`} onClick={() => nextStep()}>
+                {'SUBMIT'}
+                <SubmitIcon />
               </button>
             )}
           </div>

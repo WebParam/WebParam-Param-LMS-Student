@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=detailsCard:wght@400;600&display=swap");
+
 $font-family: "Montserrat", sans-serif;
 $primary-color: #ffffff;
 $secondary-color: #fe457a;
@@ -150,6 +152,7 @@ $padding-mobile: '1.25rem';
                     color: $text-color;
                     list-style-type: decimal;
                     counter-reset: item;
+                    white-space: wrap;
 
                     li {
                         font-size: 1.125rem;
@@ -157,7 +160,7 @@ $padding-mobile: '1.25rem';
                         padding: 0.25rem 0;
                         color: darken($text-color, 20%);
                         list-style-position: inside;
-                        white-space: nowrap;
+                        white-space: wrap;
                     }
                 }
             }
@@ -279,6 +282,9 @@ $padding-mobile: '1.25rem';
                         }
                     }
                 }
+                .feedbackReactStart{
+                    justify-content: start !important;
+                }
 
                 .matchYourJobSection {
                     display: flex;
@@ -315,6 +321,10 @@ $padding-mobile: '1.25rem';
                     }
                 }
 
+                .matchYourJobStart{
+                    justify-content: start !important;
+                }
+
                 .workLoadSection {
                     display: flex;
                     flex-wrap: wrap;
@@ -339,7 +349,6 @@ $padding-mobile: '1.25rem';
                     width: 100%;
                     display: flex;
                     justify-content: center;
-                    margin: 50px 0;
 
                     .progressIndicator {
                         display: flex;
@@ -356,8 +365,8 @@ $padding-mobile: '1.25rem';
                             position: relative;
                             z-index: 1;
 
-                            .active {
-                                background-color: red !important;
+                            &.active {
+                                background-color: $text-color !important;
                             }
                         }
 
@@ -371,7 +380,6 @@ $padding-mobile: '1.25rem';
                             background-color: #d3d3d3;
                             z-index: 0;
                         }
-
 
                         &::after {
                             content: '';
@@ -387,6 +395,32 @@ $padding-mobile: '1.25rem';
                     }
                 }
 
+                .mySuggestions {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+                    margin-bottom: 60px;
+
+                    .suggestions {
+                        width: 100px;
+                        flex-wrap: wrap;
+                        font-size: 12px;
+                        font-weight: 400;
+                        color: $text-color;
+                        text-align: center;
+                    }
+                }
+
+                .textArea {
+                    background-color: #F6F6F6;
+                    border-color: transparent;
+                    border-radius: 40px;
+                    padding: 31px 50px !important;
+                    color: #000000;
+                    font-size: 18px;
+                    font-weight: 400;
+                }
 
 
             }
@@ -662,6 +696,22 @@ $padding-mobile: '1.25rem';
                     }
                 }
 
+                .progressContainer {
+                    .progressIndicator {
+                        width: 100% !important;
+                    }
+                }
+
+                .mySuggestions {
+                    width: 100%;
+                    margin-bottom: 30px;
+
+                    .suggestions {
+                        width: 60px !important;
+                        font-size: 10px !important;
+                    }
+                }
+
             }
 
             .progressBar {
@@ -676,6 +726,22 @@ $padding-mobile: '1.25rem';
                     display: none !important;
                 }
 
+            }
+            .listContainer {
+                .list {
+                    padding-left: 0rem !important;
+                    padding-top: 2.5rem !important;
+                    white-space: wrap;
+
+                    li {
+                        font-size: 1rem !important;
+                        font-weight: 400;
+                        padding: 0.2rem 0 !important;
+                        color: darken($text-color, 20%);
+                        list-style-position: inside;
+                        white-space: wrap;
+                    }
+                }
             }
         }
     }
@@ -794,6 +860,19 @@ $padding-mobile: '1.25rem';
                     }
                 }
 
+            }
+
+            .listContainer {
+                .list {
+                    padding-top: 2rem !important;
+                    white-space: wrap;
+
+                    li {
+                        font-size: 1rem !important;
+                        font-weight: 400;
+                        padding: 0.1rem 0 !important;
+                    }
+                }
             }
         }
     }
