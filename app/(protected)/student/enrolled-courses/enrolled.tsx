@@ -9,6 +9,7 @@ import { UnitStandardData } from "@/interfaces/enrolled-unit-standards/unit-stan
 import UnitStandardWidget from "@/ui/student/enrolled/sample-unit";
 import { useRouter } from "next/navigation";
 import { useCourseId } from "@/context/courseId-context/courseId-context";
+import { useSearchParams } from "next/navigation";
 
 export default function Enrolled() {
   const { courseId } = useCourseId();
@@ -23,13 +24,14 @@ export default function Enrolled() {
   const [showDescription, setShowDescription] = useState(false);
   const [showAuthor, setShowAuthor] = useState(false);
   const [courseStyle, setCourseStyle] = useState("two");
+
+  const searchParams = useSearchParams();
+
+  const type = searchParams.get("type")??'KM';
   
 
   const itemsPerPage = 3;
   const startIndex = currentPage * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
-  console.log("courseId from context: ", courseId);
 
 
   const getUnitStandards = async (courseId: string) => {
@@ -72,7 +74,9 @@ export default function Enrolled() {
   } else {
   }
 
+  console.log("unitStandards: ", unitStandards);
 
+  const filteredUnitStandards = unitStandards?.filter(unit => unit.moduleCode.startsWith(type));
 
     return (
         <div
@@ -82,7 +86,7 @@ export default function Enrolled() {
               aria-labelledby="home-tab-4"
             >
               <div className="row g-5">
-                {unitStandards?.map((standard, index) => (
+                {filteredUnitStandards.length > 0 ? filteredUnitStandards.map((standard, index) => (
                   <div
                     className="col-lg-4 col-md-6 col-12"
                     key={`unit-standard-completed-${index}`}
@@ -97,7 +101,7 @@ export default function Enrolled() {
                       showAuthor={showAuthor}
                     />
                   </div>
-                ))}
+                )) : <div className="text-center text-muted">No Modules found</div>}
               </div>
             </div>
     )
