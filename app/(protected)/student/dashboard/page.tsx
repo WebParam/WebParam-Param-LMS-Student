@@ -6,8 +6,8 @@ import Analytics from "./analytics/page";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect } from "react";
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 function PageContent() {
   const searchParams = useSearchParams();
@@ -53,24 +53,24 @@ function PageContent() {
               <span className="title">Analytics</span>
             </Link>
           </li>
-            <li role="presentation">
-              <Link
-                href="/student/dashboard?tab=sor"
-                onClick={(e) => {
-                  e.preventDefault();
-                  router.push("/student/dashboard?tab=sor");
-                }}
-                className={`tab-button ${tab === "sor" ? "active" : ""}`}
-                id="given-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#given"
-                role="tab"
-                aria-controls="given"
-                aria-selected={tab === "sor"}
-              >
-                <span className="title">SOR</span>
-              </Link>
-            </li>
+          <li role="presentation">
+            <Link
+              href="/student/dashboard?tab=sor"
+              onClick={(e) => {
+                e.preventDefault();
+                router.push("/student/dashboard?tab=sor");
+              }}
+              className={`tab-button ${tab === "sor" ? "active" : ""}`}
+              id="given-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#given"
+              role="tab"
+              aria-controls="given"
+              aria-selected={tab === "sor"}
+            >
+              <span className="title">SOR</span>
+            </Link>
+          </li>
         </ul>
       </div>
       <Suspense fallback={<div>Loading...</div>}>

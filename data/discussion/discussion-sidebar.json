@@ -1,53 +1,72 @@
 {
   "ALL_ACCESS": [
     {
-      "link": "/student/dashboard",
-      "text": "Dashboard",
-      "icon": "bi bi-grid-fill"
+      "link": "/user-profile",
+      "text": "Profile Info",
+      "icon": "feather-user"
     },
     {
-      "link": "/student/enrolled-courses",
-      "text": "My Courses",
-      "icon": "bi bi-laptop-fill"
+      "link": "/student/programme-journey",
+      "text": "Programme Journey",
+      "icon": "bi bi-calendar"
     },
     {
-      "link": "/student/assessments",
-      "text": "Assessments",
+      "link": "/student/driver-assets",
+      "text": "Driver Assets",
+      "icon": "bi bi-car-front"
+    },
+    {
+      "link": "/student/manage-documents",
+      "text": "Manage Documents",
+      "icon": "feather-folder"
+    },
+    {
+      "link": "/student/check-in",
+      "text": "Check-in",
+      "icon": "bi bi-check-circle"
+    },
+    {
+      "link": "/student/learning",
+      "text": "Learning",
+      "icon": "bi bi-book"
+    },
+    {
+      "link": "/student/messages",
+      "text": "Messages",
       "icon": "feather-message-square"
     },
     {
-      "link": "/student/assignments",
-      "text": "Assignments",
-      "icon": "feather-menu"
-    },
-    {
-      "link": "/student/logbook",
-      "text": "Logbook",
-      "icon": "bi bi-journal-bookmark"
-    },
-    {
-      "link": "/classes",
-      "text": "Classes",
+      "link": "/student/events-inductions",
+      "text": "Events & Inductions",
       "icon": "bi bi-calendar-event"
     },
     {
-      "link": "/student/notifications",
-      "text": "Notifications",
-      "icon": "feather-volume-2"
+      "link": "/student/resources",
+      "text": "Resources",
+      "icon": "feather-file"
     }
   ],
   "FREEMIUM": [
-      {
-      "link": "/student/projects?tab=enrolled",
+    {
+      "link": "/student/my-projects",
       "text": "My Projects",
       "icon": "bi bi-laptop-fill"
     },
     {
+      "link": "/student/messages",
+      "text": "Messages",
+      "icon": "feather-message-square"
+    },
+    {
       "link": "/student/notifications",
       "text": "Notifications",
       "icon": "feather-volume-2"
+    },
+    {
+      "link": "/",
+      "text": "Logout",
+      "icon": "feather-log-out"
     }
-  
   ],
   "COURSE_ONLY": [
     {
@@ -66,5 +85,4 @@
       "icon": "feather-volume-2"
     }
   ]
-
 }

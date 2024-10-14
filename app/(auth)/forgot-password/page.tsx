@@ -1,27 +1,27 @@
-'use client'
-import { sendOtp } from '@/app/api/auth/auth';
-import React, { FormEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Cookies from 'universal-cookie';
-import Link from 'next/link';
-import './forgot.scss';
-import imageCover from './oc-lost.svg';
+"use client";
+import { sendOtp } from "@/app/api/auth/auth";
+import React, { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import Cookies from "universal-cookie";
+import Link from "next/link";
+import "./forgot.scss";
+import imageCover from "./oc-lost.svg";
 
 export default function SendResetEmail() {
-    const [email, setEmail] = useState('');
-    const cookies = new Cookies();
-    const router = useRouter();
+  const [email, setEmail] = useState("");
+  const cookies = new Cookies();
+  const router = useRouter();
 
-    async function handleEmailSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
+  async function handleEmailSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
 
-        console.log(email);
+    console.log(email);
 
-        const payload = {
-            email,
-        }
+    const payload = {
+      email,
+    };
 
-        const res = await sendOtp(payload);
+    const res = await sendOtp(payload);
 
         if (res) {
             cookies.set('resetEmail', email);

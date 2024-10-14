@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import quizData from "@/data/quiz/quiz-callcenter.json";
 import { accountingQuiz } from "@/data/quiz/accounting";
 import styles from "@/styles/quiz/quiz.module.css";
@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import './quiz.scss'
 import { POST } from "@/app/lib/api-client";
 import Loader from "@/ui/loader/loader";
-import Countdown from 'react-countdown';
+// import Countdown from 'react-countdown';
 import { rDocumentParaphraseUrl } from "@/app/lib/endpoints";
 import QuizLoading from "./loading";
 
@@ -52,9 +52,12 @@ const LessonQuiz = ({firstQuiz, setVideoEnded, handleNext, currentVideo}:any) =>
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
-    if (timeRemaining > 0 && selectedAnswers.some(answer => answer !== null)) {
+    if (
+      timeRemaining > 0 &&
+      selectedAnswers.some((answer) => answer !== null)
+    ) {
       interval = setInterval(() => {
-        setTimeRemaining(prevTime => prevTime - 1);
+        setTimeRemaining((prevTime) => prevTime - 1);
       }, 60000); // Count down by one minute
     } else if (timeRemaining === 0) {
       handleNext(); // Handle end of quiz
@@ -149,7 +152,7 @@ const initializeQuiz = async () => {
         if (next + 1 < currentQuiz.length) {
           setNext(next + 1);
         } else {
-          handleNext()
+          handleNext();
         }
       }, 3000);
     }

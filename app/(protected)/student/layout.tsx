@@ -2,41 +2,15 @@
 
 import StudentDashboardSidebar from "@/ui/student/student-enrolled-courses/student-sidebar";
 import styles from "@/styles/side-bar/side-bar-hide.module.css";
-import InstructorDashboardHeader from "@/ui/dashboard/dashboard-wrapper";
-import { CourseIdProvider } from "@/context/courseId-context/courseId-context";
-import MaintenanceModal from '@/ui/banner/MaintanceModal';
-import { useState, useEffect } from 'react';
+import MaintenanceModal from "@/ui/banner/MaintanceModal";
 
-export default function StudentLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
-
+export default function StudentLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <div className="rbt-dashboard-area rbt-section-overlayping-top rbt-section-gapBottom">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="row g-5">
-                <div className={`col-lg-3 ${styles.sidebarHiddenOnMobile}`}>
-                  <StudentDashboardSidebar />
-                </div>
-                <div className="col-lg-9">
-                  {children}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="d-flex">
+      <StudentDashboardSidebar />
+      <div className="flex-grow-1" style={{ marginLeft: '20%'}}>
+        {children}
       </div>
-
-      <MaintenanceModal 
-        show={showMaintenanceModal} 
-        onHide={() => setShowMaintenanceModal(false)} 
-      />
-    </>
+    </div>
   );
 }

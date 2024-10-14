@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap");
+
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
@@ -90,7 +92,7 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background:"#FDFDFD"
+  background: "#FDFDFD";
 }
 
 .margin-right-3 {
@@ -145,11 +147,11 @@ body {
 }
 
 .custom-quill-1 .ql-editor {
-  height: 100%; 
+  height: 100%;
 }
 
 .get-4-color {
-  color: #0D203B;
+  color: #0d203b;
 }
 
 .content-2 {
@@ -193,148 +195,140 @@ a {
 }
 
 a#recieved-tab.tab-button.active::after {
-  background-color: '#081427' !important;
+  background-color: "#081427" !important;
 }
-
-
 
 /* MEDIA QUERIES */
 
 @media only screen and (max-width: 600px) {
-  #sidebar-desktop{
+  #sidebar-desktop {
     height: 0px;
     display: none;
   }
 
-  .videoPar{
-    font-size: 12px 
+  .videoPar {
+    font-size: 12px;
   }
-  
-  .title{
+
+  .title {
     font-size: 1.5rem !important;
     font-weight: 600;
     margin-bottom: 1rem;
   }
   .rbt-table thead tr th {
-
     font-weight: 600;
     font-size: 10px !important;
-}
+  }
 
-.rbt-search-style-1 input {
-  line-height: 40px;
-  height: 40px;
-}
+  .rbt-search-style-1 input {
+    line-height: 40px;
+    height: 40px;
+  }
 
-.rbt-table tbody tr td {
-
-  font-weight: 600;
-  font-size: 10px !important;
-}
-.rbt-table tbody tr th {
+  .rbt-table tbody tr td {
+    font-weight: 600;
+    font-size: 10px !important;
+  }
+  .rbt-table tbody tr th {
     font-size: 12px !important;
-}
-.btn-text{
-  font-size: 12px;
-}
+  }
+  .btn-text {
+    font-size: 12px;
+  }
 
-.rbt-btn.icon-hover .btn-icon i {
-  opacity: 1!important;
-}
-.prev-button{
-  float: left;
-}
-.video-header{
-border:none !important;
-}
-.title{
-  font-size: 12px !important;
-}
-.next-button{
-  float: right;
-}
-.btn-prev-text{
-  float:right;
-}
-.rbt-btn.btn-md{
-  width:40% !important;
-}
+  .rbt-btn.icon-hover .btn-icon i {
+    opacity: 1 !important;
+  }
+  .prev-button {
+    float: left;
+  }
+  .video-header {
+    border: none !important;
+  }
+  .title {
+    font-size: 12px !important;
+  }
+  .next-button {
+    float: right;
+  }
+  .btn-prev-text {
+    float: right;
+  }
+  .rbt-btn.btn-md {
+    width: 40% !important;
+  }
 
-.h6{
-  font-size: 10px !important;
-}
+  .h6 {
+    font-size: 10px !important;
+  }
 
-input[type=text]{ 
-  font-size: 12px !important;
-  height: 40px !important;
-}
-input[type=email]{ 
-  font-size: 12px !important;
-  height: 40px !important;
-}
-input[type=date]{ 
-  font-size: 12px !important;
-  height: 40px !important;
-}
-select{
-  font-size: 12px !important;
-  height: 40px !important;
-  line-height: 20px !important;
-}
-input[type=tel]{ 
-  font-size: 12px !important;
-  height: 40px !important;
-}
-input[type=number]{ 
-  font-size: 12px !important;
-  height: 40px !important;
-}
-p.b3{
-  font-size: 10px !important;
-}
-p.b4{
-  font-size: 12px !important;
-}
-.fontSize12{
-  font-size: 10px !important;
-}
-.rbt-title-style-3{
-  border: none !important;
-}
-.rbt-search-style-1 input{
-  height: 40px !important;
-  line-height: 40px !important;
-  font-size: 12px !important;
-}
+  input[type="text"] {
+    font-size: 12px !important;
+    height: 40px !important;
+  }
+  input[type="email"] {
+    font-size: 12px !important;
+    height: 40px !important;
+  }
+  input[type="date"] {
+    font-size: 12px !important;
+    height: 40px !important;
+  }
+  select {
+    font-size: 12px !important;
+    height: 40px !important;
+    line-height: 20px !important;
+  }
+  input[type="tel"] {
+    font-size: 12px !important;
+    height: 40px !important;
+  }
+  input[type="number"] {
+    font-size: 12px !important;
+    height: 40px !important;
+  }
+  p.b3 {
+    font-size: 10px !important;
+  }
+  p.b4 {
+    font-size: 12px !important;
+  }
+  .fontSize12 {
+    font-size: 10px !important;
+  }
+  .rbt-title-style-3 {
+    border: none !important;
+  }
+  .rbt-search-style-1 input {
+    height: 40px !important;
+    line-height: 40px !important;
+    font-size: 12px !important;
+  }
 
-hr{
-  background-color: var(--color-border-2);
-  opacity: 0.2 !important;
-  height: 2px !important;
-}
-/* border-bottom: 2px solid var(--color-border-2); */
+  hr {
+    background-color: var(--color-border-2);
+    opacity: 0.2 !important;
+    height: 2px !important;
+  }
+  /* border-bottom: 2px solid var(--color-border-2); */
 
-.viewButtonText{
-  float: left;
-  font-size: 10px;
-  top: 10px;
-  margin-left: 5px;
-  margin-top: 1px;
-}
+  .viewButtonText {
+    float: left;
+    font-size: 10px;
+    top: 10px;
+    margin-left: 5px;
+    margin-top: 1px;
+  }
 
-.float-left{
-  float: left;
-}
-/* 
+  .float-left {
+    float: left;
+  }
+  /* 
 .rbt-btn {
   height: 20% !important;
   line-height: 37px !important;
 } */
-
-
 }
-
-
 
 .side-bar_overlay__3AZA1 {
   height: 0 !important;
@@ -349,7 +343,6 @@ hr{
   right: 0;
 }
 
-
 .apexcharts-text.apexcharts-datalabel-value {
   word-break: break-word;
   font-family: var(--font-secondary) !important;
@@ -357,11 +350,11 @@ hr{
   font-weight: 700;
 }
 
-.apexcharts-canvas{
+.apexcharts-canvas {
   background-color: transparent !important;
 }
 
-.apexcharts-title-text{
+.apexcharts-title-text {
   font-family: var(--font-secondary) !important;
   font-size: 15px;
   font-weight: 700;
