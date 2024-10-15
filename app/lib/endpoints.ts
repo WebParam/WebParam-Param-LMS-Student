@@ -27,7 +27,7 @@ export const rQuizUrl = `https://thooto-${env}-be-quiz-read.azurewebsites.net`;
 
 export const wAudioGenerateUrl = `https://thooto-${env}-be-audio-generate.azurewebsites.net`;
 
-export const wAssessmentUrl =  "https://thooto-development-assessment-write.azurewebsites.net";
+export const wAssessmentUrl =  `https://thooto-${env}-be-assessment-write.azurewebsites.net`;
 
 export const twAssessmentUrl = `https://thooto-${test}-assessment-write.azurewebsites.net`;
 
