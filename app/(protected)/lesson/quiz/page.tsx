@@ -7,8 +7,6 @@ import styles from "@/styles/quiz/quiz.module.css";
 import { useRouter } from "next/navigation";
 import './quiz.scss'
 import { POST } from "@/app/lib/api-client";
-import Loader from "@/ui/loader/loader";
-import Countdown from 'react-countdown';
 import { rDocumentParaphraseUrl } from "@/app/lib/endpoints";
 import QuizLoading from "./loading";
 
