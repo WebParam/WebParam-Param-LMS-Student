@@ -46,7 +46,7 @@ const StudentDashboardSidebar = () => {
               <nav className="mainmenu-nav">
                 <ul className="dashboard-mainmenu rbt-default-sidebar-list">
                   {SidebarData &&
-                    SidebarData.slice(0, process.env.NEXT_PUBLIC_FREEMIUM?3:2).map((data: any, index: any) => {
+                    SidebarData.map((data: any, index: any) => {
 
                       return (
                       <li className="nav-item" key={index} role="presentation">

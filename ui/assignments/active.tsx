@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
-  getAssignments,
+  getStudentAssignments,
   getStudentUnmarkedAssignments,
   uploadAssignment,
 } from "@/app/api/assignments/assignments";
@@ -17,11 +17,18 @@ export default function ActiveAssignment() {
   const [assignments, setAssignments] = useState<IAssignment[]>([]);
   const searchParams = useSearchParams();
   const moduleId = searchParams.get("moduleId");
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("loggedInUser");
 
   const fetchAssignments = async () => {
-    try {
-      const assignmentsData = await getAssignments(moduleId!);
+    console.log("Studend Id",loggedInUser?.data?.id);
+    console.log("Module Id",moduleId);
+
+    try
+     {
+      const assignmentsData = await getStudentAssignments(loggedInUser?.data?.id,moduleId!);
       setAssignments(assignmentsData);
+      console.log("Assignments",assignmentsData)
     } catch (error) {
       console.error(error);
     }

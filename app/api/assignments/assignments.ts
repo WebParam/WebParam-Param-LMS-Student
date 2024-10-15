@@ -2,9 +2,10 @@ import { get, post, put } from "../../lib/util";
 import { Diagnostic } from "../../lib/util-logger";
 import { rAssessmentUrl, wAssessmentUrl } from "@/app/lib/endpoints";
 
-export const getAssignments = async (id:string) => {
+export const getStudentAssignments = async (studentId:string, moduleId:string) => {
+    
     try {
-        const resp = await get(`${rAssessmentUrl}/api/v1/Assignment/GetAssignments/${id}`);
+        const resp = await get(`${rAssessmentUrl}/api/v1/StudentAssignment/GetStudentAssignments/${studentId}/${moduleId}`);
         const data = resp.data;
         Diagnostic("SUCCESS ON GET, returning", data);
         return data;
