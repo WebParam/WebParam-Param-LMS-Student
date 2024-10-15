@@ -21,6 +21,7 @@ import { POST } from "@/app/lib/api-client";
 import { rDocumentParaphraseUrl } from "@/app/lib/endpoints";
 import imageBg from './oc-lost.svg'
 import Modal from "react-responsive-modal";
+import { updateTimeSpent } from "@/app/api/trackTimeSpent/timeSpent";
 
 function TakeLesson() {
   const [currentVideo, setCurrentVideo] = useState<any>();
@@ -132,15 +133,12 @@ function TakeLesson() {
       topicTitle: topicElement?.name,
       IsCompleted: true
     };
-    
-    debugger;
   
     try {
       const res = await PostVideoWatched(payload);
 
       if (res?.data) {
         setVideosWatched((prev) => [...prev, res.data]);
-        // updateVideoWatched(res.data);
       }
       return res?.data
     } catch (error) {
@@ -149,9 +147,8 @@ function TakeLesson() {
   }
   
   useEffect(() => {
-    fetchKnowledgeTopics();
+    Promise.all([fetchKnowledgeTopics(), updateTimeSpent()]);
     setVideoLoader(true);
-  
   }, []);
   
   useEffect(() => {
@@ -200,6 +197,7 @@ function TakeLesson() {
       if (res.data) {
         setVideosWatched(res.data);
         // Automatically select the last watched video
+        updateTimeSpent()
         const lastWatchedVideo = res.data[res.data.length - 1]; // Get the last watched video
         if (lastWatchedVideo) {
 
