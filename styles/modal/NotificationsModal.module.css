@@ -1,0 +1,6 @@
+.customModalContent {
+    box-shadow: var(--shadow-1);
+    border-radius: var(--radius);
+    background: var(--color-white);
+    padding: 30px;
+}

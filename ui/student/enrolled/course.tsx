@@ -133,7 +133,7 @@ const CourseWidgets: React.FC<Props> = ({
           {isProgress ? (
             <>
               <div className="rbt-progress-style-1 mb--20 mt--10">
-                <div className="single-progress">
+                <div className="single-progress-bar">
                   <h6 className="rbt-title-style-2 mb--10"></h6>
                 </div>
               </div>

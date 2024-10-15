@@ -1,0 +1,169 @@
+$primary-color: #FE457A;
+$secondary-color: #051C48;
+
+.registerPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.registerContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+
+.vectorContainer {
+  position: absolute;
+  left: 0;
+  top: 80%; // Adjust this value to move the vector down
+  transform: translateY(-50%);
+}
+
+.vectorImage {
+  width: 150px;
+  height: auto;
+}
+
+.registerContent {
+  width: 100%;
+  max-width: 600px; // Increased from 500px
+  padding: 40px;
+  margin-left: 100px; // Move content to the left
+}
+
+.title {
+  font-size: 40px;
+  color: $secondary-color;
+  margin-bottom: 10px;
+  text-align: center; // Center the entire title
+
+  .welcome {
+    text-align: left; // Keep "Welcome to Ramalo" aligned to the left
+    display: block; // Make it a block element to allow separate alignment
+  }
+}
+
+.highlight {
+  position: relative;
+  display: inline-block;
+  color: $primary-color;
+}
+
+.underline {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: auto;
+}
+
+.subtitle {
+  text-align: center;
+  color: $secondary-color;
+  margin-bottom: 30px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px; // Increased from 20px
+  margin-left: -20px; // Move form to the left
+}
+
+.formRow {
+  display: flex;
+  gap: 20px;
+}
+
+.formGroup {
+  flex: 1;
+  position: relative;
+
+  input, select {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    height: 50px; // Set a fixed height for both input and select
+    line-height: 20px; // Adjust line-height for vertical centering
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+    }
+  }
+
+  select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px; // Add some padding on the right to prevent text overlap with the dropdown arrow
+  }
+}
+
+.asterisk {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $primary-color;
+}
+
+.passwordHint {
+  font-size: 14px;
+  color: #666;
+  margin-top: -10px;
+}
+
+.submitButton {
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 20px; // Increased vertical padding
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 200px;
+  margin: 5px auto 20px; // Reduced top margin to move it up
+  margin-left: -8px; // Move button to the left
+   margin-top: -35px !important;
+  display: block;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+}
+
+.requiredFieldsNote {
+  font-size: 14px;
+  color: #FE457A;
+  text-align: right;
+  margin-top: -75px;
+}
+
+.passwordInputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 16px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

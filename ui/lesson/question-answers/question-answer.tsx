@@ -13,17 +13,19 @@ const QuestionAndAnswers = () => {
   };
 
   return (
-    <div className="container mt-5 pb-5">
+    <div className="container pb-5">
       <div className="row">
         <div className="col-md-5 mb-3">
-          <label className="form-label fw-bold underline-2">
-            Question Title
-          </label>
-          <input type="text" className="form-control mt-3" />
+          <h6 className="form-label fw-bold ">
+           Ask a question
+          </h6>
+          <label  className="b4  mt-3"><small><h6>Title</h6></small></label>
+          <input type="text" style={{height: "40px"}} className="form-control" />
         </div>
       </div>
       <div className="row">
-        <div className="col-md-10 mt-4 mb-2">
+      <label  className="b4  mt-3"><small><h6>Question</h6></small></label>
+        <div className="col-md-10  mb-2">
           <ReactQuill
             theme="snow"
             value={body}
@@ -35,40 +37,40 @@ const QuestionAndAnswers = () => {
 
       <div className="row mt-3">
         <div className="col-md-10 d-flex justify-content-end">
-          <button className="btn btn-secondary me-2 custom-button-4">
+          {/* <button className="btn btn-secondary me-2 custom-button-4">
             Cancel
-          </button>
-          <button className="btn btn-success custom-button-4">
-            Post Question
+          </button> */}
+          <button style={{width:"40%"}} className="btn btn-success custom-button-4">
+            Post
           </button>
         </div>
       </div>
 
       <hr className="custom-line-break-1" />
-      <label className="form-label fw-bold underline-2">Q&A</label>
+      <label className="form-label fw-bold">Q&A</label>
 
       <div className="mb-4">
-        <p>
+      <p className="b4">
           How does the use of hooks improve the development process in React?
         </p>
-        <p style={{ marginLeft: "20px" }}>
+        <p className="b4" style={{ marginLeft: "20px" }}>
           <i className="bi bi-reply-fill"></i>
           Hooks allow for state and lifecycle management in functional
           components, making code easier to understand and maintain.
         </p>
-        <div className="d-flex justify-content-between">
+        <div style={{ fontSize:"12px" }} className="d-flex justify-content-between">
           <div>
-            <a href="#" style={{ textDecoration: "underline" }}>
+            <a href="#" >
               <i className="bi bi-hand-thumbs-up"></i> Like
             </a>{" "}
             |{" "}
-            <a href="#" style={{ textDecoration: "underline" }}>
+            <a href="#" style={{ }}>
               <i className="bi bi-chat-dots"></i> Reply
             </a>{" "}
             <a
               href="/discussions"
               className="ms-3"
-              style={{ textDecoration: "underline" }}
+              style={{  }}
             >
               <i className="bi bi-flag"></i> more
             </a>
@@ -80,13 +82,13 @@ const QuestionAndAnswers = () => {
       </div>
 
       <div className="mb-4">
-        <p>What are the benefits of using TypeScript with React?</p>
-        <p style={{ marginLeft: "20px" }}>
+      <p className="b4">What are the benefits of using TypeScript with React?</p>
+      <p className="b4" style={{ marginLeft: "20px" }}>
           <i className="bi bi-reply-fill"></i>
           TypeScript provides type safety, making it easier to catch errors
           early and improving overall code quality.
         </p>
-        <div className="d-flex justify-content-between">
+        <div  style={{ fontSize:"12px" }} className="d-flex justify-content-between">
           <div>
             <a href="#" style={{ textDecoration: "underline" }}>
               <i className="bi bi-hand-thumbs-up"></i> Like

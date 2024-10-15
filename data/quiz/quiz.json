@@ -1,77 +1,77 @@
 [
   {
-    "question": "What is the primary role of a project manager?",
-    "options": ["To develop software", "To design marketing strategies", "To oversee and manage project progress", "To manage the company’s finances"],
-    "answer": "To oversee and manage project progress"
+    "question": "What is the primary role of a call center agent?",
+    "options": ["To resolve customer inquiries", "To design marketing strategies", "To manage company finances", "To oversee project progress"],
+    "answer": "To resolve customer inquiries"
   },
   {
-    "question": "Which document outlines the objectives, scope, and participants in a project?",
-    "options": ["Project Charter", "Business Plan", "Risk Management Plan", "Stakeholder Analysis"],
-    "answer": "Project Charter"
+    "question": "Which document outlines the protocols and procedures for handling customer calls?",
+    "options": ["Call Script", "Business Plan", "Risk Management Plan", "Stakeholder Analysis"],
+    "answer": "Call Script"
   },
   {
-    "question": "What is a Gantt Chart used for?",
-    "options": ["Tracking project milestones", "Managing project budget", "Scheduling project tasks", "Conducting risk analysis"],
-    "answer": "Scheduling project tasks"
+    "question": "What is a call log used for?",
+    "options": ["Tracking customer interactions", "Managing the call center budget", "Scheduling agent shifts", "Conducting risk analysis"],
+    "answer": "Tracking customer interactions"
   },
   {
-    "question": "What does the term 'scope creep' refer to in project management?",
-    "options": ["Increased project costs", "Uncontrolled changes in the project scope", "Delays in project timeline", "Decrease in project quality"],
-    "answer": "Uncontrolled changes in the project scope"
+    "question": "What does the term 'average handle time' (AHT) refer to in a call center?",
+    "options": ["The time it takes to resolve a customer issue", "The average call duration", "The number of calls an agent handles per hour", "The time between customer calls"],
+    "answer": "The average call duration"
   },
   {
-    "question": "What is the critical path in project management?",
-    "options": ["The sequence of project activities which add the most value", "The longest path through the project schedule", "The path with the most dependencies", "The sequence of activities that leads to project failure"],
-    "answer": "The longest path through the project schedule"
+    "question": "What is the purpose of a knowledge base in a call center?",
+    "options": ["To store customer contact information", "To provide agents with information to resolve inquiries", "To monitor call quality", "To train new agents"],
+    "answer": "To provide agents with information to resolve inquiries"
   },
   {
-    "question": "Which methodology is known for its iterative approach and flexibility to changes?",
-    "options": ["Waterfall", "Six Sigma", "Agile", "PRINCE2"],
-    "answer": "Agile"
+    "question": "Which customer service methodology emphasizes quick and effective resolution of customer issues?",
+    "options": ["Six Sigma", "Agile", "First Call Resolution (FCR)", "Lean"],
+    "answer": "First Call Resolution (FCR)"
   },
   {
-    "question": "What is the main purpose of a risk management plan?",
-    "options": ["To define the project budget", "To schedule project tasks", "To identify, analyze, and mitigate risks", "To manage team communication"],
-    "answer": "To identify, analyze, and mitigate risks"
+    "question": "What is the main purpose of a quality assurance (QA) program in a call center?",
+    "options": ["To define the call center budget", "To evaluate and improve call quality", "To schedule agent shifts", "To manage team communication"],
+    "answer": "To evaluate and improve call quality"
   },
   {
-    "question": "Which phase of a project involves determining if the project objectives were met and documenting lessons learned?",
-    "options": ["Initiation", "Planning", "Execution", "Closure"],
-    "answer": "Closure"
+    "question": "Which phase of a call center interaction involves determining if the customer's issue was fully resolved and offering additional assistance?",
+    "options": ["Greeting", "Problem Identification", "Issue Resolution", "Call Closure"],
+    "answer": "Call Closure"
   },
   {
-    "question": "In the context of project management, what is a 'deliverable'?",
-    "options": ["A financial report", "A completed project task or product", "A team meeting", "A risk management plan"],
-    "answer": "A completed project task or product"
+    "question": "In the context of call centers, what is a 'service level agreement' (SLA)?",
+    "options": ["A financial report", "A contract that defines the expected service standards", "A team meeting", "A risk management plan"],
+    "answer": "A contract that defines the expected service standards"
   },
   {
-    "question": "What is the main focus during the execution phase of a project?",
-    "options": ["Planning project details", "Tracking and managing project performance", "Closing the project", "Defining project goals"],
-    "answer": "Tracking and managing project performance"
+    "question": "What is the main focus during the customer interaction phase of a call?",
+    "options": ["Planning call details", "Tracking and managing agent performance", "Resolving the customer's issue", "Defining customer goals"],
+    "answer": "Resolving the customer's issue"
   },
   {
-    "question": "What does 'PMBOK' stand for?",
-    "options": ["Project Management Book of Knowledge", "Professional Management Bureau of Knowledge", "Project Monitoring and Budgeting Knowledge", "Project Maintenance and Business Organization Knowledge"],
-    "answer": "Project Management Book of Knowledge"
+    "question": "What does 'IVR' stand for in a call center?",
+    "options": ["Interactive Voice Response", "Instant Voice Recognition", "Internal Verification Report", "Integrated Value Response"],
+    "answer": "Interactive Voice Response"
   },
   {
-    "question": "What is a stakeholder in project management?",
-    "options": ["A team member", "A project sponsor", "Anyone who has an interest or investment in the project's outcome", "A client"],
-    "answer": "Anyone who has an interest or investment in the project's outcome"
+    "question": "What is a customer satisfaction survey in a call center context?",
+    "options": ["A tool to measure agent performance", "A feedback tool to assess customer experience", "A method to monitor call center metrics", "A process for training new agents"],
+    "answer": "A feedback tool to assess customer experience"
   },
   {
-    "question": "Which tool is commonly used for project cost management?",
-    "options": ["PERT Chart", "Earned Value Management (EVM)", "SWOT Analysis", "Pareto Chart"],
-    "answer": "Earned Value Management (EVM)"
+    "question": "Which tool is commonly used to measure call center efficiency?",
+    "options": ["Earned Value Management (EVM)", "Average Handle Time (AHT)", "SWOT Analysis", "Pareto Chart"],
+    "answer": "Average Handle Time (AHT)"
   },
   {
-    "question": "What is a 'milestone' in project management?",
-    "options": ["A small task within a project", "A significant point or event in the project", "A project risk", "An internal team meeting"],
-    "answer": "A significant point or event in the project"
+    "question": "What is a 'key performance indicator' (KPI) in a call center?",
+    "options": ["A significant event in the company", "A metric to evaluate call center performance", "A project risk", "An internal team meeting"],
+    "answer": "A metric to evaluate call center performance"
   },
   {
-    "question": "What is the purpose of a Work Breakdown Structure (WBS)?",
-    "options": ["To organize the team's workload", "To outline the project budget", "To divide the project into manageable sections", "To manage project risks"],
-    "answer": "To divide the project into manageable sections"
+    "question": "What is the purpose of a call escalation process?",
+    "options": ["To organize the team's workload", "To outline the call center budget", "To manage calls that cannot be resolved by the first agent", "To manage call center risks"],
+    "answer": "To manage calls that cannot be resolved by the first agent"
   }
 ]

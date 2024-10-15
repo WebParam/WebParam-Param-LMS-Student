@@ -60,10 +60,10 @@ const Notes = () => {
   };
 
   return (
-    <div className="container mt-4 pb-5">
+    <div className="container pb-5">
       <div className="row">
         <div className="col-md-5 mb-3">
-          <label className="form-label fw-bold underline-2">Notes</label>
+          <h6 className="form-label fw-bold">Post a note</h6>
         </div>
       </div>
 
@@ -123,7 +123,7 @@ const Notes = () => {
             <div className={styles.mb3Custom} key={note.id}>
               {/* <div className="note-title fw-bold">{note.title}</div> */}
               <div className="mt-2">
-                <p dangerouslySetInnerHTML={{ __html: displayContent }} />
+                <p  className="videoPar" dangerouslySetInnerHTML={{ __html: displayContent }} />
                 {isLong && (
                   <a
                     onClick={toggleCollapse}
@@ -136,11 +136,11 @@ const Notes = () => {
               </div>
               <div className="d-flex justify-content-between mt-2">
                 <div>
-                  <strong>By:</strong> {note.studentName}
+                <p  className="videoPar">  <strong>By:</strong> {note.studentName}</p>
                 </div>
                 <div>
-                  <strong>Posted on:</strong>{" "}
-                  {format(new Date(note.timestamp), "PPpp")}
+                <p  className="videoPar">     <strong>Posted on:</strong>{" "}
+                  {format(new Date(note.timestamp), "PPpp")}</p>
                 </div>
               </div>
             </div>

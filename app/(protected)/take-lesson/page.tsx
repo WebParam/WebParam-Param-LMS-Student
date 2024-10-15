@@ -1,19 +1,24 @@
 "use client";
 
 import "./lesson.scss";
-import { GetKnowledgeTopicsNew, getTopics } from "@/app/api/lesson/lessonEndpoint";
+import { GetKnowledgeTopicsNew, getTopics, GetVideosWatched, PostVideoWatched } from "@/app/api/lesson/lessonEndpoint";
 import { TopicElement } from "@/interfaces/pharaphase/paraphase-d";
 import Notes from "@/ui/lesson/notes/notes";
 import QuestionAndAnswers from "@/ui/lesson/question-answers/question-answer";
 import Overview from "@/ui/overview/overview";
 import Transcript from "@/ui/transcript/transcript";
 import Link from "next/link";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import LessonQuiz from "../lesson/quiz/page";
+import { isMobile } from "react-device-detect";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";  
+import Cookies from "universal-cookie";
+import { useCourseId } from "@/context/courseId-context/courseId-context";
 
-export default function TakeLesson() {
+function TakeLesson() {
   const [currentVideo, setCurrentVideo] = useState<any>();
   const [knowledgeTopics, setKnowledgeTopics] = useState<any[]>([]);
   const [videoLoader, setVideoLoader] = useState(false);
@@ -28,15 +33,33 @@ export default function TakeLesson() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [videoEnded, setVideoEnded] = useState<boolean>(false);
+  const [videosWatched, setVideosWatched] = useState<any[]>([]);
+  const [expandedTopicId, setExpandedTopicId] = useState<any>();
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get('loggedInUser');
+  const userID = cookies.get('userID');
+  const router = useRouter();  
+  console.log('loggedInUser', loggedInUser)
 
-  const firstAccordionButtonRef = useRef<HTMLButtonElement>(null);
   const topicRef = useRef<HTMLLIElement>(null);
 
+  const searchParams = useSearchParams();
+  const moduleId = searchParams.get("moduleId");
+
+  const allSubTopics = Object.values(expandedTopics).flat();
+  const { courseId } = useCourseId();
+
+  // Add a state to track the currently open accordion
+  const [openAccordionId, setOpenAccordionId] = useState<string | null>(null);
+
   async function fetchKnowledgeTopics() {
+    
     try {
-      const response = await GetKnowledgeTopicsNew(`668fcfad1a1ce7b0635b61c7`);
+      const response = await GetKnowledgeTopicsNew(moduleId);
       if (!response.error) {
         setKnowledgeTopics(response.data);
+        
+        response.data.length > 0 &&  handleExpandClick(response.data[0].id);
       } else {
         setError("Failed to load data");
       }
@@ -45,8 +68,7 @@ export default function TakeLesson() {
       setError(err.message);
     } finally {
       setLoading(false);
-      firstAccordionButtonRef.current?.click();
-    }
+      }
   }
 
   async function fetchTopics(topicId: string) {
@@ -71,14 +93,91 @@ export default function TakeLesson() {
     }
   }
 
+  async function trackVideoWatched() {
+
+    const totalWatchTime = Math.floor(Math.random() * 1000);
+    const timeSpent = totalWatchTime + Math.floor(Math.random() * 100);
+
+    const topicElement = knowledgeTopics.find(topic => topic.id === currentVideo.topicId);
+
+    const payload = {
+      UserId: userID || loggedInUser?.userId,
+      ElementId: currentVideo.id,
+      TopicId: currentVideo.topicId,
+      TotalVideoTime: totalWatchTime,
+      TimeSpent: timeSpent,
+      courseId: courseId??process.env.NEXT_PUBLIC_COURSE_ID,
+      videoTitle: currentVideo?.title,
+      topicTitle: topicElement?.name,
+      IsCompleted: true
+    };
+    
+    debugger;
+  
+    try {
+      const res = await PostVideoWatched(payload);
+
+      if (res?.data) {
+        setVideosWatched((prev) => [...prev, res.data]);
+        updateVideoWatched(res.data);
+      }
+      return res?.data
+    } catch (error) {
+      console.error("Error tracking video watched:", error);
+    }
+  }
+  
   useEffect(() => {
     fetchKnowledgeTopics();
     setVideoLoader(true);
+  
   }, []);
+  
+  useEffect(() => {
+    if (currentVideo?.topicId) {
+      getWatchedVideos();
+    }
+  }, [currentVideo?.topicId]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    console.log("expanded topics:", filteredTopics.some(topic => topic));
+  }, [currentVideo]);
+
+  function updateVideoWatched(payload: any) {
+    videosWatched.push(payload);
+    localStorage.setItem("videosWatched", JSON.stringify(videosWatched));
+  }
+  
+  async function getWatchedVideos() {
+    try {
+      const res = await GetVideosWatched(userID || loggedInUser?.data?.id, currentVideo?.topicId);
+      console.log("Videos watched:", res.data);
+      if (res.data) {
+        setVideosWatched(res.data);
+      }
+    } catch (error) {
+      console.error("Error fetching watched videos:", error);
+    }
+  }
+  
 
   const handleExpandClick = (topicId: string) => {
-    if (!expandedTopics[topicId]) {
-      fetchTopics(topicId);
+    if (openAccordionId === topicId) {
+      // If the clicked accordion is already open, close it
+      setOpenAccordionId(null);
+    } else {
+      // Open the clicked accordion and close others
+      setOpenAccordionId(topicId);
+      if (!expandedTopics[topicId]) {
+        fetchTopics(topicId);
+      } else {
+        // Ensure the first subtopic is selected when re-opening an accordion
+        const firstSubTopic = expandedTopics[topicId][0];
+        if (firstSubTopic) {
+          handleSubTopicClick(firstSubTopic, 0);
+        }
+      }
     }
   };
 
@@ -93,6 +192,7 @@ export default function TakeLesson() {
     setCurrentIndex(index);
     setVideoEnded(false); // Reset videoEnded state when a new video is selected
     setVideoLoader(false);
+    // setExpandedTopicId(subTopic.id);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,9 +204,8 @@ export default function TakeLesson() {
   );
 
   const handlePrevious = () => {
-    const allSubTopics = Object.values(expandedTopics).flat();
-    if (currentIndex > 0) {
-      const previousSubTopic = allSubTopics[currentIndex - 1];
+    if (currentIndex >= 0) {
+      const previousSubTopic = expandedTopics[currentVideo.topicId][currentIndex - 1];
       if (previousSubTopic) {
         setCurrentVideo(previousSubTopic);
         setCheckedSubTopics((prev) => ({
@@ -120,22 +219,26 @@ export default function TakeLesson() {
   };
 
   const handleNext = () => {
-    const allSubTopics = Object.values(expandedTopics).flat();
+    console.log("Current index before next:", currentIndex);  // Debugging log
+  
     if (!videoEnded) {
       setVideoEnded(true); // Show quiz first
       return;
     }
   
-    if (currentIndex < allSubTopics.length - 1) {
-      const nextSubTopic = allSubTopics[currentIndex + 1];
+    const currentTopicSubTopics = expandedTopics[currentVideo.topicId];
+    if (currentIndex <= currentTopicSubTopics.length - 1) {
+      const nextIndex = currentIndex + 1;
+      console.log("Navigating to next index:", nextIndex);  // Debugging log
+      const nextSubTopic = currentTopicSubTopics[nextIndex];
       if (nextSubTopic) {
         setCurrentVideo(nextSubTopic);
         setCheckedSubTopics((prev) => ({
           ...prev,
           [nextSubTopic.id]: true,
         }));
-        setCurrentIndex(currentIndex + 1);
-        setVideoEnded(false); // Reset videoEnded state for the next video
+        setCurrentIndex(nextIndex);
+        setVideoEnded(false);
       }
     }
   };
@@ -143,6 +246,8 @@ export default function TakeLesson() {
   const handleVideoEnd = () => {
     setVideoEnded(true);
   };
+
+ 
 
   if (error) return (
     <div className="error-area">
@@ -164,14 +269,19 @@ export default function TakeLesson() {
     </div>
   );
 
+  console.log(`topics:`,expandedTopics)
+
   return (
     <div className="rbt-lesson-area bg-color-white">
       <div className="rbt-lesson-content-wrapper">
         {/* Sidebar */}
-        <div className="rbt-lesson-leftsidebar">
+
+        
+        <div id="sidebar-desktop" className="rbt-lesson-leftsidebar">
           <div className="rbt-course-feature-inner rbt-search-activation">
-            <div className="section-title">
+            <div className="section-title" style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'0 5px'}}>
               <h4 className="rbt-title-style-3">Course Content</h4>
+              <button className="rbt-btn btn-md bg-primary-opacity" onClick={() => router.push('/student/enrolled-courses')}>Back</button>
             </div>
             <div className="lesson-search-wrapper">
               <form action="#" className="rbt-search-style-1">
@@ -196,12 +306,12 @@ export default function TakeLesson() {
                     id={`heading${index}`}
                   >
                     <button
-                      ref={index === 0 ? firstAccordionButtonRef : null}
-                      className="accordion-button collapsed"
+                      // ref={index === 0 ? firstAccordionButtonRef : null}
+                      className={`accordion-button ${openAccordionId === topic.id ? '' : 'collapsed'}`}
                       type="button"
                       data-bs-toggle="collapse"
                       data-bs-target={`#collapse${index}`}
-                      aria-expanded="false"
+                      aria-expanded={openAccordionId === topic.id}
                       aria-controls={`collapse${index}`}
                       onClick={() => handleExpandClick(topic.id)}
                       style={{fontSize:'16px'}}
@@ -211,7 +321,7 @@ export default function TakeLesson() {
                   </h2>
                   <div
                     id={`collapse${index}`}
-                    className="accordion-collapse collapse"
+                    className={`accordion-collapse collapse ${openAccordionId === topic.id ? 'show' : ''}`}
                     aria-labelledby={`heading${index}`}
                     data-bs-parent="#accordionExampleb2"
                   >
@@ -219,14 +329,17 @@ export default function TakeLesson() {
                       {expandedTopics[topic.id] ? (
                         <ul style={{marginLeft:'0', paddingLeft:'0'}}>
                           {expandedTopics[topic.id].map(
-                            (subTopic: TopicElement, subIndex) => (
-                              <>
+                            (subTopic: TopicElement, subIndex) => {
+
+                              const isWatched = videosWatched.find(video => video?.elementId == subTopic.id);
+
+                              return (
                               <li
                                 ref={subIndex === 0 ? topicRef : null}
                                 className="d-flex justify-content-between align-items mt-2"
-                                key={subIndex}
+                                key={topic.id}
                                 onClick={() => handleSubTopicClick(subTopic, subIndex)}
-                                style={{ color: `${checkedSubTopics[subTopic.id] && 'rgb(47, 87, 239)'}` }}
+                                style={{ color: `${currentVideo?.id == subTopic.id || isWatched?.elementId == subTopic.id ? 'rgb(47, 87, 239)' : null}`, }}
                               >
                                 <div
                                   className="course-content-left topic_Element_container"
@@ -256,23 +369,13 @@ export default function TakeLesson() {
                                 </div>
                                 <div className="course-content-right">
                                   <span className="rbt-check ">
-                                    {checkedSubTopics[subTopic.id] ? (
+                                    {currentVideo?.id === subTopic?.id || isWatched?.elementId == subTopic.id && (
                                       <i className="feather-check" />
-                                    ) : (
-                                      <i className="feather-square" />
                                     )}
                                   </span>
                                 </div>
-                              </li>
-                              {/* <li className="" style={{listStyle:'none'}}>
-                                <div className="course-content-left quiz">
-                                  <i className="feather-file-text" />
-                                  <span className="text">Quiz</span>
-                                </div>
-                              </li>
-                              <hr /> */}
-                              </>
-                            )
+                              </li>)
+                              }
                           )}
                         </ul>
                       ) : (
@@ -289,8 +392,10 @@ export default function TakeLesson() {
             </div>
           </div>
         </div>
+
+        
         {/* End of Sidebar */}
-        <div className="rbt-lesson-rightsidebar overflow-hidden lesson-video">
+        <div className="rbt-lesson-rightsidebar overflow-hidden lesson-video" id="lesson-video">
           {!videoEnded ? <div className="inner">
             {!videoLoader ? (
               <>
@@ -299,36 +404,35 @@ export default function TakeLesson() {
                   height="500px"
                   src={currentVideo?.videoUrl}
                   title="Video player"
-                  frameBorder="0"
+                  
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   onEnded={handleVideoEnd}
                 />
                 <div>
                   <div className="content">
+
                     <div className="section-title">
-                      <h5><u>{currentVideo?.title}</u></h5>
+                      <h5>{currentVideo?.title}</h5>
                     </div>
+
                     <div className="rbt-button-group">
                       <button
-                        className="rbt-btn icon-hover icon-hover-left btn-md bg-primary-opacity"
+                        className="rbt-btn  btn-md bg-primary-opacity"
                         onClick={handlePrevious}
                         disabled={currentIndex <= 0}
                       >
-                        <span className="btn-icon">
-                          <i className="feather-arrow-left" />
-                        </span>
+                        
                         <span className="btn-text">Previous</span>
                       </button>
                       <button
-                        className="rbt-btn icon-hover btn-md"
-                        onClick={handleNext}
-                        disabled={currentIndex > (filteredTopics.length - 1)}
+                        className="rbt-btn  btn-md"
+                        onClick={() => {trackVideoWatched();handleNext()}}
+                        disabled={currentIndex > expandedTopics[currentVideo?.topicId]?.length - 1}
+
                       >
                         <span className="btn-text">Next</span>
-                        <span className="btn-icon">
-                          <i className="feather-arrow-right" />
-                        </span>
+                        
                       </button>
                     </div>
                     <div className="content-2">
@@ -366,7 +470,7 @@ export default function TakeLesson() {
                               <span className="title">Transcript</span>
                             </Link>
                           </li>
-                          <li role="presentation">
+                          {/* <li role="presentation">
                             <Link
                               href="#"
                               className="tab-button"
@@ -379,8 +483,8 @@ export default function TakeLesson() {
                             >
                               <span className="title">Q&A</span>
                             </Link>
-                          </li>
-                          <li role="presentation">
+                          </li> */}
+                          {/* <li role="presentation">
                             <Link
                               href="#"
                               className="tab-button"
@@ -393,7 +497,23 @@ export default function TakeLesson() {
                             >
                               <span className="title">Notes</span>
                             </Link>
+                          </li> */}
+                          {isMobile && 
+                          <li role="presentation">
+                            <Link
+                              href="#"
+                              className="tab-button"
+                              id="content-tab-4"
+                              data-bs-toggle="tab"
+                              data-bs-target="#content-4"
+                              role="tab"
+                              aria-controls="content-4"
+                              aria-selected="false"
+                            >
+                              <span className="title">Content</span>
+                            </Link>
                           </li>
+}
                         </ul>
                       </div>
                     </div>
@@ -430,6 +550,127 @@ export default function TakeLesson() {
                       >
                         <Notes />
                       </div>
+                  
+                      <div
+                        className="tab-pane fade"
+                        id="content-4"
+                        role="tabpanel"
+                        aria-labelledby="content-tab-4"
+                      >
+                        <div className="rbt-lesson-leftsidebar">
+                          <div className="rbt-course-feature-inner rbt-search-activation">
+                            {/* <div className="section-title">
+                              <h4 className="rbt-title-style-3">Course Content</h4>
+                            </div> */}
+                            {/* <div className="lesson-search-wrapper">
+                              <form action="#" className="rbt-search-style-1">
+                                <input
+                                  className="rbt-search-active"
+                                  type="text"
+                                  placeholder="Search Lesson"
+                                  value={searchQuery}
+                                  onChange={handleSearchChange}
+                                />
+                                <button className="search-btn disabled">
+                                  <i className="feather-search" />
+                                </button>
+                              </form>
+                            </div> */}
+                            {/* <hr className="" /> */}
+                            <div className="rbt-accordion-style rbt-accordion-02 for-right-content accordion">
+                            {!loading ? (
+                                filteredTopics.map((topic, index) => (
+                                  <div className="accordion-item card" key={topic.id}>
+                                    <h2 className="accordion-header card-header" id={`heading${index}`}>
+                                    <button
+                                      className={`accordion-button ${openAccordionId === topic.id ? '' : 'collapsed'}`}
+                                      type="button"
+                                      data-bs-toggle="collapse"
+                                      data-bs-target={`#collapse${index}`}
+                                      aria-expanded={openAccordionId === topic.id}
+                                      aria-controls={`collapse${index}`}
+                                      onClick={() => handleExpandClick(topic.id)}
+                                      style={{fontSize:'16px'}}
+                                    >
+                                      {topic.name}
+                                    </button>
+                                    </h2>
+                                    <div
+                                      id={`collapse${index}`}
+                                      className={`accordion-collapse collapse ${openAccordionId === topic.id ? 'show' : ''}`}
+                                      aria-labelledby={`heading${index}`}
+                                      data-bs-parent="#accordionExampleb2"
+                                    >
+                                      <div className="accordion-body card-body">
+                                        {expandedTopics[topic.id] ? (
+                                          <ul style={{ marginLeft: '0', paddingLeft: '0' }}>
+                                            {expandedTopics[topic.id].map((subTopic: TopicElement, subIndex) => {
+                                            
+                                            const isWatched = videosWatched.find(video => video?.elementId == subTopic.id);
+
+                                              return (
+                                                <li
+                                                  ref={subIndex === 0 ? topicRef : null}
+                                                  className="d-flex justify-content-between align-items mt-2"
+                                                  key={topic.id} // Use subTopic.id for uniqueness
+                                                  onClick={() => handleSubTopicClick(subTopic, subIndex)}
+                                                  style={{ color: `${currentVideo?.id == subTopic.id || isWatched?.elementId == subTopic.id ? 'rgb(47, 87, 239)' : null}`, }}
+                                                >
+                                                  <div
+                                                    className="course-content-left topic_Element_container"
+                                                    style={{
+                                                      overflow: "hidden",
+                                                      display: "flex",
+                                                      gap: "18px", // Corrected from "18x" to "18px"
+                                                      alignItems: "center",
+                                                      width: '100%'
+                                                    }}
+                                                  >
+                                                    {currentVideo?.id === subTopic.id ? (
+                                                      <i className="bi bi-pause-circle-fill" style={{ marginRight: '15px' }}></i>
+                                                    ) : (
+                                                      <i className="feather-play-circle icon" style={{ marginRight: '15px' }} />
+                                                    )}
+                                                    <p
+                                                      className="topic-Element-Title"
+                                                      style={{
+                                                        fontSize: 13,
+                                                        cursor: "pointer",
+                                                        textDecoration: "none",
+                                                        fontWeight: "bold",
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                        textOverflow: "ellipsis", // Added textOverflow for better text handling
+                                                      }}
+                                                    >
+                                                      {subTopic.title}
+                                                    </p>
+                                                  </div>
+                                                  <div className="course-content-right">
+                                                    <span className="rbt-check">
+                                                      {currentVideo?.id === subTopic?.id || isWatched?.elementId == subTopic.id && <i className="feather-check" />}
+                                                    </span>
+                                                  </div>
+                                                </li>
+                                              );
+                                            })}
+                                          </ul>
+                                        ) : (
+                                          <div>Loading topics...</div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="rbt-accordion-style rbt-accordion-02 for-right-content accordion" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                  <Skeleton count={5} height={40} />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -450,4 +691,12 @@ export default function TakeLesson() {
       </div>
     </div>
   );
+}
+
+export default function TakeLessonContainer() {
+  return (
+    <Suspense fallback={<div>loading</div>}>
+      <TakeLesson />
+    </Suspense>
+  )
 }

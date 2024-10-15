@@ -1,0 +1,19 @@
+.error-area {
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.rbt-accordion-style .card + .card {
+    margin-top: 0 !important;
+}
+
+.quiz {
+    font-size: 14px;
+    margin-top: 4px !important;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}

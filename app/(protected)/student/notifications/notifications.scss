@@ -1,0 +1,37 @@
+p.b2 {
+    font-size: 13px !important;
+
+    @media (max-width: 1920px) {
+        font-size: 12px !important;
+    }
+}
+
+tbody tr:nth-child(even) td {
+    background: none !important;
+}
+
+tbody tr.unread td {
+    background: rgba(207, 207, 207, .24) !important;
+}
+
+tbody tr {
+    border: 1px solid red;
+    // margin-bottom: 10px !important;
+    
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+
+tbody tr {
+    border: 1px solid yellow;
+    border-bottom: 10px solid transparent;
+}
+
+tbody tr td {
+    @media (max-width: 1920px) {
+        font-size: 13px !important;
+    }
+}
