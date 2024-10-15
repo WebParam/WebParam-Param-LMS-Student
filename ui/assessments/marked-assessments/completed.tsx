@@ -41,7 +41,8 @@ function CompletedAssessment() {
   async function fetchAssessments() {
     try {
       const response = await GET(`${rAssessmentUrl}/api/v1/StudentAnswers/GetStudentAssessments/${userID || loggedInUser?.userId}`);
-      setAssessments(response.data);
+      debugger;
+      setAssessments(response?.data?.data);
     } catch (error) {
       console.error("Error fetching assessments:", error);
     }
@@ -54,11 +55,10 @@ function CompletedAssessment() {
     }, 700);
   }
 
-  debugger;
   useEffect(() => {
     if(assessments.length > 0){    
       debugger;
-    const filteredAssessments = assessments?.filter((assessment: Assessment) => assessment.assessment.type === (type === 'summative' ? 0:1));
+    const filteredAssessments = assessments?.filter((assessment: Assessment) => assessment?.assessment?.type === (type === 'summative' ? 0:1));
     setFilteredAssessments(filteredAssessments);
     }
   }, [assessments]);

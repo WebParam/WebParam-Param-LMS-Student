@@ -70,14 +70,14 @@ const StudentDashboardSidebar = () => {
               <nav className="mainmenu-nav">
                 <ul className="dashboard-mainmenu rbt-default-sidebar-list">
                   <li>
-                    <a
+                    <Link
                   
                       href={'/student/student-profile'}
                       className={`${path === '/student/student-profile' ? "active" : ""}`}
                     >
                       <i className="feather-user" />
                       <span>My Profile</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <a
@@ -89,35 +89,6 @@ const StudentDashboardSidebar = () => {
                       <span>Logout</span>
                     </a>
                   </li>
-                  {/* {SidebarData &&
-                  
-                    SidebarData?.slice(-1).map((data: any, index: any) => {
-                      // if logout, attach the logout function to the link
-                      if (data.text == "Logout") {
-                        return  <li key={index}>
-                        <Link
-                        onClick={handleLogOut}
-                          href={data.link}
-                          className={`${path === data.link ? "active" : ""}`}
-                        >
-                          <i className={data.icon} />
-                          <span>{data.text}</span>
-                        </Link>
-                      </li>;
-                      }
-
-                      return (
-                      <li key={index}>
-                        <Link
-                          href={data.link}
-                          className={`${path === data.link ? "active" : ""}`}
-                        >
-                          <i className={data.icon} />
-                          <span>{data.text}</span>
-                        </Link>
-                      </li>
-                    )
-                    })} */}
                 </ul>
               </nav>
             </div>
