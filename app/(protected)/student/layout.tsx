@@ -29,8 +29,10 @@ export default function StudentLayout({
           userId: userId ?? loggedInUser?.data?.id,
         };
         const res = await TrackTimeSpent(payload);
+        debugger;
         if (res?.data?.data?.id) {
           localStorage.setItem('trackTimeSpentId',res.data.data.id);
+          localStorage.setItem('startTimeTrack', res.data.data.startTime);
         }
       }
     } catch (error) {

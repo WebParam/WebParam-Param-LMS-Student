@@ -28,10 +28,6 @@ export default function Enrolled() {
   const searchParams = useSearchParams();
 
   const type = searchParams.get("type")??'KM';
-  
-
-  const itemsPerPage = 3;
-  const startIndex = currentPage * itemsPerPage;
 
 
   const getUnitStandards = async (courseId: string) => {

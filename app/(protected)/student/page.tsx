@@ -1,5 +1,4 @@
 const StudentHome = () => {
- alert('hi')
   return <></>;
 };
 

@@ -153,7 +153,7 @@ function TakeLesson() {
   
   useEffect(() => {
     if (currentVideo?.topicId) {
-      getWatchedVideos();
+      Promise.all([getWatchedVideos(), updateTimeSpent()])
     }
   }, [currentVideo?.topicId]);
 
@@ -521,7 +521,7 @@ function TakeLesson() {
                     <div className="rbt-button-group">
                       <button
                         className="rbt-btn  btn-md bg-primary-opacity"
-                        onClick={handlePrevious}
+                        onClick={() => {updateTimeSpent(),handlePrevious()}}
                         disabled={currentIndex <= 0}
                       >
                         
@@ -529,7 +529,7 @@ function TakeLesson() {
                       </button>
                       <button
                         className="rbt-btn  btn-md"
-                        onClick={() => {trackVideoWatched();handleNext()}}
+                        onClick={() => {trackVideoWatched(),updateTimeSpent(),handleNext()}}
                         disabled={currentIndex > expandedTopics[currentVideo?.topicId]?.length - 1}
 
                       >

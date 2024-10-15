@@ -38,13 +38,31 @@ export async function UpdateTimeSpent(id: string) {
 
 export async function updateTimeSpent() {
     const id = localStorage.getItem('trackTimeSpentId');
-    if (id) {
-        try {   
+
+    const startTime = localStorage.getItem('startTimeTrack') ??"";
+
+    const endTime = new Date().toString();
+    const timeSpent = new Date(endTime).getTime() - new Date(startTime).getTime();
+    const timeSpentInMinutes = timeSpent / (1000 * 60);
+
+    console.log('Time spent:', timeSpentInMinutes.toFixed(0));
+
+    if (parseInt(timeSpentInMinutes.toFixed(0)) > 20) {
+        window.location.href = '/login';
+        return;
+    }
+
+        if (id) {
+        try {
             const res = await UpdateTimeSpent(id);
-            console.log('update time spent:', res);
+            console.log('Update time spent response:', res?.data?.data?.startTime);
+            localStorage.setItem('startTimeTrack', endTime);
+
             return res;
         } catch (error: any) {
-            console.log(error);
+            console.error("Error updating time spent:", error);
         }
+    } else {
+        console.error("ID not found in localStorage");
     }
 };

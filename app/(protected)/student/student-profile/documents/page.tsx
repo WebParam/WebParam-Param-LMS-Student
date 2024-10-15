@@ -378,7 +378,7 @@ const FileUpload: React.FC = () => {
        <div className="upload-container"
        >
           <h5>Change File</h5>
-          <form onSubmit={handleChangeDocument}>
+          <form onSubmit={(e) => {handleChangeDocument(e), updateTimeSpent()}}>
             <div 
             onDrop={(e) => handleDrop(e, documentinfo as DocumentType)}
             onDragOver={(e) => handleDragOver(e, documentinfo as DocumentType)}
@@ -423,7 +423,7 @@ const FileUpload: React.FC = () => {
        <div className="upload-container"
        >
           <h5>Upload File</h5>
-          <form onSubmit={handleUpload}>
+          <form onSubmit={(e) => {handleUpload(e), updateTimeSpent()}}>
             <div
             onDrop={(e) => handleDrop(e, documentinfo as DocumentType)}
             onDragOver={(e) => handleDragOver(e, documentinfo as DocumentType)}
