@@ -1,6 +1,5 @@
 import styles from '../CheckIn.module.scss'
 import { StepProps } from '../page';
-import NextDefaultIcon from '../svg/NextDefaultIcon';
 
 export default function StepsAndForm({ step, goToStep }: StepProps) {
     return (

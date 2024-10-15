@@ -7,12 +7,12 @@ import StepsAndForm from "./components/StepsAndForm";
 import YouthDetails from "./components/YouthDetails";
 import StepComponent from "./components/StepComponent";
 import WorkExperience from "./components/WorkExperience";
-import NextDefaultIcon from "./svg/NextDefaultIcon";
-import BackDefaultIcon from "./svg/BackDefaultIcon";
 import UnderLineIcon from "./svg/UnderLineIcon";
 import Learning from "./components/Learning";
 import OverallReView from "./components/OverallView";
 import SubmitIcon from "./components/SubmitIcon";
+import BackIcon from "./svg/BackIcon";
+import NextIcon from "./svg/NextIcon";
 
 export interface StepProps {
   step: number;
@@ -40,7 +40,7 @@ export default function CheckIn() {
         <div className={styles.cardHeader}>
           <div className="d-flex flex-column">
             <h1 className={styles.heading}>
-              Youth Programme Monthly Check-in 2023
+              Youth Programme Monthly Check-in 2024
               {(step === 2 || step === 3) &&
                 <div className={styles.underLineIcon}>
                   <UnderLineIcon />
@@ -65,19 +65,31 @@ export default function CheckIn() {
           {step > 4 && <StepComponent step={step} />}
           <div className={styles.formFooter}>
             {step > 0 && (
-              <button type="submit" className={`${styles.prevButton}`} onClick={() => prevStep()}>
-                <BackDefaultIcon />
+              <button
+                type="button"
+                className={`${styles.prevButton}`}
+                onClick={() => prevStep()}
+              >
+                <BackIcon />
                 {'BACK'}
               </button>
             )}
             {step < 4 && (
-              <button type="submit" className={`${styles.nextButton}`} onClick={() => nextStep()}>
+              <button
+                type="button"
+                className={`${styles.nextButton}`}
+                onClick={() => nextStep()}
+              >
                 {'NEXT'}
-                <NextDefaultIcon />
+                <NextIcon />
               </button>
             )}
             {step === 4 && (
-              <button type="submit" className={`${styles.nextButton}`} onClick={() => nextStep()}>
+              <button
+                type="submit"
+                className={`${styles.submitButton}`}
+                onClick={() => nextStep()}
+              >
                 {'SUBMIT'}
                 <SubmitIcon />
               </button>

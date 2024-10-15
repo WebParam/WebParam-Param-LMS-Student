@@ -3,7 +3,6 @@ import { useState } from 'react';
 import styles from '../CheckIn.module.scss'
 import { StepProps } from '../page';
 import ProgressBar from './ProgressBar';
-import NextDefaultIcon from '../svg/NextDefaultIcon';
 
 interface YouthDetailsProps extends StepProps {
     heading: string;
