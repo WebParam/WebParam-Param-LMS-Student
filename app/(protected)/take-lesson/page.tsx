@@ -21,6 +21,7 @@ import { POST } from "@/app/lib/api-client";
 import { rDocumentParaphraseUrl } from "@/app/lib/endpoints";
 import imageBg from './oc-lost.svg'
 import Modal from "react-responsive-modal";
+import { updateTimeSpent } from "@/app/api/trackTimeSpent/timeSpent";
 
 function TakeLesson() {
   const [currentVideo, setCurrentVideo] = useState<any>();
@@ -132,15 +133,12 @@ function TakeLesson() {
       topicTitle: topicElement?.name,
       IsCompleted: true
     };
-    
-    debugger;
   
     try {
       const res = await PostVideoWatched(payload);
 
       if (res?.data) {
         setVideosWatched((prev) => [...prev, res.data]);
-        // updateVideoWatched(res.data);
       }
       return res?.data
     } catch (error) {
@@ -149,14 +147,13 @@ function TakeLesson() {
   }
   
   useEffect(() => {
-    fetchKnowledgeTopics();
+    Promise.all([fetchKnowledgeTopics(), updateTimeSpent()]);
     setVideoLoader(true);
-  
   }, []);
   
   useEffect(() => {
     if (currentVideo?.topicId) {
-      getWatchedVideos();
+      Promise.all([getWatchedVideos(), updateTimeSpent()])
     }
   }, [currentVideo?.topicId]);
 
@@ -200,6 +197,7 @@ function TakeLesson() {
       if (res.data) {
         setVideosWatched(res.data);
         // Automatically select the last watched video
+        updateTimeSpent()
         const lastWatchedVideo = res.data[res.data.length - 1]; // Get the last watched video
         if (lastWatchedVideo) {
 
@@ -523,7 +521,7 @@ function TakeLesson() {
                     <div className="rbt-button-group">
                       <button
                         className="rbt-btn  btn-md bg-primary-opacity"
-                        onClick={handlePrevious}
+                        onClick={() => {updateTimeSpent(),handlePrevious()}}
                         disabled={currentIndex <= 0}
                       >
                         
@@ -531,7 +529,7 @@ function TakeLesson() {
                       </button>
                       <button
                         className="rbt-btn  btn-md"
-                        onClick={() => {trackVideoWatched();handleNext()}}
+                        onClick={() => {trackVideoWatched(),updateTimeSpent(),handleNext()}}
                         disabled={currentIndex > expandedTopics[currentVideo?.topicId]?.length - 1}
 
                       >

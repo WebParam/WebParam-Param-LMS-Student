@@ -23,6 +23,7 @@ import '@react-pdf-viewer/zoom/lib/styles/index.css';
 import {isMobile} from 'react-device-detect';
 import { GET, GET_DOCUMENT, POST, POST_MULTIPART, PUT, PUT_MULTIPART } from '@/app/lib/api-client';
 import { useProgressContext } from "@/context/progress-card-context/progress-context";
+import { updateTimeSpent } from '@/app/api/trackTimeSpent/timeSpent';
 
 
 const pdfVersion = "3.11.174";
@@ -32,7 +33,6 @@ const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion
 type DocumentType = typeof documentsRequired[number]['documentName'];
 
 const FileUpload: React.FC = () => {
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const thumbnailPluginInstance = thumbnailPlugin();
   const zoomPluginInstance = zoomPlugin();
   const { setDocumentsPercentage } = useProgressContext();
@@ -77,6 +77,7 @@ const FileUpload: React.FC = () => {
       if (documentToView) {
           fetchDocument();
       }
+      updateTimeSpent();
     }, [documentToView]);
 
   useEffect(() => {
@@ -97,28 +98,6 @@ const FileUpload: React.FC = () => {
   }
   },[])
 
-  const calculateDocumentsPercentage = () => {
-    // Filter documents that have a `blobUrl` value
-    if (documents.length > 0) {
-      const documentsWithBlob = documents.filter((document) => document.blobUrl);
-      console.log('documentsWithBlob',documentsWithBlob, documents);
-  
-    // Calculate percentage
-    const totalDocuments = documents.length;
-    const uploadedDocuments = documentsWithBlob.length;
-    const percentage = (uploadedDocuments / totalDocuments) * 100;
-  
-    // Store the count of uploaded documents and the percentage in localStorage
-    if (typeof window !== "undefined") {
-      localStorage.setItem('uploadedDocumentsCount', uploadedDocuments.toString());
-      localStorage.setItem('documentsPercentage', percentage.toString());
-  
-      // Optionally update any other state/context with the percentage
-      setDocumentsPercentage(percentage);
-    }
-  }
-  }
-
 
   const user = cookies.get('loggedInUser');
 
@@ -131,7 +110,6 @@ const FileUpload: React.FC = () => {
 
         if (docs) {
           setDocuments(docs?.data.data);
-          calculateDocumentsPercentage();
         }
       }
     } catch (error) {
@@ -145,7 +123,7 @@ const FileUpload: React.FC = () => {
     console.log(docId);
     setDocumentToView(docId);
     console.log('documentToView',documentToView);
-    fetchDocument();
+    Promise.all([fetchDocument(), updateTimeSpent()]);
   }
 
   const [dragging, setDragging] = useState<Record<DocumentType, boolean>>(
@@ -213,7 +191,7 @@ const FileUpload: React.FC = () => {
           setIsUploaded(true);
           router.push(`/student/student-profile?tab=documents`);
           viewDocument(response.data.data.id)
-          calculateDocumentsPercentage()
+        
         
         } 
       } catch (error) {
@@ -243,8 +221,6 @@ const FileUpload: React.FC = () => {
         if (response.status === 200) {
           router.push(`/student/student-profile?tab=documents&document=${selectedDocument}&action=view`);
 
-        } else {
-          // alert('File upload failed');
         }
       } catch (error) {
         console.error('Error uploading file:', error);
@@ -261,8 +237,7 @@ const FileUpload: React.FC = () => {
   };
 
   useEffect(() => {
-    getDocuments();
-    calculateDocumentsPercentage();
+    Promise.all([getDocuments(), updateTimeSpent()]);
     console.log('documents:', documents);
     router.push(`/student/student-profile?tab=documents`);
   }, []);
@@ -403,7 +378,7 @@ const FileUpload: React.FC = () => {
        <div className="upload-container"
        >
           <h5>Change File</h5>
-          <form onSubmit={handleChangeDocument}>
+          <form onSubmit={(e) => {handleChangeDocument(e), updateTimeSpent()}}>
             <div 
             onDrop={(e) => handleDrop(e, documentinfo as DocumentType)}
             onDragOver={(e) => handleDragOver(e, documentinfo as DocumentType)}
@@ -426,7 +401,7 @@ const FileUpload: React.FC = () => {
                 accept=".pdf"
                 style={{display: 'none'}}
                 />
-              <label className="btn btn-dark" htmlFor="file-input" >Choose File</label>
+              <label className="btn btn-dark text-light" htmlFor="file-input" >Choose File</label>
             </div>
             <div>
               <p>Supported Formats: PDF</p>
@@ -439,7 +414,7 @@ const FileUpload: React.FC = () => {
 
             <div>
               <button type="button" className="btn btn-outline-dark" onClick={() => (router.push(`/student/student-profile?tab=documents&document=${selectedDocument}&action=view`), setSelectedFile(null))}>Cancel</button>
-              <button type="submit" style={{backgroundColor: 'rgb(36, 52, 92)', border: 'none', borderRadius: '5px'}}>
+              <button type="submit" style={{backgroundColor: 'rgb(36, 52, 92)', border: 'none', borderRadius: '5px', color:'white'}} disabled={selectedFile?.file == null}>
                 {upLoadingLoader ? <div className="spinner-grow" role="status"></div> : 'Upload'}
               </button>
             </div>
@@ -448,7 +423,7 @@ const FileUpload: React.FC = () => {
        <div className="upload-container"
        >
           <h5>Upload File</h5>
-          <form onSubmit={handleUpload}>
+          <form onSubmit={(e) => {handleUpload(e), updateTimeSpent()}}>
             <div
             onDrop={(e) => handleDrop(e, documentinfo as DocumentType)}
             onDragOver={(e) => handleDragOver(e, documentinfo as DocumentType)}
@@ -483,7 +458,7 @@ const FileUpload: React.FC = () => {
 
             <div>
             <button type="button" className="btn btn-outline-dark" onClick={() => (router.push(`/student/student-profile?tab=documents&document=${selectedDocument}&action=view`), setSelectedFile(null))}>Cancel</button>
-              <button type="submit" style={{backgroundColor: 'rgb(36, 52, 92)', border: 'none', borderRadius: '5px'}}>
+              <button type="submit" style={{backgroundColor: 'rgb(36, 52, 92)', border: 'none', borderRadius: '5px', color:'white'}} disabled={selectedFile?.file == null}>
                 {upLoadingLoader ? <div className="spinner-grow" role="status"></div> : 'Upload'}
               </button>
             </div>
