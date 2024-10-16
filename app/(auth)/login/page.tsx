@@ -70,8 +70,6 @@ export default function LoginPage() {
               cookies.set("loggedInUser", res.data, options);
               cookies.set("userID", userId, options);
       
-              console.log("Cookies set:", cookies.getAll());
-              
               if(process.env.NEXT_PUBLIC_FREEMIUM){
                 const redirectPath = "/student/projects";
                 router.push(redirectPath)
@@ -200,7 +198,7 @@ export default function LoginPage() {
                 className={hasError.password ? "error" : ""}
                 
               />
-              <i onClick={()=>setShowPassword(!showPassword)} className="feather-eye position-absolute" style={{right:"10px", top:"17px", cursor:"pointer"}}  />
+              {showPassword ? <i onClick={()=>setShowPassword(!showPassword)} className="feather-eye position-absolute" style={{right:"10px", top:"17px", cursor:"pointer"}}  /> : <i onClick={()=>setShowPassword(!showPassword)} className="bi-eye-slash position-absolute" style={{right:"10px", top:"14px", cursor:"pointer"}}  />}
             </div>
           </div>
           <div className="mb--30 remember-me">
