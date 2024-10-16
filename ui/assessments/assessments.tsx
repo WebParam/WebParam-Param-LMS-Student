@@ -5,6 +5,7 @@ import styles from "@/styles/assessment/assessment.module.css";
 import loaderStyles from "@/ui/loader-ui/loader.module.css";
 import assessmentData from "@/data/assessment/assessment.json";
 import { submitAssessment } from "@/actions/assessments/assessments-action";
+import { updateTimeSpent } from "@/app/api/trackTimeSpent/timeSpent";
 
 type AssessmentQuestion = {
   question: string;
@@ -181,7 +182,7 @@ const AssessmentComponent = () => {
               <button
                 className="rbt-btn btn-gradient btn-sm"
                 type="button"
-                onClick={handleSubmitAssessment}
+                onClick={() => {handleSubmitAssessment(), updateTimeSpent()}}
                 disabled={
                   !isInteracted ||
                   loading ||

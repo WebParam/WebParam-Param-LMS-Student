@@ -21,7 +21,7 @@ const Overview = ({currentVideo}:any) => {
       <div className="row">
         <div className="col-md-5 mb-3">
           <h6 className="form-label fw-bold ">
-          About Lesson
+            About Lesson
           </h6>
         </div>
       </div>
@@ -29,7 +29,7 @@ const Overview = ({currentVideo}:any) => {
       <div className="row mt-3">
         <div className="mb-3">
           <div className="mt-2">
-            <p className="videoPar">{currentVideo?.description??"description"}</p>
+            <p className="videoPar" dangerouslySetInnerHTML={{__html: currentVideo?.description??"description"}} />
           </div>
         </div>
       </div>

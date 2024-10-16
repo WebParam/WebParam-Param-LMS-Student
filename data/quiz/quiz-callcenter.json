@@ -1,77 +1,171 @@
 [
   {
-    "question": "What is the primary role of a call center agent?",
-    "options": ["To resolve customer inquiries", "To design marketing strategies", "To manage company finances", "To oversee project progress"],
-    "answer": "To resolve customer inquiries"
+    "question": "What is the primary purpose of management accounting?",
+    "options": ["To provide information for internal decision-making", "To prepare financial statements", "To ensure compliance with regulations", "To manage external audits"],
+    "answer": "To provide information for internal decision-making"
   },
   {
-    "question": "Which document outlines the protocols and procedures for handling customer calls?",
-    "options": ["Call Script", "Business Plan", "Risk Management Plan", "Stakeholder Analysis"],
-    "answer": "Call Script"
+    "question": "Which of the following is a key function of management accounting?",
+    "options": ["Budgeting", "Tax filing", "External reporting", "Financial auditing"],
+    "answer": "Budgeting"
   },
   {
-    "question": "What is a call log used for?",
-    "options": ["Tracking customer interactions", "Managing the call center budget", "Scheduling agent shifts", "Conducting risk analysis"],
-    "answer": "Tracking customer interactions"
+    "question": "What is a budget variance?",
+    "options": ["The difference between budgeted and actual performance", "The total amount of the budget", "A financial statement format", "The process of preparing a budget"],
+    "answer": "The difference between budgeted and actual performance"
   },
   {
-    "question": "What does the term 'average handle time' (AHT) refer to in a call center?",
-    "options": ["The time it takes to resolve a customer issue", "The average call duration", "The number of calls an agent handles per hour", "The time between customer calls"],
-    "answer": "The average call duration"
+    "question": "What method is used to allocate indirect costs to products?",
+    "options": ["Direct costing", "Activity-based costing", "Absorption costing", "Standard costing"],
+    "answer": "Activity-based costing"
   },
   {
-    "question": "What is the purpose of a knowledge base in a call center?",
-    "options": ["To store customer contact information", "To provide agents with information to resolve inquiries", "To monitor call quality", "To train new agents"],
-    "answer": "To provide agents with information to resolve inquiries"
+    "question": "Which of the following is a direct cost?",
+    "options": ["Raw materials used in production", "Utilities for the factory", "Salaries of administrative staff", "Insurance for the company"],
+    "answer": "Raw materials used in production"
   },
   {
-    "question": "Which customer service methodology emphasizes quick and effective resolution of customer issues?",
-    "options": ["Six Sigma", "Agile", "First Call Resolution (FCR)", "Lean"],
-    "answer": "First Call Resolution (FCR)"
+    "question": "What does a cash flow statement provide?",
+    "options": ["Information about income and expenses", "Details of assets and liabilities", "A summary of cash inflows and outflows", "An overview of stock prices"],
+    "answer": "A summary of cash inflows and outflows"
   },
   {
-    "question": "What is the main purpose of a quality assurance (QA) program in a call center?",
-    "options": ["To define the call center budget", "To evaluate and improve call quality", "To schedule agent shifts", "To manage team communication"],
-    "answer": "To evaluate and improve call quality"
+    "question": "What is break-even analysis used for?",
+    "options": ["To determine sales needed to cover costs", "To calculate profit margins", "To evaluate investment returns", "To assess market trends"],
+    "answer": "To determine sales needed to cover costs"
   },
   {
-    "question": "Which phase of a call center interaction involves determining if the customer's issue was fully resolved and offering additional assistance?",
-    "options": ["Greeting", "Problem Identification", "Issue Resolution", "Call Closure"],
-    "answer": "Call Closure"
+    "question": "Which cost is not typically considered a variable cost?",
+    "options": ["Direct materials", "Sales commissions", "Rent for a factory", "Direct labor"],
+    "answer": "Rent for a factory"
   },
   {
-    "question": "In the context of call centers, what is a 'service level agreement' (SLA)?",
-    "options": ["A financial report", "A contract that defines the expected service standards", "A team meeting", "A risk management plan"],
-    "answer": "A contract that defines the expected service standards"
+    "question": "What is the main focus of financial accounting?",
+    "options": ["Internal decision-making", "External reporting to stakeholders", "Cost control", "Operational efficiency"],
+    "answer": "External reporting to stakeholders"
   },
   {
-    "question": "What is the main focus during the customer interaction phase of a call?",
-    "options": ["Planning call details", "Tracking and managing agent performance", "Resolving the customer's issue", "Defining customer goals"],
-    "answer": "Resolving the customer's issue"
+    "question": "What is a performance measure used in management accounting?",
+    "options": ["Return on investment (ROI)", "Debt-to-equity ratio", "Gross profit margin", "Current ratio"],
+    "answer": "Return on investment (ROI)"
   },
   {
-    "question": "What does 'IVR' stand for in a call center?",
-    "options": ["Interactive Voice Response", "Instant Voice Recognition", "Internal Verification Report", "Integrated Value Response"],
-    "answer": "Interactive Voice Response"
+    "question": "Which of the following is a component of a balanced scorecard?",
+    "options": ["Financial perspective", "Market share perspective", "Customer satisfaction perspective", "All of the above"],
+    "answer": "All of the above"
   },
   {
-    "question": "What is a customer satisfaction survey in a call center context?",
-    "options": ["A tool to measure agent performance", "A feedback tool to assess customer experience", "A method to monitor call center metrics", "A process for training new agents"],
-    "answer": "A feedback tool to assess customer experience"
+    "question": "What does the term 'overhead' refer to?",
+    "options": ["Direct materials costs", "Indirect production costs", "Sales revenues", "Net income"],
+    "answer": "Indirect production costs"
   },
   {
-    "question": "Which tool is commonly used to measure call center efficiency?",
-    "options": ["Earned Value Management (EVM)", "Average Handle Time (AHT)", "SWOT Analysis", "Pareto Chart"],
-    "answer": "Average Handle Time (AHT)"
+    "question": "What is standard costing?",
+    "options": ["A method to analyze variances", "A budgeting approach", "A technique for financial forecasting", "An external audit procedure"],
+    "answer": "A method to analyze variances"
   },
   {
-    "question": "What is a 'key performance indicator' (KPI) in a call center?",
-    "options": ["A significant event in the company", "A metric to evaluate call center performance", "A project risk", "An internal team meeting"],
-    "answer": "A metric to evaluate call center performance"
+    "question": "What does contribution margin represent?",
+    "options": ["Sales minus variable costs", "Total revenue minus fixed costs", "Gross profit", "Net income"],
+    "answer": "Sales minus variable costs"
   },
   {
-    "question": "What is the purpose of a call escalation process?",
-    "options": ["To organize the team's workload", "To outline the call center budget", "To manage calls that cannot be resolved by the first agent", "To manage call center risks"],
-    "answer": "To manage calls that cannot be resolved by the first agent"
-  }
-]
+    "question": "What is a key benefit of budgeting?",
+    "options": ["Enhances cash flow", "Increases sales revenue", "Facilitates planning and control", "Reduces operational costs"],
+    "answer": "Facilitates planning and control"
+  },
+  {
+    "question": "Which financial metric assesses profitability in relation to sales?",
+    "options": ["Net profit margin", "Current ratio", "Return on equity", "Debt ratio"],
+    "answer": "Net profit margin"
+  },
+  {
+    "question": "What is the main purpose of a variance report?",
+    "options": ["To summarize financial statements", "To identify differences between planned and actual performance", "To evaluate employee performance", "To forecast future revenues"],
+    "answer": "To identify differences between planned and actual performance"
+  },
+  {
+    "question": "Which technique helps in determining the cost-effectiveness of different products?",
+    "options": ["Activity-based costing", "Standard costing", "Job order costing", "Marginal costing"],
+    "answer": "Activity-based costing"
+  },
+  {
+    "question": "What is capital budgeting?",
+    "options": ["The process of planning long-term investments", "The process of preparing annual budgets", "The analysis of short-term financing", "The allocation of operational costs"],
+    "answer": "The process of planning long-term investments"
+  },
+  {
+    "question": "What is meant by 'fixed costs'?",
+    "options": ["Costs that vary with production levels", "Costs that remain constant regardless of output", "Costs incurred only when a product is sold", "None of the above"],
+    "answer": "Costs that remain constant regardless of output"
+  },
+  {
+    "question": "What is the primary objective of internal auditing?",
+    "options": ["Compliance with laws", "Risk management", "Efficiency and effectiveness of operations", "All of the above"],
+    "answer": "All of the above"
+  },
+  {
+    "question": "What does the term 'liquidity' refer to?",
+    "options": ["The ability to meet short-term obligations", "The profitability of the company", "The level of fixed assets", "The total debt level"],
+    "answer": "The ability to meet short-term obligations"
+  },
+  {
+    "question": "Which method assesses the feasibility of a project over time?",
+    "options": ["Net present value (NPV)", "Return on investment (ROI)", "Payback period", "Internal rate of return (IRR)"],
+    "answer": "Net present value (NPV)"
+  },
+  {
+    "question": "What is the primary function of a cost accountant?",
+    "options": ["To prepare tax returns", "To monitor and control costs", "To create financial statements", "To conduct market research"],
+    "answer": "To monitor and control costs"
+  },
+  {
+    "question": "What is the purpose of a financial ratio analysis?",
+    "options": ["To assess the financial health of a business", "To prepare a budget", "To calculate taxes owed", "To determine product pricing"],
+    "answer": "To assess the financial health of a business"
+  },
+  {
+    "question": "What does 'working capital' represent?",
+    "options": ["Total assets minus total liabilities", "Current assets minus current liabilities", "Long-term assets minus long-term liabilities", "Net income for the year"],
+    "answer": "Current assets minus current liabilities"
+  },
+  {
+    "question": "Which report summarizes a company's revenues and expenses over a specific period?",
+    "options": ["Balance sheet", "Income statement", "Cash flow statement", "Statement of changes in equity"],
+    "answer": "Income statement"
+  },
+  {
+    "question": "What does 'depreciation' represent?",
+    "options": ["The reduction in asset value over time", "The increase in asset value over time", "The amount of cash available", "The cost of goods sold"],
+    "answer": "The reduction in asset value over time"
+  },
+  {
+    "question": "What is the primary focus of strategic management accounting?",
+    "options": ["Internal efficiency", "Long-term strategic planning", "Short-term financial reporting", "Tax compliance"],
+    "answer": "Long-term strategic planning"
+  },
+  {
+    "question": "What is a forecast?",
+    "options": ["An estimate of future financial outcomes", "A report on past financial performance", "An analysis of market trends", "A detailed budget plan"],
+    "answer": "An estimate of future financial outcomes"
+  },
+  {
+    "question": "Which of the following is an example of a non-financial measure?",
+    "options": ["Customer satisfaction ratings", "Profit margin", "Return on equity", "Gross revenue"],
+    "answer": "Customer satisfaction ratings"
+  },
+  {
+    "question": "What does 'cost-volume-profit analysis' examine?",
+    "options": ["The relationship between cost, sales volume, and profit", "The breakdown of fixed and variable costs", "The impact of pricing strategies on profit", "All of the above"],
+    "answer": "The relationship between cost, sales volume, and profit"
+  },
+  {
+    "question": "What is a primary component of a financial plan?",
+    "options": ["Revenue projections", "Employee salaries", "Tax obligations", "Market share analysis"],
+    "answer": "Revenue projections"
+  },
+  {
+    "question": "What is the purpose of a sensitivity analysis?",
+    "options": ["To analyze how different values of an independent variable affect a dependent variable", "To prepare tax returns", "To determine cash flow", "To calculate inventory levels"],
+    "answer": "To analyze how different values of an independent variable affect a dependent variable"
+  }]

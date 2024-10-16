@@ -90,6 +90,8 @@ const InstructorDashboardHeader = () => {
     localStorage.setItem("modalOpened", "true");
   }, []);
 
+  const bg = process.env.NEXT_PUBLIC_BANNER_URL;
+
   return (
     <>
       {/* Modal for course selection */}
@@ -134,7 +136,7 @@ const InstructorDashboardHeader = () => {
       )}
 
       {/* Course title display */}
-      <div className="mb-5" style={{ marginTop: "-7%" }}>
+      <div className="mb-5">
         {process.env.NEXT_PUBLIC_DEMO ? (
           <div style={{ maxWidth: "40rem" }}>
             <span className="select-label d-block">Select a course</span>
@@ -169,9 +171,9 @@ const InstructorDashboardHeader = () => {
       <div className="rbt-dashboard-content-wrapper banner-wrapper">
         {isMobile ? (
           <div
-            className="rbt-shadow-box"
+            className=""
             style={{
-              backgroundImage: `url(${process.env.NEXT_PUBLIC_FREEMIUM ? process.env.NEXT_PUBLIC_THOOTO_BANNER_URL : process.env.NEXT_PUBLIC_BANNER_URL})`,
+              backgroundImage: `url(${process.env.NEXT_PUBLIC_BANNER_URL})`,
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -179,13 +181,13 @@ const InstructorDashboardHeader = () => {
               position: 'relative'
             }}
           >
-            <AnimatePresence>
+            {/* <AnimatePresence>
               {pathname === "/student/student-profile" && isClicked &&
                 <div className="info-button-container">
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    exit={{ opacity:1 }}
                     transition={{ duration: 1 }}
                     className="rbt-dashboard-content rbt-shadow-box mobile-progress-status"
                   >
@@ -224,27 +226,27 @@ const InstructorDashboardHeader = () => {
                 {isClicked ? <i className="bi bi-x-circle-fill text-danger" style={{ fontSize: "1.5rem" }} /> : <i className="bi bi-info-circle-fill" style={{ color: "#24345c" }} />}
                 {isClicked ? "" : "My Progress"}
               </button>}
-            </AnimatePresence>
+            </AnimatePresence> */}
           </div>
         ) : (
           <AnimatePresence>
             <div
-              className="height-350 rbt-shadow-box progress-status-wrapper"
+              className="height-350 progress-status-wrapper"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
               style={{
-                backgroundImage: `url(${process.env.NEXT_PUBLIC_FREEMIUM ? process.env.NEXT_PUBLIC_THOOTO_BANNER_URL : process.env.NEXT_PUBLIC_BANNER_URL})`,
+                backgroundImage: `url(${ process.env.NEXT_PUBLIC_BANNER_URL})`,
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
             >
-              {pathname === "/student/student-profile" && isHovered &&
+              {/* {pathname === "/student/student-profile" && isHovered &&
                 <motion.div
                   className="rbt-dashboard-content progress-status"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  exit={{ opacity: 1 }}
                   transition={{ duration: 1 }}
                 >
                   <div className={`progress-status-left ${getBorderClass(overallPercentage)}`}>
@@ -272,7 +274,7 @@ const InstructorDashboardHeader = () => {
                     </div>
                   </div>
                 </motion.div>
-              }
+              } */}
             </div>
           </AnimatePresence>
         )}

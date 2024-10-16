@@ -3,6 +3,8 @@ import { verifyOtp } from '@/app/api/auth/auth';
 import React, { FormEvent, useState } from 'react';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
+import imageCover from './oc-hi-five.svg';
+import '../forgot.scss';
 
 export default function Otp(){
     const [otp, setOtp] = useState('');
@@ -10,6 +12,8 @@ export default function Otp(){
     const [password, setPassword] = useState('');
     const [retypePassword, setRetypePassword] = useState('');
     const router = useRouter();
+
+    const resetEmail = cookies.get('resetEmail');
 
 
     async function handleOtpSubmit(event: FormEvent<HTMLFormElement>) {
@@ -22,7 +26,7 @@ export default function Otp(){
 
         const payload = {
             otp: otp,
-            email: 'bradleysaint45@gmail.com',
+            email: resetEmail,
             password: retypePassword
         };
 
@@ -36,7 +40,22 @@ export default function Otp(){
 
     return (
     <>
-      <div className="tab-content">
+    <div className='reset-otp-container'>
+    <div
+            className="left-container d-md-block d-none"
+            data-aos="zoom-out-right"
+            style={{
+            backgroundImage: `url(${imageCover.src})`,
+            backgroundSize: "60%",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            boxShadow: "inset 0 0 100px rgba(0,0,0,0.2",
+            }}
+            >
+            
+        </div>
+      <div className="reset-otp-inner">
+        <h3>Forgot Password</h3>
         <div
             className="tab-pane fade active show"
             id="password"
@@ -77,8 +96,13 @@ export default function Otp(){
             <div className="col-12 mt--10">
                 <div className="rbt-form-group">
                 <button
-                    className="rbt-btn btn-gradient"
                     type="submit"
+                    className="btn w-100 text-light"
+                    style={{
+                        height: "50px",
+                        fontSize: "18px",
+                        backgroundColor: "#24345C",
+                    }}
                 >
                     Update Password
                 </button>
@@ -87,6 +111,7 @@ export default function Otp(){
             </form>
         </div>
       </div>
+    </div>
     </>
     );
 }

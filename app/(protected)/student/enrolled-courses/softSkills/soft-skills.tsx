@@ -89,7 +89,7 @@ export default function SoftSkills() {
                         <ul className="rbt-meta mt-3">
                             <li>
                             <i className="feather-book" />
-                            KM{randomNumber} {/* Display the random number here */}
+                            KM-0{index+1} {/* Display the random number here */}
                             </li>
                             <li>
                             <i className="bi bi-play-circle-fill" />

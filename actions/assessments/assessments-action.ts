@@ -64,7 +64,7 @@ type StudentAnswer = {
     moderatorScore: number;
   }>;
   moderatorFeedBack: string;
-  score: number;
+  score: string;
 };
 
 type AssessmentSubmission = {
