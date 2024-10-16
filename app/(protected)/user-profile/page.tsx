@@ -2,6 +2,8 @@ import React from "react";
 import StudentDashboardSidebar from "@/ui/student/student-enrolled-courses/student-sidebar";
 import Image from "next/image";
 import styles from "./UserProfile.module.css"; // Adjust the path as necessary
+import Calendar from "@/ui/classes/calendar";
+import DayView from "@/ui/classes/DayView";
 
 const profilePicture =
   require("../../../app/(auth)/login/profilepic.jpeg").default;
@@ -142,6 +144,8 @@ const UserProfile: React.FC = () => {
                 <h3 className={`${styles.programJourney} mb-5 fs-2 text-start`}>
                   Program Journey Summary
                 </h3>
+                <Calendar />
+
                 {/* <p>[Placeholder text for program journey goes here]</p> */}
                 <div className="d-flex justify-content-center">
                   <div className="text-center mx-3">

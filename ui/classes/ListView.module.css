@@ -1,0 +1,126 @@
+.listViewContainer {
+  padding: 40px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.mainTitle {
+  font-size: 30px;
+  margin-bottom: 20px;
+  color: #051c48;
+  font-weight: 800;
+}
+
+.contentContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftSection {
+  flex: 0 0 40%;
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rightSection {
+  flex: 0 0 60%;
+}
+
+.viewSelector {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: flex-end;
+}
+
+.viewSelector button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #666666;
+  padding: 4px 8px;
+}
+
+.viewSelector span {
+  color: #ff69b4;
+  margin: 0 8px;
+}
+
+.activeView {
+  color: #ff69b4 !important;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.eventTiles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.eventTile {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
+  width: 75%;
+  position: relative;
+}
+
+.eventTitle {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.eventTime {
+  font-size: 14px;
+  color: #666;
+}
+
+.viewDetailsButton {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #ff69b4;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.viewDetailsButton:hover,
+.activeButton {
+  background-color: #ff1493;
+}
+
+.eventDetails {
+  width: 80%;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.detailsTitle {
+  color: #ff1493;
+  font-size: 20px;
+  margin-bottom: 1px;
+}
+
+.detailsDate {
+  color: #999;
+  font-size: 14px;
+  margin-bottom: 40px;
+}
+
+.detailsDescription {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+}
