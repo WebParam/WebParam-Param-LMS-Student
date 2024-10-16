@@ -8,7 +8,7 @@ import QuestionAndAnswers from "@/ui/lesson/question-answers/question-answer";
 import Overview from "@/ui/overview/overview";
 import Transcript from "@/ui/transcript/transcript";
 import Link from "next/link";
-import { useEffect, useState, useCallback, useRef, Suspense } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import LessonQuiz from "../lesson/quiz/page";
@@ -30,10 +30,7 @@ function TakeLesson() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [videoEnded, setVideoEnded] = useState<boolean>(false);
-  
-  
 
-  // const firstAccordionButtonRef = useRef<HTMLButtonElement>(null);
   const topicRef = useRef<HTMLLIElement>(null);
 
   const searchParams = useSearchParams();
@@ -41,17 +38,12 @@ function TakeLesson() {
 
   const allSubTopics = Object.values(expandedTopics).flat();
 
-  const watchedVideos:string[] = ["66c7132d0c2eeac80af3b61c","66c7132d0c2eeac80af3b61d","66c7132d0c2eeac80af3b61e" ];
-
-
   async function fetchKnowledgeTopics() {
-    
     try {
       const response = await GetKnowledgeTopicsNew(moduleId);
       if (!response.error) {
         setKnowledgeTopics(response.data);
-        
-        response.data.length > 0 &&  handleExpandClick(response.data[0].id);
+        response.data.length > 0 && handleExpandClick(response.data[0].id);
       } else {
         setError("Failed to load data");
       }
@@ -60,22 +52,20 @@ function TakeLesson() {
       setError(err.message);
     } finally {
       setLoading(false);
-      }
+    }
   }
 
   async function fetchTopics(topicId: string) {
     try {
       const response = await getTopics(topicId);
-      console.log("topics", response);
       if (!response.error) {
         setExpandedTopics((prev) => ({
           ...prev,
           [topicId]: response.data,
         }));
         setTimeout(() => {
-            console.log('hello world')
-            topicRef.current?.click();
-        }, 1000)
+          topicRef.current?.click();
+        }, 1000);
       } else {
         setError("Failed to load topics data");
       }
@@ -85,26 +75,14 @@ function TakeLesson() {
     }
   }
 
-  function setCheckedVideos(){
-    const watchedVideos:string[] = ["66c7132d0c2eeac80af3b61c","66c7132d0c2eeac80af3b61d","66c7132d0c2eeac80af3b61e" ];
-    watchedVideos.forEach((videoId) => {
-      setCheckedSubTopics((prev) => ({
-        ...prev,
-        [videoId]: true,
-      }));
-    });
-  }
   useEffect(() => {
     fetchKnowledgeTopics();
     setVideoLoader(true);
-    // setCheckedVideos();
-    
   }, []);
 
   const handleExpandClick = (topicId: string) => {
     if (!expandedTopics[topicId]) {
       fetchTopics(topicId);
-     
     }
   };
 
@@ -114,10 +92,9 @@ function TakeLesson() {
       ...prev,
       [subTopic.id]: !prev[subTopic.id],
     }));
-    console.log("selected topic for video:", subTopic);
     setCurrentVideo(subTopic || null);
     setCurrentIndex(index);
-    setVideoEnded(false); // Reset videoEnded state when a new video is selected
+    setVideoEnded(false);
     setVideoLoader(false);
   };
 
@@ -130,7 +107,6 @@ function TakeLesson() {
   );
 
   const handlePrevious = () => {
-
     if (currentIndex > 0) {
       const previousSubTopic = allSubTopics[currentIndex - 1];
       if (previousSubTopic) {
@@ -140,18 +116,17 @@ function TakeLesson() {
           [previousSubTopic.id]: true,
         }));
         setCurrentIndex(currentIndex - 1);
-        setVideoEnded(false); // Reset videoEnded state when a new video is selected
+        setVideoEnded(false);
       }
     }
   };
 
   const handleNext = () => {
-  
     if (!videoEnded) {
-      setVideoEnded(true); // Show quiz first
+      setVideoEnded(true);
       return;
     }
-  
+
     if (currentIndex < allSubTopics.length - 1) {
       const nextSubTopic = allSubTopics[currentIndex + 1];
       if (nextSubTopic) {
@@ -161,7 +136,7 @@ function TakeLesson() {
           [nextSubTopic.id]: true,
         }));
         setCurrentIndex(currentIndex + 1);
-        setVideoEnded(false); // Reset videoEnded state for the next video
+        setVideoEnded(false);
       }
     }
   };
@@ -194,8 +169,6 @@ function TakeLesson() {
     <div className="rbt-lesson-area bg-color-white">
       <div className="rbt-lesson-content-wrapper">
         {/* Sidebar */}
-
-        
         <div id="sidebar-desktop" className="rbt-lesson-leftsidebar">
           <div className="rbt-course-feature-inner rbt-search-activation">
             <div className="section-title">
@@ -224,7 +197,6 @@ function TakeLesson() {
                     id={`heading${index}`}
                   >
                     <button
-                      // ref={index === 0 ? firstAccordionButtonRef : null}
                       className="accordion-button collapsed"
                       type="button"
                       data-bs-toggle="collapse"
@@ -248,7 +220,6 @@ function TakeLesson() {
                         <ul style={{marginLeft:'0', paddingLeft:'0'}}>
                           {expandedTopics[topic.id].map(
                             (subTopic: TopicElement, subIndex) => (
-                              <>
                               <li
                                 ref={subIndex === 0 ? topicRef : null}
                                 className="d-flex justify-content-between align-items mt-2"
@@ -292,7 +263,6 @@ function TakeLesson() {
                                   </span>
                                 </div>
                               </li>
-                              </>
                             )
                           )}
                         </ul>
@@ -311,7 +281,6 @@ function TakeLesson() {
           </div>
         </div>
 
-        
         {/* End of Sidebar */}
         <div className="rbt-lesson-rightsidebar overflow-hidden lesson-video">
           {!videoEnded ? <div className="inner">
@@ -322,14 +291,13 @@ function TakeLesson() {
                   height="500px"
                   src={currentVideo?.videoUrl}
                   title="Video player"
-                   scrolling="no"
+                  scrolling="no"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   onEnded={handleVideoEnd}
                 />
                 <div>
                   <div className="content">
-
                     <div className="section-title">
                       <h5>{currentVideo?.title}</h5>
                     </div>
@@ -340,7 +308,6 @@ function TakeLesson() {
                         onClick={handlePrevious}
                         disabled={currentIndex <= 0}
                       >
-                        
                         <span className="btn-text">Previous</span>
                       </button>
                       <button
@@ -349,7 +316,6 @@ function TakeLesson() {
                         disabled={currentIndex > (filteredTopics.length - 1)}
                       >
                         <span className="btn-text">Next</span>
-                        
                       </button>
                     </div>
                     <div className="content-2">
@@ -387,7 +353,7 @@ function TakeLesson() {
                               <span className="title">Transcript</span>
                             </Link>
                           </li>
-                          {/* <li role="presentation">
+                          <li role="presentation">
                             <Link
                               href="#"
                               className="tab-button"
@@ -400,8 +366,8 @@ function TakeLesson() {
                             >
                               <span className="title">Q&A</span>
                             </Link>
-                          </li> */}
-                          {/* <li role="presentation">
+                          </li>
+                          <li role="presentation">
                             <Link
                               href="#"
                               className="tab-button"
@@ -414,7 +380,7 @@ function TakeLesson() {
                             >
                               <span className="title">Notes</span>
                             </Link>
-                          </li> */}
+                          </li>
                           {isMobile && 
                           <li role="presentation">
                             <Link
@@ -430,7 +396,7 @@ function TakeLesson() {
                               <span className="title">Content</span>
                             </Link>
                           </li>
-}
+                          }
                         </ul>
                       </div>
                     </div>
@@ -465,9 +431,11 @@ function TakeLesson() {
                         role="tabpanel"
                         aria-labelledby="notes-tab-4"
                       >
-                        <Notes />
+                        <Notes
+                          topicId={currentVideo?.topicId}
+                          elementId={currentVideo?.id}
+                        />
                       </div>
-                  
                       <div
                         className="tab-pane fade"
                         id="content-4"
@@ -476,24 +444,6 @@ function TakeLesson() {
                       >
                         <div className="rbt-lesson-leftsidebar">
                           <div className="rbt-course-feature-inner rbt-search-activation">
-                            {/* <div className="section-title">
-                              <h4 className="rbt-title-style-3">Course Content</h4>
-                            </div> */}
-                            {/* <div className="lesson-search-wrapper">
-                              <form action="#" className="rbt-search-style-1">
-                                <input
-                                  className="rbt-search-active"
-                                  type="text"
-                                  placeholder="Search Lesson"
-                                  value={searchQuery}
-                                  onChange={handleSearchChange}
-                                />
-                                <button className="search-btn disabled">
-                                  <i className="feather-search" />
-                                </button>
-                              </form>
-                            </div> */}
-                            {/* <hr className="" /> */}
                             <div className="rbt-accordion-style rbt-accordion-02 for-right-content accordion">
                               {!loading ? filteredTopics.map((topic, index) => (
                                 <div className="accordion-item card" key={topic.id}>
@@ -502,7 +452,6 @@ function TakeLesson() {
                                     id={`heading${index}`}
                                   >
                                     <button
-                                      // ref={index === 0 ? firstAccordionButtonRef : null}
                                       className="accordion-button collapsed"
                                       type="button"
                                       data-bs-toggle="collapse"
@@ -526,7 +475,6 @@ function TakeLesson() {
                                         <ul style={{marginLeft:'0', paddingLeft:'0'}}>
                                           {expandedTopics[topic.id].map(
                                             (subTopic: TopicElement, subIndex) => (
-                                              <>
                                               <li
                                                 ref={subIndex === 0 ? topicRef : null}
                                                 className="d-flex justify-content-between align-items mt-2"
@@ -570,7 +518,6 @@ function TakeLesson() {
                                                   </span>
                                                 </div>
                                               </li>
-                                              </>
                                             )
                                           )}
                                         </ul>

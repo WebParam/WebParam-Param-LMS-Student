@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import notesData from "@/data/sample/sample.json";
 import styles from "@/styles/notes/notes.module.css";
 import { format } from "date-fns";
+import { rCommentUrl,wCommentUrl } from "@/app/lib/endpoints";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-interface Note {
+interface Note {///whats this for
   id: number;
   title: string;
   content: string;
@@ -16,14 +16,38 @@ interface Note {
   timestamp: string;
 }
 
-const Notes = () => {
+interface NotesProps {
+  topicId: string;
+  elementId: string;
+}
+
+const Notes = ({ topicId, elementId }: NotesProps) => {
   const [body, setBody] = useState<string>("");
   const [notes, setNotes] = useState<Note[]>([]);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
 
   useEffect(() => {
-    setNotes(notesData);
-  }, []);
+    const fetchNotes = async () => {
+      try {
+        const response = await fetch(`${rCommentUrl}/api/Notes/GetNotesBySudentAndElement/${topicId}/${elementId}`, {
+          headers: {
+            "Client-Key": process.env.NEXT_PUBLIC_CLIENT_KEY || "",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setNotes(data);
+        } else {
+          console.error("Failed to fetch notes:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      }
+    };
+
+    fetchNotes();
+  }, [topicId, elementId]);
 
   const handleChange = (value: string) => {
     setBody(value);
@@ -47,16 +71,35 @@ const Notes = () => {
     return { displayContent, isLong };
   };
 
-  const handlePostNote = () => {
-    const newNote: Note = {
-      id: notes.length + 1,
-      title: "New Note",
-      content: body,
-      studentName: "Anonymous",
-      timestamp: new Date().toISOString(),
+  const handlePostNote = async () => {
+    const newNote = {
+      topicId,
+      text: body,
+      studentId: "yourStudentId", // Replace with actual student ID
+      elementId,
+      fullName: "Your Full Name", // Replace with actual full name
     };
-    setNotes([...notes, newNote]);
-    setBody("");
+
+    try {
+      const response = await fetch(`${wCommentUrl}/api/v1/Notes/AddNote`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Client-Key": process.env.NEXT_PUBLIC_CLIENT_KEY || "",
+        },
+        body: JSON.stringify(newNote),
+      });
+
+      if (response.ok) {
+        const postedNote = await response.json();
+        setNotes([...notes, postedNote]);
+        setBody("");
+      } else {
+        console.error("Failed to post note:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error posting note:", error);
+    }
   };
 
   return (
@@ -69,17 +112,7 @@ const Notes = () => {
 
       <div className="row mt-3">
         <div className="col-md-5 mb-3">
-          {/* <button
-            className="bi bi-plus-lg btn btn-success custom-button-4"
-            onClick={() => {
-              const editor = document.querySelector(
-                ".ql-editor"
-              ) as HTMLElement;
-              editor?.focus();
-            }}
-          >
-            Add Note
-          </button> */}
+          {/* Add Note button can be re-enabled if needed */}
         </div>
       </div>
 
@@ -121,9 +154,8 @@ const Notes = () => {
           );
           return (
             <div className={styles.mb3Custom} key={note.id}>
-              {/* <div className="note-title fw-bold">{note.title}</div> */}
               <div className="mt-2">
-                <p  className="videoPar" dangerouslySetInnerHTML={{ __html: displayContent }} />
+                <p className="videoPar" dangerouslySetInnerHTML={{ __html: displayContent }} />
                 {isLong && (
                   <a
                     onClick={toggleCollapse}
@@ -136,11 +168,10 @@ const Notes = () => {
               </div>
               <div className="d-flex justify-content-between mt-2">
                 <div>
-                <p  className="videoPar">  <strong>By:</strong> {note.studentName}</p>
+                  <p className="videoPar"><strong>By:</strong> {note.studentName}</p>
                 </div>
                 <div>
-                <p  className="videoPar">     <strong>Posted on:</strong>{" "}
-                  {format(new Date(note.timestamp), "PPpp")}</p>
+                  <p className="videoPar"><strong>Posted on:</strong> {format(new Date(note.timestamp), "PPpp")}</p>
                 </div>
               </div>
             </div>
