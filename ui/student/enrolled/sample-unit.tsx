@@ -8,6 +8,7 @@ import { useLessonContext } from "@/context/lesson-context/lesson-context";
 import "./courseStyle.scss";
 import courseImage from "./courseImage.jpeg";
 import "@/styles/css/plugins/mainstyle.css";
+import { usePathname, useSearchParams } from "next/navigation";
 
 interface UnitData {
   id: string;
@@ -25,23 +26,40 @@ interface Props {
   showAuthor: boolean;
 }
 
-const UnitStandardWidget: React.FC<Props> = ({data, courseStyle, isProgress,}) => {
-    // Set a random number when the component mounts
-    const generateRandomVideoCount = () => {
-      return Math.floor(Math.random() * (50 - 10 + 1)) + 10;
-    };
+const UnitStandardWidget: React.FC<Props> = ({
+  data,
+  courseStyle,
+  isProgress,
+  isEdit,
+  showAuthor,
+}) => {
+  const { setId, navigateToLesson } = useLessonContext();
+  const pathName = usePathname();
+  const isAssignment = pathName == "/student/assignments";
+  const searchParams = useSearchParams();
+  const moduleId = searchParams.get("moduleId");
 
-    console.log("data: ", data);
-
+  const generateRandomVideoCount = () => {
+    return Math.floor(Math.random() * (50 - 10 + 1)) + 10;
+  };
 
   return (
     <>
-      <div className="rbt-card variation-01 rbt-hover" style={{ display:'flex', flexDirection:'column', justifyContent:'space-between'}}>
+      <div
+        className="rbt-card variation-01 rbt-hover"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
         <div className="rbt-card-img">
           <Link
             href={{
-              pathname: '/take-lesson',
-              query: { moduleId: `${data.id}` },
+              pathname: isAssignment ? `/student/assignments`: "/take-lesson",
+              query: { 
+                tab :"active",
+                moduleId: `${data.id}` },
             }}
           >
             <Image
@@ -51,25 +69,25 @@ const UnitStandardWidget: React.FC<Props> = ({data, courseStyle, isProgress,}) =
               alt={data.title}
             />
           </Link>
-          
         </div>
-        
-        <div className="rbt-card-body" style={{paddingTop:'0 !important'}}>
+
+        <div className="rbt-card-body" style={{ paddingTop: "0 !important" }}>
           {courseStyle === "two" && (
-              <h4
-                className="rbt-card-title"
-                style={{ fontSize: "1.2em", margin:'0'}}
+            <h4
+              className="rbt-card-title"
+              style={{ fontSize: "1.2em", margin: "0" }}
+            >
+              <Link
+                href={{
+                  pathname: isAssignment ? `/student/assignments`: "/take-lesson",
+                  query: { 
+                    tab :"active",
+                    moduleId: `${data.id}` },
+                }}
               >
-                <Link
-                  href={{
-                    pathname: '/take-lesson',
-                    query: { moduleId: `${data.id}` },
-                  }}
-                >
-                  {data.title}
-                  
-                </Link>
-              </h4>
+                {data.title}
+              </Link>
+            </h4>
           )}
           <ul className="rbt-meta mt-3">
             <li>
@@ -84,23 +102,25 @@ const UnitStandardWidget: React.FC<Props> = ({data, courseStyle, isProgress,}) =
 
           {isProgress ? (
             <>
-              <div className="rbt-card-bottom">
-                <button
-                  className={`bi bi-play rbt-btn bg-primary-opacity w-100 text-center continue-watching`}
-                  style={{padding:'0 !important'}}
-                >
-                  <Link href={{
-                    pathname: '/take-lesson',
-                    query: { moduleId: `${data.id}` },
-                  }}>
-                    Continue Watching</Link>
-                </button>
-              </div>
+              {!isAssignment && (
+                <div className="rbt-card-bottom">
+                  <button
+                    className={`bi bi-play rbt-btn bg-primary-opacity w-100 text-center continue-watching`}
+                    style={{ padding: "0 !important" }}
+                  >
+                    <Link
+                      href={{
+                        pathname: "/take-lesson",
+                        query: { moduleId: `${data.id}` },
+                      }}
+                    >
+                      Continue Watching
+                    </Link>
+                  </button>
+                </div>
+              )}
             </>
-          ) : (
-            ""
-          )}
-
+          ) : null}
         </div>
       </div>
     </>
