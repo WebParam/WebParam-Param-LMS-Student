@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import styles from "@/styles/notes/notes.module.css";
 import { format } from "date-fns";
-import { rCommentUrl,wCommentUrl } from "@/app/lib/endpoints";
+import { rCommentUrl, wCommentUrl,readUserData } from "@/app/lib/endpoints";
+import Cookies from "universal-cookie";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-interface Note {///whats this for
+interface Note {
   id: number;
   title: string;
   content: string;
@@ -25,13 +26,40 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
   const [body, setBody] = useState<string>("");
   const [notes, setNotes] = useState<Note[]>([]);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
+  const [fullName, setFullName] = useState<string>("");
+
+  const cookies = new Cookies();
+  const userID = cookies.get('userID');
 
   useEffect(() => {
+    const fetchStudentInfo = async (userId: string) => {
+      try {
+        const response = await fetch(`${readUserData}/api/v1/Student/GetStudentInformation/${userId}`, {
+          headers: {
+            "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY || "",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setFullName(`${data.firstName} ${data.surname}`);
+        } else {
+          console.error("Failed to fetch student information:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching student information:", error);
+      }
+    };
+
+    if (userID) {
+      fetchStudentInfo(userID);
+    }
+
     const fetchNotes = async () => {
       try {
-        const response = await fetch(`${rCommentUrl}/api/Notes/GetNotesBySudentAndElement/${topicId}/${elementId}`, {
+        const response = await fetch(`${rCommentUrl}/api/Notes/GetNotesBySudentAndElement/${userID}/${elementId}`, {
           headers: {
-            "Client-Key": process.env.NEXT_PUBLIC_CLIENT_KEY || "",
+            "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY || "",
           },
         });
 
@@ -47,7 +75,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
     };
 
     fetchNotes();
-  }, [topicId, elementId]);
+  }, [topicId, elementId, userID]);
 
   const handleChange = (value: string) => {
     setBody(value);
@@ -75,9 +103,9 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
     const newNote = {
       topicId,
       text: body,
-      studentId: "yourStudentId", // Replace with actual student ID
+      studentId: userID,
       elementId,
-      fullName: "Your Full Name", // Replace with actual full name
+      fullName,
     };
 
     try {
@@ -85,7 +113,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Client-Key": process.env.NEXT_PUBLIC_CLIENT_KEY || "",
+          "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY || "",
         },
         body: JSON.stringify(newNote),
       });
