@@ -55,7 +55,6 @@ export async function updateTimeSpent() {
         if (id) {
         try {
             const res = await UpdateTimeSpent(id);
-            console.log('Update time spent response:', res?.data?.data?.startTime);
             localStorage.setItem('startTimeTrack', endTime);
 
             return res;
@@ -66,3 +65,10 @@ export async function updateTimeSpent() {
         console.error("ID not found in localStorage");
     }
 };
+
+export async function getTimeSpent() {
+    const endTime = new Date().toString();
+    console.log('endTime: ', endTime);
+    // return res;
+}
+

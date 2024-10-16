@@ -401,7 +401,7 @@ const FileUpload: React.FC = () => {
                 accept=".pdf"
                 style={{display: 'none'}}
                 />
-              <label className="btn btn-dark" htmlFor="file-input" >Choose File</label>
+              <label className="btn btn-dark text-light" htmlFor="file-input" >Choose File</label>
             </div>
             <div>
               <p>Supported Formats: PDF</p>
@@ -414,7 +414,7 @@ const FileUpload: React.FC = () => {
 
             <div>
               <button type="button" className="btn btn-outline-dark" onClick={() => (router.push(`/student/student-profile?tab=documents&document=${selectedDocument}&action=view`), setSelectedFile(null))}>Cancel</button>
-              <button type="submit" style={{backgroundColor: 'rgb(36, 52, 92)', border: 'none', borderRadius: '5px'}}>
+              <button type="submit" style={{backgroundColor: 'rgb(36, 52, 92)', border: 'none', borderRadius: '5px', color:'white'}} disabled={selectedFile?.file == null}>
                 {upLoadingLoader ? <div className="spinner-grow" role="status"></div> : 'Upload'}
               </button>
             </div>
@@ -458,7 +458,7 @@ const FileUpload: React.FC = () => {
 
             <div>
             <button type="button" className="btn btn-outline-dark" onClick={() => (router.push(`/student/student-profile?tab=documents&document=${selectedDocument}&action=view`), setSelectedFile(null))}>Cancel</button>
-              <button type="submit" style={{backgroundColor: 'rgb(36, 52, 92)', border: 'none', borderRadius: '5px'}}>
+              <button type="submit" style={{backgroundColor: 'rgb(36, 52, 92)', border: 'none', borderRadius: '5px', color:'white'}} disabled={selectedFile?.file == null}>
                 {upLoadingLoader ? <div className="spinner-grow" role="status"></div> : 'Upload'}
               </button>
             </div>
