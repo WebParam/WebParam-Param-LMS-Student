@@ -5,6 +5,7 @@ import Cookies from "universal-cookie";
 import { relationshipOptions } from "./data";
 import { useRouter } from "next/navigation";
 import { useProgressContext } from "@/context/progress-card-context/progress-context";
+import { updateTimeSpent } from "@/app/api/trackTimeSpent/timeSpent";
 
 
 export default function ContactInformation({student}:any) {
@@ -48,8 +49,7 @@ export default function ContactInformation({student}:any) {
     }
 
     useEffect(() => {
-        setStudentContactInformation(student);
-        calculateEmptyFieldsPercentage();
+        Promise.all([setStudentContactInformation(student), updateTimeSpent()])
     }, [student]);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -126,7 +126,7 @@ export default function ContactInformation({student}:any) {
   >
     <div className="rbt-dashboard-content-wrapper">
     <form
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {handleSubmit(e), updateTimeSpent()}}
         className="rbt-profile-row rbt-default-form row row--15"
         style={{minWidth:'100%'}}
       >
