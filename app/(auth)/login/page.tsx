@@ -49,8 +49,8 @@ export default function LoginPage() {
         const res = await LoginUser(payload);
             setIsLoading(false);
             debugger;
-            if (res == null) {
-                setErrorMessage('User not found');
+            if (res.data.message) {
+                setErrorMessage(res?.data?.message);
                 return;
             }
             debugger;
@@ -86,7 +86,8 @@ export default function LoginPage() {
               }
             }
         } catch (error: any) {
-            setErrorMessage('Network Error please try again');
+            setErrorMessage(error?.response?.data?.message);
+            console.log("Error:", error);
             setIsLoading(false);
         }
       
