@@ -59,6 +59,7 @@ function MarkedAssessmentPage() {
     const searchParams = useSearchParams();
     const [assessment, setAssessment] = useState<Assessment | any>();
     const id = searchParams.get("id");
+    const mark = searchParams.get("mark");
     const router = useRouter();
 
     const cookies = new Cookies();
@@ -104,7 +105,7 @@ function MarkedAssessmentPage() {
                 if (answer.questionType === 'Quiz') return <MultipleChoiceAnswer key={answer.id} answer={answer} />
             })}
             <div className="rbt-card m-0 p-2">
-                <h5 className="rbt-card m-0 p-2" style={{ color: 'tomato' }}>Marks: {assessment.answers.reduce((total: any, answer: any) => total + answer.score, 0)}</h5>
+                <h5 className="rbt-card m-0 p-2" style={{ color: 'tomato' }}>Marks: {mark}</h5>
             </div>
         </div>
     );
