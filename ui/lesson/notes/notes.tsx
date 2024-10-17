@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import styles from "@/styles/notes/notes.module.css";
 import { format } from "date-fns";
-import { rCommentUrl, wCommentUrl,readUserData } from "@/app/lib/endpoints";
+import { rCommentUrl, wCommentUrl, readUserData } from "@/app/lib/endpoints";
 import Cookies from "universal-cookie";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -30,14 +30,22 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
 
   const cookies = new Cookies();
   const userID = cookies.get('userID');
+  const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
 
   useEffect(() => {
     const fetchStudentInfo = async (userId: string) => {
+      if (!clientKey) {
+        console.error("Client-Key is not defined");
+        return;
+      }
+
       try {
         const response = await fetch(`${readUserData}/api/v1/Student/GetStudentInformation/${userId}`, {
-          headers: {
-            "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY || "",
-          },
+          headers: new Headers({
+            "Client-Key": clientKey,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          }),
         });
 
         if (response.ok) {
@@ -56,11 +64,18 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
     }
 
     const fetchNotes = async () => {
+      if (!clientKey) {
+        console.error("Client-Key is not defined");
+        return;
+      }
+
       try {
         const response = await fetch(`${rCommentUrl}/api/Notes/GetNotesBySudentAndElement/${userID}/${elementId}`, {
-          headers: {
-            "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY || "",
-          },
+          headers: new Headers({
+            "Client-Key": clientKey,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          }),
         });
 
         if (response.ok) {
@@ -75,7 +90,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
     };
 
     fetchNotes();
-  }, [topicId, elementId, userID]);
+  }, [topicId, elementId, userID, clientKey]);
 
   const handleChange = (value: string) => {
     setBody(value);
@@ -100,6 +115,11 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
   };
 
   const handlePostNote = async () => {
+    if (!clientKey) {
+      console.error("Client-Key is not defined");
+      return;
+    }
+
     const newNote = {
       topicId,
       text: body,
@@ -111,10 +131,11 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
     try {
       const response = await fetch(`${wCommentUrl}/api/v1/Notes/AddNote`, {
         method: "POST",
-        headers: {
+        headers: new Headers({
+          "Client-Key": clientKey,
+          Accept: "application/json",
           "Content-Type": "application/json",
-          "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY || "",
-        },
+        }),
         body: JSON.stringify(newNote),
       });
 
