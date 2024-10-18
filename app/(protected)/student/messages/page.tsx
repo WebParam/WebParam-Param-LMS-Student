@@ -5,9 +5,9 @@ import Image from 'next/image';
 import dummyImg from '@/public/svg/dyummyImg.svg';
 import Img from '@/public/images/message/Img.png';
 import { getNotifications } from '@/app/api/notifications/notification';
-import DropdownItems from '@/ui/student/message/DropdownItems';
-import SearchInput from '@/ui/student/message/SearchInput';
-import styles from './Message.module.scss'
+import DropdownItems from '@/ui/student/messages/DropdownItems';
+import SearchInput from '@/ui/student/messages/SearchInput';
+import styles from './Messages.module.scss'
 
 export default function Message() {
   const [imageError, setImageError] = useState(false);

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import styles from '@/app/(protected)/student/message/Message.module.scss';
+import styles from '@/app/(protected)/student/messages/Messages.module.scss';
 
 const list = [
   { id: 1, name: 'All Messages' },
