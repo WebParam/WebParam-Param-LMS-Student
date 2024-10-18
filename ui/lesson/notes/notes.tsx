@@ -68,7 +68,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
         if (response.ok) {
           const result = await response.json();
           const data: UserInfo = result.data;
-  
+          
           setFullName(`${data.firstName || ''} ${data.surname || ''}`.trim());
         } else {
           console.error("Failed to fetch student information:", response.statusText);
