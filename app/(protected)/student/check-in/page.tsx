@@ -3,16 +3,15 @@
 import React, { useState } from "react";
 import styles from "./CheckIn.module.scss";
 import CheckInIcon from "./svg/CheckInIcon";
-import StepsAndForm from "./components/StepsAndForm";
-import YouthDetails from "./components/YouthDetails";
-import StepComponent from "./components/StepComponent";
-import WorkExperience from "./components/WorkExperience";
+import YouthDetails from "@/ui/student/check-in/YouthDetails";
+import WorkExperience from "@/ui/student/check-in/WorkExperience";
 import UnderLineIcon from "./svg/UnderLineIcon";
-import Learning from "./components/Learning";
-import OverallReView from "./components/OverallView";
-import SubmitIcon from "./components/SubmitIcon";
+import Learning from "@/ui/student/check-in/Learning";
+import OverallReView from "@/ui/student/check-in/OverallView";
+import SubmitIcon from "@/ui/student/check-in/SubmitIcon"
 import BackIcon from "./svg/BackIcon";
 import NextIcon from "./svg/NextIcon";
+import StepsAndForm from "@/ui/student/check-in/StepsAndForm";
 
 export interface StepProps {
   step: number;
@@ -62,7 +61,6 @@ export default function CheckIn() {
           {step === 2 && <WorkExperience step={step} goToStep={goToStep} stepTitle={'Tell us about work...'} heading={'Work Experience'} />}
           {step === 3 && <Learning step={step} goToStep={goToStep} stepTitle={'One more...'} heading={'Learning'} />}
           {step === 4 && <OverallReView step={step} goToStep={goToStep} stepTitle={'And we are done...'} heading={'Overall View'} />}
-          {step > 4 && <StepComponent step={step} />}
           <div className={styles.formFooter}>
             {step > 0 && (
               <button

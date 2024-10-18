@@ -1,19 +1,16 @@
 import { useState } from 'react';
-import styles from '../CheckIn.module.scss'
-import { StepProps } from '../page';
-import ProgressBar from './ProgressBar';
-import ProgressIndicator from './ProgressIndicator';
+import styles from '@/app/(protected)/student/check-in/CheckIn.module.scss'
+import { StepProps } from '@/app/(protected)/student/check-in/page';
 import Image from 'next/image';
+import ProgressBar from './ProgressBar';
 
-interface WorkExperienceProps extends StepProps {
+interface LearningProps extends StepProps {
     heading: string;
     stepTitle: string;
 }
 
-export default function WorkExperience({ step, goToStep, stepTitle, heading }: WorkExperienceProps) {
-    const [currentProgressStep, setCurrentProgressStep] = useState(4);
+export default function Learning({ step, goToStep, stepTitle, heading }: LearningProps) {
     const [hovered, setHovered] = useState({ happy: false, okay: false, unhappy: false });
-    const totalSteps = 10;
     return (
         <div className={styles.detailsCard}>
             <h3 className={styles.stepTitle}>{stepTitle}</h3>
@@ -31,7 +28,7 @@ export default function WorkExperience({ step, goToStep, stepTitle, heading }: W
                         Would you say you are happy with your work experience this month?
                     </div>
                 </div>
-                <div className={styles.feedbackReactSection}>
+                <div className={`${styles.feedbackReactSection} ${styles.feedbackReactStart}`}>
                     <button className={styles.feedbackReact}
                         onMouseEnter={() => setHovered({ ...hovered, happy: true })}
                         onMouseLeave={() => setHovered({ ...hovered, happy: false })}
@@ -83,7 +80,7 @@ export default function WorkExperience({ step, goToStep, stepTitle, heading }: W
                 </div>
 
 
-                <div className={styles.matchYourJobSection}>
+                <div className={`${styles.matchYourJobSection} ${styles.matchYourJobStart}`}>
                     <div className={styles.matchYourJob}>
                         <button className={styles.reactButton}>
                             1
@@ -117,61 +114,12 @@ export default function WorkExperience({ step, goToStep, stepTitle, heading }: W
                 </div>
 
                 <div className={styles.questionSection}>
-                    <div className={styles.questionNo}>
-                        3.
-                    </div>
-                    <div className={styles.questionSection}>
-                        On a scale how often does your supervisor listen and appreciate your suggestions?
-                    </div>
-                </div>
-
-                <div className={styles.workLoadSection}>
-                    <div className={styles.workLoadButton}>
-                        Too little work is received
-                    </div>
-                    <div className={styles.workLoadButton}>
-                        My workload is sufficient
-                    </div>
-                    <div className={styles.workLoadButton}>
-                        I had nothing to do
-                    </div>
-                    <div className={styles.workLoadButton}>
-                        My workload is overwhelming
-                    </div>
-                </div>
-
-                <div className={styles.questionSection}>
-                    <div className={styles.questionNo}>
-                        4.
-                    </div>
-                    <div className={styles.questionSection}>
-                        On a scale how often does your supervisor listen and appreciate your suggestions?
-                    </div>
-                </div>
-                <ProgressIndicator progressSteps={Array.from({ length: totalSteps })} currentProgressStep={currentProgressStep} setCurrentProgressStep={setCurrentProgressStep} />
-                <div className={styles.mySuggestions}>
-                    <h5 className={styles.suggestions}>
-                        My suggestions are ignored
-                    </h5>
-                    <h5 className={styles.suggestions}>
-                        My suggests are appreciated
-                    </h5>
-                    <h5 className={styles.suggestions}>
-                        My suggests are extremely appreciated
-                    </h5>
-                </div>
-                <div className={styles.questionSection}>
                     <div className={styles.questionSection}>
                         Any other compliments, unaddressed complaints or work related questions?
                     </div>
                 </div>
-                <div className={styles.questionSection}>
-                    <div className={styles.questionSection}>
-                        (Optional)
-                    </div>
-                </div>
-                <textarea name="" id="" rows={4} placeholder='Type your Answer' className={styles.textArea} />
+                <textarea name="" id="" placeholder='Type your Answer' rows={4} className={styles.textArea} />
             </div>
-        </div>
+        </div >
     );
 }

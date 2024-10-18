@@ -1,5 +1,5 @@
-import styles from '../CheckIn.module.scss'
-import { StepProps } from '../page';
+import styles from '@/app/(protected)/student/check-in/CheckIn.module.scss'
+import { StepProps } from '@/app/(protected)/student/check-in/page';
 
 export default function StepsAndForm({ step, goToStep }: StepProps) {
     return (
