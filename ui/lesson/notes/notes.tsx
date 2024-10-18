@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import styles from "@/styles/notes/notes.module.css";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { rCommentUrl, wCommentUrl, readUserData } from "@/app/lib/endpoints";
 import Cookies from "universal-cookie";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-interface Note {
+interface NoteData {
   id: string;
   topicId: string;
   text: string;
@@ -18,6 +18,12 @@ interface Note {
   dateCreated: string;
   dateUpdated: string | null;
   fullName: string;
+}
+
+interface NoteResponse {
+  data: NoteData;
+  error: boolean;
+  message: string | null;
 }
 
 interface UserInfo {
@@ -32,7 +38,7 @@ interface NotesProps {
 
 const Notes = ({ topicId, elementId }: NotesProps) => {
   const [body, setBody] = useState<string>("");
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<NoteData[]>([]);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   const [fullName, setFullName] = useState<string>("");
 
@@ -57,7 +63,8 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
         });
 
         if (response.ok) {
-          const data: UserInfo = await response.json();
+          const result = await response.json();
+          const data = result.data;
           setFullName(`${data.firstName || ''} ${data.surname || ''}`.trim());
         } else {
           console.error("Failed to fetch student information:", response.statusText);
@@ -88,8 +95,9 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
 
         if (response.ok) {
           const result = await response.json();
-          const notesData = result.data;
-          setNotes(Array.isArray(notesData) ? notesData : []);
+          const notesData: NoteResponse[] = result.data;
+          console.log("Fetched notes data:", notesData); // Log fetched notes
+          setNotes(notesData.map(noteResponse => noteResponse.data));
         } else {
           console.error("Failed to fetch notes:", response.statusText);
         }
@@ -114,12 +122,14 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
     isCollapsed: boolean,
     wordLimit = 100
   ) => {
-    const words = text.split(" ");
+    const plainText = text.replace(/<[^>]+>/g, ''); // Strip HTML tags
+    const words = plainText.split(" ");
     const isLong = words.length > wordLimit;
     const displayContent =
       isCollapsed && isLong
         ? words.slice(0, wordLimit).join(" ") + "..."
-        : text;
+        : plainText;
+    console.log("Display content:", displayContent); // Log display content
     return { displayContent, isLong };
   };
 
@@ -129,12 +139,16 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
       return;
     }
 
+    // Strip HTML tags from the body
+    const plainText = body.replace(/<[^>]+>/g, '');
+
     const newNote = {
       topicId,
-      text: body,
+      text: plainText,
       studentId: userID,
       elementId,
       fullName,
+      dateCreated: new Date().toISOString(), // Ensure dateCreated is in ISO format
     };
 
     try {
@@ -150,7 +164,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
 
       if (response.ok) {
         const postedNote = await response.json();
-        setNotes([...notes, postedNote]);
+        setNotes([...notes, postedNote.data]);
         setBody("");
       } else {
         console.error("Failed to post note:", response.statusText);
@@ -206,14 +220,49 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
 
       <div className="row mt-3">
         {notes.map((note) => {
+          console.log("Processing note:", note); // Log each note
+
           const { displayContent, isLong } = getDisplayContent(
             note.text,
             isCollapsed
           );
+
+          // Check if dateCreated is defined
+          if (!note.dateCreated) {
+            return (
+              <div className={styles.mb3Custom} key={note.id}>
+                <div className="mt-2">
+                  <p className="videoPar">{displayContent}</p>
+                  {isLong && (
+                    <a
+                      onClick={toggleCollapse}
+                      className="ms-2"
+                      style={{ cursor: "pointer" }}
+                    >
+                      {isCollapsed ? "Read more" : "Show less"}
+                    </a>
+                  )}
+                </div>
+                <div className="d-flex justify-content-between mt-2">
+                  <div>
+                    <p className="videoPar"><strong>By:</strong> {note.fullName}</p>
+                  </div>
+                  <div>
+                    <p className="videoPar"><strong>Posted on:</strong> Invalid date</p>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          // Use date-fns to parse the date string
+          const date = parse(note.dateCreated, "yyyy/MM/dd HH:mm:ss", new Date());
+          const isValidDate = !isNaN(date.getTime());
+
           return (
             <div className={styles.mb3Custom} key={note.id}>
               <div className="mt-2">
-                <p className="videoPar" dangerouslySetInnerHTML={{ __html: displayContent }} />
+                <p className="videoPar">{displayContent}</p>
                 {isLong && (
                   <a
                     onClick={toggleCollapse}
@@ -229,7 +278,9 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
                   <p className="videoPar"><strong>By:</strong> {note.fullName}</p>
                 </div>
                 <div>
-                  <p className="videoPar"><strong>Posted on:</strong> {format(new Date(note.dateCreated), "PPpp")}</p>
+                  <p className="videoPar">
+                    <strong>Posted on:</strong> {isValidDate ? format(date, "PPpp") : "Invalid date"}
+                  </p>
                 </div>
               </div>
             </div>
