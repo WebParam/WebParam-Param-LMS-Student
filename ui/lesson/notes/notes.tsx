@@ -47,7 +47,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
   const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
 
   useEffect(() => {
-    console.log("useEffect fired");
+    console.log("useEffect fired");//
     const fetchStudentInfo = async (userId: string) => {
       if (!clientKey) {
         console.error("Client-Key is not defined");
@@ -66,10 +66,10 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
         if (response.ok) {
           const result = await response.json();
           const data: UserInfo = result.data;
-          console.log("Fetched user data:", data);
+          console.log("Fetched user data:", data);//
 
           setFullName(`${data.firstName || ''} ${data.surname || ''}`.trim());
-          console.log("Set full name:", fullName); 
+          console.log("Set full name:", fullName); //
         } else {
           console.error("Failed to fetch student information:", response.statusText);
         }
@@ -100,7 +100,6 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
         if (response.ok) {
           const result = await response.json();
           const notesData: NoteResponse[] = result.data;
-          console.log("Fetched notes data:", notesData); // Log fetched notes
           setNotes(notesData.map(noteResponse => noteResponse.data));
         } else {
           console.error("Failed to fetch notes:", response.statusText);
@@ -126,14 +125,14 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
     isCollapsed: boolean,
     wordLimit = 100
   ) => {
-    const plainText = text.replace(/<[^>]+>/g, ''); // Strip HTML tags
+    const plainText = text.replace(/<[^>]+>/g, '');
     const words = plainText.split(" ");
     const isLong = words.length > wordLimit;
     const displayContent =
       isCollapsed && isLong
         ? words.slice(0, wordLimit).join(" ") + "..."
         : plainText;
-    console.log("Display content:", displayContent); // Log display content
+    console.log("Display content:", displayContent);
     return { displayContent, isLong };
   };
 
@@ -143,7 +142,6 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
       return;
     }
 
-    // Strip HTML tags from the body
     const plainText = body.replace(/<[^>]+>/g, '');
 
     const newNote = {
@@ -151,8 +149,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
       text: plainText,
       studentId: userID,
       elementId,
-      fullName,
-      dateCreated: new Date().toISOString(), // Ensure dateCreated is in ISO format
+      fullName
     };
 
     try {
@@ -224,44 +221,10 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
 
       <div className="row mt-3">
         {notes.map((note) => {
-          console.log("Processing note:", note); // Log each note
-
           const { displayContent, isLong } = getDisplayContent(
             note.text,
             isCollapsed
           );
-
-          // Check if dateCreated is defined
-          if (!note.dateCreated) {
-            return (
-              <div className={styles.mb3Custom} key={note.id}>
-                <div className="mt-2">
-                  <p className="videoPar">{displayContent}</p>
-                  {isLong && (
-                    <a
-                      onClick={toggleCollapse}
-                      className="ms-2"
-                      style={{ cursor: "pointer" }}
-                    >
-                      {isCollapsed ? "Read more" : "Show less"}
-                    </a>
-                  )}
-                </div>
-                <div className="d-flex justify-content-between mt-2">
-                  <div>
-                    <p className="videoPar"><strong>By:</strong> {note.fullName}</p>
-                  </div>
-                  <div>
-                    <p className="videoPar"><strong>Posted on:</strong> Invalid date</p>
-                  </div>
-                </div>
-              </div>
-            );
-          }
-
-          // Use date-fns to parse the date string
-          const date = parse(note.dateCreated, "yyyy/MM/dd HH:mm:ss", new Date());
-          const isValidDate = !isNaN(date.getTime());
 
           return (
             <div className={styles.mb3Custom} key={note.id}>
@@ -283,7 +246,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
                 </div>
                 <div>
                   <p className="videoPar">
-                    <strong>Posted on:</strong> {isValidDate ? format(date, "PPpp") : "Invalid date"}
+                    <strong>Posted on:</strong> {format(note.dateCreated, "PPpp")}
                   </p>
                 </div>
               </div>
