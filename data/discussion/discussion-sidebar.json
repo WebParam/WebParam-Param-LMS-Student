@@ -1,7 +1,7 @@
 {
   "ALL_ACCESS": [
     {
-      "link": "/user-profile",
+      "link": "/student/student-profile",
       "text": "Profile Info",
       "icon": "feather-user"
     },

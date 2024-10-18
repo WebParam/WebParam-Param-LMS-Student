@@ -1,5 +1,5 @@
 const StudentHome = () => {
-  return <></>;
+  return <> Hello Student </>;
 };
 
 export default StudentHome;

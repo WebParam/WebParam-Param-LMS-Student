@@ -1,10 +1,16 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 import Cookies from "universal-cookie";
 import styles from "./Calendar.module.css";
 import DayView from "./DayView";
 import { GET } from "../../app/lib/api-client";
-import { rLoogBookUrl, rCourseUrl } from "../../app/lib/endpoints";
+import {
+  rLoogBookUrl,
+  rCourseUrl,
+  rClassSessionsThootoUrl,
+} from "../../app/lib/endpoints";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
@@ -38,45 +44,70 @@ const Calendar: React.FC = () => {
   const [view, setView] = useState<"month" | "day">("month");
   const [activeView, setActiveView] = useState<"list" | "calendar">("calendar");
   const [classSessions, setClassSessions] = useState<ClassSession[]>([
-    {
-      id: "mock-event-1",
-      state: 1,
-      createdAt: new Date().toISOString(),
-      modifiedAt: new Date().toISOString(),
-      sessionType: 1,
-      classLink: "https://example.com/join-class",
-      date: specificDate.toISOString().split("T")[0], // Today's date
-      title: "Camblish Induction",
-      courseId: "mock-course-id",
-      moduleId: "mock-module-id",
-      classDuration: "1 hour",
-      startingTime: "10:00 AM",
-      adminId: "mock-admin-id",
-      location: "Online",
-      description: "This is a description of the class session",
-    },
-    {
-      id: "mock-event-2",
-      state: 1,
-      createdAt: new Date().toISOString(),
-      modifiedAt: new Date().toISOString(),
-      sessionType: 1,
-      classLink: "https://example.com/join-class",
-      date: new Date().toISOString().split("T")[0], // Today's date
-      title: "Youth Group Check-in",
-      courseId: "mock-course-id",
-      moduleId: "mock-module-id",
-      classDuration: "1 hour",
-      startingTime: "10:00 AM",
-      adminId: "mock-admin-id",
-      location: "Online",
-      description: "This is a description of the class session",
-    },
+    // {
+    //   id: "mock-event-1",
+    //   state: 1,
+    //   createdAt: new Date().toISOString(),
+    //   modifiedAt: new Date().toISOString(),
+    //   sessionType: 1,
+    //   classLink: "https://example.com/join-class",
+    //   date: specificDate.toISOString().split("T")[0], // Today's date
+    //   title: "Camblish Induction",
+    //   courseId: "mock-course-id",
+    //   moduleId: "mock-module-id",
+    //   classDuration: "1 hour",
+    //   startingTime: "10:00 AM",
+    //   adminId: "mock-admin-id",
+    //   location: "Online",
+    //   description: "This is a description of the class session",
+    // },
+    // {
+    //   id: "mock-event-2",
+    //   state: 1,
+    //   createdAt: new Date().toISOString(),
+    //   modifiedAt: new Date().toISOString(),
+    //   sessionType: 1,
+    //   classLink: "https://example.com/join-class",
+    //   date: new Date().toISOString().split("T")[0], // Today's date
+    //   title: "Youth Group Check-in",
+    //   courseId: "mock-course-id",
+    //   moduleId: "mock-module-id",
+    //   classDuration: "1 hour",
+    //   startingTime: "10:00 AM",
+    //   adminId: "mock-admin-id",
+    //   location: "Online",
+    //   description: "This is a description of the class session",
+    // },
   ]);
   const [courseId, setCourseId] = useState<string | null>(null);
 
   const cookies = new Cookies();
   const userID = cookies.get("userID");
+
+  useEffect(() => {
+    const fetchClassSessions = async () => {
+      try {
+        const response = await axios.get(rClassSessionsThootoUrl, {
+          headers: {
+            "Client-Key": "ec51852d24b1450faff0a868e84d05e5",
+          },
+        });
+        // console.log("API Response:", response.data);
+        // const data = response.data;
+        // const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+        // const modifiedData = data.data.map((session: ClassSession) => ({
+        //   ...session,
+        //   date: today,
+        // }));
+        // setClassSessions(modifiedData);
+        setClassSessions(response.data.data);
+      } catch (error) {
+        console.error("Error fetching class sessions:", error);
+      }
+    };
+
+    fetchClassSessions();
+  }, []); // Empty dependency array means this effect runs once on component mount
 
   useEffect(() => {
     const fetchCourseId = async () => {
@@ -97,26 +128,6 @@ const Calendar: React.FC = () => {
 
     fetchCourseId();
   }, [userID]);
-
-  useEffect(() => {
-    const fetchClassSessions = async () => {
-      if (!courseId) return;
-
-      try {
-        const response = await GET(
-          `${rLoogBookUrl}/api/v1/ClassSessions/GetClassSessions/${courseId}/Course`
-        );
-        if (response) {
-          const data = response.data;
-          setClassSessions(data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching class sessions:", error);
-      }
-    };
-
-    fetchClassSessions();
-  }, [courseId]);
 
   const daysInMonth = new Date(
     currentDate.getFullYear(),
@@ -195,7 +206,7 @@ const Calendar: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  12pm - 16:30pm
+                  {session.startingTime}
                 </a>
                 <button
                   className={styles.notificationButton}
@@ -204,7 +215,7 @@ const Calendar: React.FC = () => {
                     alert(`Notification for ${session.title}`);
                   }}
                 >
-                  <i className="far  fa-bell"></i>
+                  <i className="far fa-bell"></i>
                 </button>
               </div>
             ))}

@@ -41,7 +41,7 @@ const StudentDashboardSidebar: React.FC = () => {
 
   const basePath = path.split("?")[0];
 
-  const isProfilePage = basePath === "/user-profile"; // Assuming "/profile" is the profile link
+  const isProfilePage = basePath === "/student/student-profile"; // Assuming "/profile" is the profile link
 
   useEffect(() => {
     console.log(`This is the path: ${path}`);
