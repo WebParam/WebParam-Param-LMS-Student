@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import styles from "../Message.module.scss";
-import SearchIcon from "../svg/SearchIcon";
+import styles from "@/app/(protected)/student/message/Message.module.scss";
+import SearchIcon from "@/public/svg/SearchIcon"
 
 const SearchInput = () => {
     return (

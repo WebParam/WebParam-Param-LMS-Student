@@ -1,15 +1,32 @@
 'use client';
 
-import React, { useState } from 'react';
-import DropdownItems from './components/DropdownItems';
-import SearchInput from './components/SearchInput';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import Img from './svg/Img.png';
-import dummyImg from './svg/dyummyImg.svg';
-import styles from './Message.module.scss';
+import dummyImg from '@/public/svg/dyummyImg.svg';
+import Img from '@/public/images/message/Img.png';
+import { getNotifications } from '@/app/api/notifications/notification';
+import DropdownItems from '@/ui/student/message/DropdownItems';
+import SearchInput from '@/ui/student/message/SearchInput';
+import styles from './Message.module.scss'
 
 export default function Message() {
   const [imageError, setImageError] = useState(false);
+
+  async function fetchNotifications(userId: string) {
+    console.log('responseff:1')
+    try {
+      const res = await getNotifications('66851cd94b5009327c77bbe4');
+      console.log("responseff:2 ", res.data.data);
+      // setNotifications(res.data.data);
+      // setLoading(false); // Set loading to false once notifications are fetched
+    } catch (error) {
+      console.error("responseff:3 Error fetching notifications:", error);
+      // setLoading(false);
+    }
+  }
+  useEffect(() => {
+    fetchNotifications('');
+  }, [])
   const data = `
     <div>
       <p>Subject: <strong>Reminder: Monthly Check-In Past Due</strong></p>
@@ -33,7 +50,7 @@ export default function Message() {
         </div>
 
         {[...Array(5)].map((_, index) => (
-          <div
+          <button
             key={index}
             className={styles.listMessages}
             style={index === 0 ? { backgroundColor: 'rgba(254, 69, 122, 0.05)' } : {}}
@@ -54,7 +71,7 @@ export default function Message() {
                 </div>
               </div>
             </div>
-          </div>
+          </button>
         ))}
       </div>
 
@@ -86,7 +103,7 @@ export default function Message() {
           </div>
           <div className={styles.msgTime}>2:32pm</div>
         </div>
-        <div className={styles.line}/>
+        <div className={styles.line} />
         <div className={styles.viewMsgHeading}>Monthly Check-In</div>
         <div dangerouslySetInnerHTML={{ __html: data }} />
       </div>
