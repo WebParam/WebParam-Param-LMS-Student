@@ -10,11 +10,19 @@ import Cookies from "universal-cookie";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface Note {
-  id: number;
-  title: string;
-  content: string;
-  studentName: string;
-  timestamp: string;
+  id: string;
+  topicId: string;
+  text: string;
+  studentId: string;
+  elementId: string;
+  dateCreated: string;
+  dateUpdated: string | null;
+  fullName: string;
+}
+
+interface UserInfo {
+  firstName: string;
+  surname: string;
 }
 
 interface NotesProps {
@@ -49,8 +57,8 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          setFullName(`${data.firstName} ${data.surname}`);
+          const data: UserInfo = await response.json();
+          setFullName(`${data.firstName || ''} ${data.surname || ''}`.trim());
         } else {
           console.error("Failed to fetch student information:", response.statusText);
         }
@@ -70,7 +78,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
       }
 
       try {
-        const response = await fetch(`${rCommentUrl}/api/Notes/GetNotesBySudentAndElement/${userID}/${elementId}`, {
+        const response = await fetch(`${rCommentUrl}/api/Notes/GetNotesByElement/${userID}/${elementId}`, {
           headers: new Headers({
             "Client-Key": clientKey,
             Accept: "application/json",
@@ -79,8 +87,9 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          setNotes(data);
+          const result = await response.json();
+          const notesData = result.data;
+          setNotes(Array.isArray(notesData) ? notesData : []);
         } else {
           console.error("Failed to fetch notes:", response.statusText);
         }
@@ -101,7 +110,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
   };
 
   const getDisplayContent = (
-    text: string,
+    text: string = "",
     isCollapsed: boolean,
     wordLimit = 100
   ) => {
@@ -198,7 +207,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
       <div className="row mt-3">
         {notes.map((note) => {
           const { displayContent, isLong } = getDisplayContent(
-            note.content,
+            note.text,
             isCollapsed
           );
           return (
@@ -217,10 +226,10 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
               </div>
               <div className="d-flex justify-content-between mt-2">
                 <div>
-                  <p className="videoPar"><strong>By:</strong> {note.studentName}</p>
+                  <p className="videoPar"><strong>By:</strong> {note.fullName}</p>
                 </div>
                 <div>
-                  <p className="videoPar"><strong>Posted on:</strong> {format(new Date(note.timestamp), "PPpp")}</p>
+                  <p className="videoPar"><strong>Posted on:</strong> {format(new Date(note.dateCreated), "PPpp")}</p>
                 </div>
               </div>
             </div>
