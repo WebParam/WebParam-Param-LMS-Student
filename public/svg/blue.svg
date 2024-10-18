@@ -1,0 +1,10 @@
+<svg width="600" height="80" xmlns="http://www.w3.org/2000/svg">
+  <!-- First line (bottom line, longer and thicker) -->
+  <path d="M10 60 C 150 65, 450 65, 590 60" stroke="#051C48" stroke-width="8" fill="transparent"/>
+  
+  <!-- Second line (upper line, longer and thicker) -->
+  <path d="M10 45 C 150 50, 450 50, 590 45" stroke="#051C48" stroke-width="6" fill="transparent"/>
+  
+  <!-- Third line (small line on the right, longer and thicker) -->
+  <path d="M120 30 C 250 32, 450 32, 550 30" stroke="#051C48" stroke-width="4" fill="transparent"/>
+</svg>

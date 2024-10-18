@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Courses from "../../../data/dashboard/instructor/instructor.json";
 import CourseWidgets from "../enrolled/course";
+import { isMobile } from "react-device-detect";
 
 const EnrolledCourses = () => {
   return (
@@ -32,7 +33,8 @@ const EnrolledCourses = () => {
                   aria-controls="home-4"
                   aria-selected="true"
                 >
-                  <span className="title">Enrolled</span>
+                 {!isMobile && <span className="title">Enrolled</span>}
+                 {isMobile && <span style={{fontSize:"15px"}} className="title">Enrolled</span>}
                 </Link>
               </li>
               <li role="presentation">
@@ -46,7 +48,8 @@ const EnrolledCourses = () => {
                   aria-controls="profile-4"
                   aria-selected="false"
                 >
-                  <span className="title">Active Courses</span>
+                    {!isMobile && <span className="title">Active Courses</span>}
+                    {isMobile && <span style={{fontSize:"15px"}} className="title">Active Courses</span>}
                 </Link>
               </li>
               <li role="presentation">
@@ -60,7 +63,8 @@ const EnrolledCourses = () => {
                   aria-controls="contact-4"
                   aria-selected="false"
                 >
-                  <span className="title">Completed Courses</span>
+                {!isMobile && <span className="title">Completed Courses</span>}
+                {isMobile && <span style={{fontSize:"15px"}} className="title">Completed Courses</span>}
                 </Link>
               </li>
             </ul>

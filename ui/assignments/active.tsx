@@ -1,6 +1,6 @@
 export default function ActiveAssignment() {
   return (
-    <table className="rbt-table table table-borderless">
+    <table className="rbt-table table table-borderless" style={{minWidth:'10px'}}>
       <thead>
         <tr>
           <th>Assignment Name</th>

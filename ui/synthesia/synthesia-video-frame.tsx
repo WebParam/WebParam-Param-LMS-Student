@@ -20,6 +20,9 @@ const ResponsiveVideoComponent: React.FC = () => {
       const iframe = document.querySelector("iframe");
       if (iframe) {
         iframe.onload = () => {
+    
+          iframe.style.display = "none";
+
           try {
             iframe.contentWindow?.addEventListener("ended", () => {
               const event = new CustomEvent("videoWatched", {
@@ -49,11 +52,12 @@ const ResponsiveVideoComponent: React.FC = () => {
             style={{ width: "100%", height: "100%" }}
           >
             <iframe
+             scrolling="no"
               src={videoUrl}
               loading="lazy"
-              title="Synthesia video player - KM01-KT0101 Project Management Overview"
+              // title="Synthesia video player - KM01-KT0101 Project Management Overview"
               allowFullScreen
-              allow="encrypted-media; fullscreen;"
+              allow="fullscreen;"
               style={{
                 position: "absolute",
                 width: "100%",

@@ -6,6 +6,8 @@ import { preferredOccupations, sector } from "./data";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { readUserData } from "@/app/lib/endpoints";
+import { GET } from "@/app/lib/api-client";
+import { useProgressContext } from "@/context/progress-card-context/progress-context";
 
 export default function EmploymentInformation({ student }: any) {
   const cookies = new Cookies();
@@ -20,9 +22,11 @@ export default function EmploymentInformation({ student }: any) {
   const [preferedOccupation, setPreferedOccupation] = useState('');
   const [referalCompany, setReferalCompany] = useState('');
   const [codes, setCodes] = useState<any>()
+  const { setEmploymentPercentage } = useProgressContext();
 
   async function getInputCodes() {
-    const res = await axios.get(`${readUserData}/api/v1/Student/GetCodes`);
+    // const res = await axios.get(`${readUserData}/api/v1/Student/GetCodes`);
+    const res = await GET(`${readUserData}/api/v1/Student/GetCodes`);
 
     console.log('codes:', res?.data?.data);
     setCodes(res?.data?.data)
@@ -46,7 +50,7 @@ export default function EmploymentInformation({ student }: any) {
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
     setIsSubmitting(true);
-    debugger;
+    
       const payload = {
         userId: user?.data?.id||user?.id,
         employmentStatus: employmentStatus,
@@ -61,6 +65,7 @@ export default function EmploymentInformation({ student }: any) {
       if (res) {
         console.log('response', res);
         setIsSubmitting(false);
+        calculateEmploymentPercentage();
         router.push('/student/student-profile?tab=documents')
       }
       
@@ -68,7 +73,27 @@ export default function EmploymentInformation({ student }: any) {
 
   useEffect(() => {
     getInputCodes();
+    calculateEmploymentPercentage();
   }, [])
+
+  const calculateEmploymentPercentage = () => {
+    const fields = [
+      employmentStatus,
+      sarsTaxNumber,
+      selectedSector,
+      preferedOccupation,
+      referalCompany,
+    ];
+
+    const totalFields = fields.length;
+    const emptyFields = fields.filter(field => field).length;
+    const percentage = (emptyFields / totalFields) * 100;
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem('employmentPercentage', percentage.toString());
+      setEmploymentPercentage(percentage);
+    }
+  };
 
   return (
     <div
@@ -78,7 +103,7 @@ export default function EmploymentInformation({ student }: any) {
     aria-labelledby="Personal Information"
     >
     <div className="rbt-dashboard-content-wrapper">
-    <form onSubmit={handleSubmit} className="rbt-profile-row rbt-default-form row row--15">
+    <form onSubmit={handleSubmit} className="rbt-profile-row rbt-default-form row row--15" style={{minWidth:'100%'}}>
     <div className="col-lg-6 col-md-6 col-sm-6 col-12">
       <div className="rbt-form-group">
         <label htmlFor="employmentStatus">Employment Status</label>
@@ -88,7 +113,7 @@ export default function EmploymentInformation({ student }: any) {
           value={employmentStatus}
           onChange={(e) => setEmploymentStatus(e.target.value)}
         >
-          <option value="">select</option>
+          <option value="">Select</option>
           {
           codes && codes[6]?.codes?.map((item:any, index:number) => (
               <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -101,6 +126,7 @@ export default function EmploymentInformation({ student }: any) {
 
     <div className="col-lg-6 col-md-6 col-sm-6 col-12">
     <div className="rbt-form-group">
+      <br/>
         <label htmlFor="sarsTaxNumber">SARS TAX NUMBER</label>
         <input
           type="text"
@@ -122,7 +148,7 @@ export default function EmploymentInformation({ student }: any) {
             id="sector"
             onChange={(e) => setSelectedSector(e.target.value)}
         >
-            <option value="">select</option>
+            <option value="">Select</option>
             {
           codes && codes[18]?.codes?.map((item:any, index:number) => (
               <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -173,32 +199,31 @@ export default function EmploymentInformation({ student }: any) {
     </div>
   
 
-    <div className="col-12 mt--20">
-      <div className="rbt-form-group">
-        {/* <button
-          className="rbt-btn btn-gradient"
-          type='submit'
-          style={{ backgroundColor: '#24345c', backgroundImage: 'none' }}
-        >
-          {isSubmitting ? <div className="spinner-border text-light" role="status"/>:'Update Info'}
-        </button> */}
-        <button
-            className="btn-sm mr--10 hover-icon-reverse w-100"
-            style={{height:'40px', border:'none', backgroundColor:'rgb(36, 52, 92)', borderRadius:'8px  '}}
-            type="submit"
-            disabled={isSubmitting}
-        >
-            <span className="icon-reverse-wrapper">
-                <span className="btn-text text-light">Proceed</span>
-                <span className="btn-icon text-light">
-                    <i className="feather-arrow-right" />
-                </span>
-            </span>
-        </button>
-      </div>
+  <div className="col-12 mt--20">
+    <div className="rbt-form-group">
+      {/* <button
+         className="rbt-btn btn-gradient"
+         type='submit'
+         style={{ backgroundColor: '#24345c', backgroundImage: 'none' }}
+      >
+        {isSubmitting ? <div className="spinner-border text-light" role="status"/>:'Update Info'}
+      </button> */}
+      <button
+          className="btn-sm mr--10 hover-icon-reverse w-100"
+          style={{height:'40px', border:'none', backgroundColor:'rgb(36, 52, 92)', borderRadius:'8px  '}}
+          type="submit"
+          disabled={isSubmitting}
+      >
+          <span className="icon-reverse-wrapper">
+              <span className="btn-text text-light">Save & Proceed</span>
+              <span className="btn-icon text-light">
+                  <i className="feather-arrow-right" />
+              </span>
+          </span>
+      </button>
     </div>
 
-  
+  </div>
       </form>
     </div>
     </div>

@@ -62,13 +62,7 @@ export default function Nav() {
                     <span>My Dashboard</span>
                     </Link>
                 </li>
-{/*                 
-                <li>
-                    <a href="/#">
-                    <i className="feather-bookmark" />
-                    <span>Bookmark</span>
-                    </a>
-                </li> */}
+
                 <li>
                     <Link href="/student/enrolled-courses">
                     <i className="feather-shopping-bag" />
@@ -84,60 +78,6 @@ export default function Nav() {
                       <span>Notifications</span>
                     </Link>
                   </li>
-                
-                {/* <li>
-                    <a href="/instructor/instructor-wishlist">
-                    <i className="feather-heart" />
-                    <span>Wishlist</span>
-                    </a>
-                </li> */}
-                
-                {/* <li>
-                    <a href="/instructor/instructor-reviews">
-                    <i className="feather-star" />
-                    <span>Reviews</span>
-                    </a>
-                </li> */}
-                
-                {/* <li>
-                    <a href="/instructor/instructor-my-quiz-attempts">
-                    <i className="feather-list" />
-                    <span>My Quiz Attempts</span>
-                    </a>
-                </li> */}
-                
-                {/* <li>
-                    <a href="/instructor/instructor-order-history">
-                    <i className="feather-clock" />
-                    <span>Order History</span>
-                    </a>
-                </li> */}
-                
-                {/* <li>
-                    <a href="/instructor/instructor-quiz-attempts">
-                    <i className="feather-message-square" />
-                    <span>Question &amp; Answer</span>
-                    </a>
-                </li>
-                </ul>
-                <hr className="mt--10 mb--10" />
-                <ul className="user-list-wrapper">
-                <li>
-                    <a href="/#">
-                    <i className="feather-book-open" />
-                    <span>Getting Started</span>
-                    </a>
-                </li>
-                </ul>
-                <hr className="mt--10 mb--10" />
-                <ul className="user-list-wrapper">
-                <li>
-                    <a href="/instructor/instructor-settings">
-                    <i className="feather-settings" />
-                    <span>Settings</span>
-                    </a>
-                </li> */}
-                
                 <li >
                     <a onClick={handleLogOut}
                     style={{cursor:'pointer'}}>

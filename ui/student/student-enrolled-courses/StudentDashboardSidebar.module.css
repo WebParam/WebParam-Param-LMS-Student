@@ -1,0 +1,39 @@
+.sidebar {
+  position: fixed; /* Make the sidebar fixed */
+  top: 0;
+  left: 0;
+  width: 20%; /* Adjust width as needed for responsiveness */
+  height: 100vh; /* Full screen height */
+  overflow: hidden; /* Prevent overflow */
+  background-color: #fff; /* or any preferred background */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-block-start: 10px;
+}
+
+.sidebarLink {
+  text-decoration: none; /* Optional to remove underline if any */
+  transition: color 0.3s ease, transform 0.3s ease; /* Add transition for transform */
+  color: inherit; /* Ensure the color is inherited from the parent */
+}
+
+.sidebarLink:hover {
+  color: #ff7fa3; /* Light version of the activeLink color (#fe457a) */
+  transform: scale(1.05); /* Scale up by 5% on hover */
+}
+
+.sidebarLink:focus {
+  outline: none; /* Remove the default focus outline */
+  color: #fe457a;
+}
+
+.activeLink {
+  color: #fe457a;
+  font-weight: bold;
+}
+
+.username {
+  color: #051c48;
+  text-transform: capitalize;
+}

@@ -32,7 +32,7 @@ const LogbookList = ({
         hasMore={hasMore}
         loader={
           <div className={styles["loading-custom"]}>
-            Loading more logbooks...
+            {/* Loading more logbooks... */}
           </div>
         }
         endMessage={
@@ -44,7 +44,7 @@ const LogbookList = ({
         {logbooks.map((logbook, index) => (
           <div
             key={index}
-            className={`${styles["logbook-card-custom"]} ${
+            className={`rbt-card ${styles["logbook-card-custom"]} ${
               logbook.status === "Checked Out"
                 ? styles["bg-light-custom"]
                 : styles["border-success-custom"]
@@ -98,7 +98,7 @@ const LogbookList = ({
             </div>
           </div>
         ))}
-      </InfiniteScroll>
+        </InfiniteScroll>
     </div>
   );
 };
