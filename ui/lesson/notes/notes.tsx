@@ -47,6 +47,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
   const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
 
   useEffect(() => {
+    console.log("useEffect fired");
     const fetchStudentInfo = async (userId: string) => {
       if (!clientKey) {
         console.error("Client-Key is not defined");
@@ -64,8 +65,11 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
 
         if (response.ok) {
           const result = await response.json();
-          const data = result.data;
+          const data: UserInfo = result.data;
+          console.log("Fetched user data:", data);
+
           setFullName(`${data.firstName || ''} ${data.surname || ''}`.trim());
+          console.log("Set full name:", fullName); 
         } else {
           console.error("Failed to fetch student information:", response.statusText);
         }
@@ -107,7 +111,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
     };
 
     fetchNotes();
-  }, [topicId, elementId, userID, clientKey]);
+  }, [topicId, elementId, userID]);
 
   const handleChange = (value: string) => {
     setBody(value);
