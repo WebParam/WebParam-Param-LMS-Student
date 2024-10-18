@@ -47,13 +47,15 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
   const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
 
   useEffect(() => {
-    console.log("useEffect fired");//
+    console.log("UseEffect Fired:");
+    console.log("Fetching notes with userID:", userID, "and elementId:", elementId);
+  
     const fetchStudentInfo = async (userId: string) => {
       if (!clientKey) {
         console.error("Client-Key is not defined");
         return;
       }
-
+  
       try {
         const response = await fetch(`${readUserData}/api/v1/Student/GetStudentInformation/${userId}`, {
           headers: new Headers({
@@ -62,14 +64,12 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
             "Content-Type": "application/json",
           }),
         });
-
+  
         if (response.ok) {
           const result = await response.json();
           const data: UserInfo = result.data;
-          console.log("Fetched user data:", data);//
-
+  
           setFullName(`${data.firstName || ''} ${data.surname || ''}`.trim());
-          console.log("Set full name:", fullName); //
         } else {
           console.error("Failed to fetch student information:", response.statusText);
         }
@@ -77,30 +77,31 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
         console.error("Error fetching student information:", error);
       }
     };
-
+  
     if (userID) {
       fetchStudentInfo(userID);
     }
-
+  
     const fetchNotes = async () => {
       if (!clientKey) {
         console.error("Client-Key is not defined");
         return;
       }
-
+  
       try {
-        const response = await fetch(`${rCommentUrl}/api/Notes/GetNotesByElement/${userID}/${elementId}`, {
+        const response = await fetch(`${rCommentUrl}/api/Notes/GetNotesByElement/${elementId}`, {
           headers: new Headers({
             "Client-Key": clientKey,
             Accept: "application/json",
             "Content-Type": "application/json",
           }),
         });
-
+  
         if (response.ok) {
           const result = await response.json();
-          const notesData: NoteResponse[] = result.data;
-          setNotes(notesData.map(noteResponse => noteResponse.data));
+          const notesData: NoteData[] = result.data;
+          setNotes(notesData);
+          console.log("Notes Data Thats fetched :", notesData)
         } else {
           console.error("Failed to fetch notes:", response.statusText);
         }
@@ -108,7 +109,7 @@ const Notes = ({ topicId, elementId }: NotesProps) => {
         console.error("Error fetching notes:", error);
       }
     };
-
+  
     fetchNotes();
   }, [topicId, elementId, userID]);
 
