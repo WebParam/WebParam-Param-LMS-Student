@@ -8,84 +8,99 @@
     height: 100%;
     width: 50%;
   }
-
-  & .reset-password-inner {
-    height: 100%;
-    width: 50%;
+    width: 100%;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-
-    @media (max-width: 768px) {
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    & form {
-      width: 70%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-      & label {
-        @media (max-width: 768px) {
-          text-align: center;
-        }
-      }
-
-      @media (max-width: 768px) {
-        width: 100%;
-        max-width: 400px;
-      }
-    }
-  }
-}
-
-.reset-otp-container {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-
-  & .left-container {
-    height: 100%;
-    width: 50%;
-  }
-
-  & .reset-otp-inner {
-    height: 100%;
-    width: 70%;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
-
-    @media (max-width: 768px) {
-      width: 70%;
-      margin: 0 auto;
-    }
-
-    & form {
-      width: 80%;
-      margin: 0 auto;
-
-      @media (max-width: 768px) {
-        width: 100%;
-      }
-    }
-  }
+    background-color: #ffffff;
 }
 
-.button-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-
-  @media (min-width: 918px) {
-    flex-direction: row;
-  }
+.reset-password-inner {
+    width: 100%;
+    max-width: 600px;
+    padding: 40px;
+    text-align: center;
+    margin-left: 20px;
+    
 }
+
+.reset-password-inner h5 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #000000;
+    font-weight: normal;
+}
+
+.reset-password-inner p {
+    font-size: 20px;
+    color: #000000;
+    margin-bottom: 40px; // Decreased from 40px to 20px
+}
+
+.input-group {
+    margin-bottom: 30px;
+}
+
+.input-group input {
+    width: 100%;
+    max-width: 380px; 
+    padding: 15px 25px; // Increased right padding
+    border: 1px solid #666666;
+    border-radius: 30px;
+    font-size: 18px;
+    margin-left: 80px;
+    text-align: left; // Ensure text alignment is left
+}
+
+// Add this new rule for the placeholder
+.input-group input::placeholder {
+    text-align: left !important;
+    padding-left: 10px !important; // Adjust this value to move the placeholder more to the right
+    color: #999 !important; // Optional: you can change the color if needed
+}
+
+// Add media query for small screens
+@media (max-width: 768px) {
+    .input-group input {
+        margin-left: 5px; // Reduce left margin on small screens
+        max-width: 300px;
+    }
+}
+
+.reset-button {
+    width: 100%;
+    max-width: 300px;
+    padding: 15px;
+    background-color: #ff4081;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reset-button:hover {
+    background-color: #e91e63;
+}
+
+@media (max-width: 768px) {
+    .reset-password-inner {
+        padding: 20px;
+    }
+
+    .reset-password-inner h2 {
+        font-size: 24px;
+    }
+
+    .reset-password-inner p {
+        font-size: 18px;
+    }
+
+    .input-group input,
+    .reset-button {
+        font-size: 16px;
+    }
+}
+

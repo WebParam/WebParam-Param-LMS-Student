@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import Profile from './profile/page';
 import { useSearchParams } from 'next/navigation';
 import { getStudentData } from '@/app/api/studentProfile/studentprofile';
+import { codes } from './codes';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -37,13 +38,13 @@ function UserProfileContent() {
     const renderComponent = (tab: string | null) => {
         switch (tab) {
             case 'profile':
-                return <Profile student={student} />;
+                return <Profile student={student} codes={codes} />;
             case 'democraticLegal':
-                return <DemocraticLegal student={student} />;
+                return <DemocraticLegal student={student} codes={codes} />;
             case 'ContactInformation':
-                return <ContactInformation student={student} />;
+                return <ContactInformation student={student} codes={codes} />;
             case 'EmploymentInformation':
-                return <EmploymentInformation student={student} />;
+                return <EmploymentInformation student={student} codes={codes}   />;
             case 'documents':
                 return <Documents />;
             default:

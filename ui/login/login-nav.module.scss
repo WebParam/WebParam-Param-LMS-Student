@@ -1,0 +1,76 @@
+.root {
+    --primary-color: #fe457a;
+  }
+  
+  .navbar {
+    background-color: white;
+    padding: 20px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbarContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .navLinks {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+  
+  .navLinks li {
+    margin: 0 15px;
+  }
+  
+  .navLinks a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .authLinks {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    margin-left: auto !important;
+  }
+  
+  .authLinks a {
+    text-decoration: none;
+    color: var(--primary-color);
+    margin: 0 5px;
+  }
+  
+  .loginButton {
+    color: var(--primary-color);
+    font-weight: bold;
+  }
+  
+  .userIcon {
+    color: var(--primary-color);
+    font-size: 24px;
+    margin-right: 10px;
+  }
+  
+  .menuButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--primary-color);
+    margin-left: 10px;
+  }
+  

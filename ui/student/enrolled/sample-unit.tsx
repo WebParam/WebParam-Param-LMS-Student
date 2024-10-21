@@ -25,36 +25,14 @@ interface Props {
   showAuthor: boolean;
 }
 
-const UnitStandardWidget: React.FC<Props> = ({
-  data,
-  courseStyle,
-  isProgress,
-  isEdit,
-  showAuthor,
-}) => {
-  const { setId, navigateToLesson } = useLessonContext();
-  
-  const course = Courses.find((course) => course.id.toString() === data.id) || {
-    courseThumbnail: "images/course/course-02.jpg",
-    coursePrice: 0,
-    offerPrice: 0,
-    reviews: { oneStar: 0, twoStar: 0, threeStar: 0, fourStar: 0, fiveStar: 0 },
-    rating: { average: 0, total: 0 },
-    lectures: "0",
-    enrolledStudent: "0",
-  };
-
+const UnitStandardWidget: React.FC<Props> = ({data, courseStyle, isProgress,}) => {
     // Set a random number when the component mounts
     const generateRandomVideoCount = () => {
       return Math.floor(Math.random() * (50 - 10 + 1)) + 10;
     };
 
+    console.log("data: ", data);
 
-  // const handleClick = (id: string) => {
-  //   setId(id);
-  //   console.log(id);
-  //   navigateToLesson();
-  // };
 
   return (
     <>

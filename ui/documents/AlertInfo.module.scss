@@ -1,0 +1,24 @@
+.alertInfo {
+    background-color: white;
+    // border: 1px solid #ffcccb;
+    border-radius: 4px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif!important;
+  
+    p {
+      color: #666666;
+      font-size: 18px;
+      line-height: 1.5;
+      margin-left: -10px; // Added negative margin to move the paragraph left
+  
+      .noteText {
+        color: #FE457A;
+        
+      }
+
+      .boldText {
+        font-weight: bold;
+      }
+    }
+  }

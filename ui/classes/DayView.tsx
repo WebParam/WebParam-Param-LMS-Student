@@ -3,6 +3,7 @@ import Cookies from 'universal-cookie';
 import styles from './DayView.module.css';
 import { POST } from '../../app/lib/api-client';
 import {wLoogBookUrl} from '../../app/lib/endpoints';
+import { useCourseId } from '@/context/courseId-context/courseId-context';
 
 interface ClassSession {
   id: string;
@@ -87,6 +88,8 @@ const DayView: React.FC<DayViewProps> = ({ date, onBackClick, classSessions }) =
     });
   };
 
+  console.log('events', events);
+
   return (
     <div className={styles.dayViewWrapper}>
       <div className={styles.header}>
@@ -97,6 +100,8 @@ const DayView: React.FC<DayViewProps> = ({ date, onBackClick, classSessions }) =
         {hours.map(hour => {
           const event = getEventForTime(hour);
           const eventDuration = event ? parseInt(event.classDuration.split(' ')[0], 10) : 0;
+
+          console.log('event', event);
           return (
             <div key={hour} className={`${styles.timeSlot} ${event ? styles.hasEvent : ''}`} style={{ height: `${eventDuration * 60}px` }}>
               <div className={styles.time}>{`${hour}:00`}</div>

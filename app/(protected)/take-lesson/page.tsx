@@ -17,6 +17,8 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";  
 import Cookies from "universal-cookie";
 import { useCourseId } from "@/context/courseId-context/courseId-context";
+import { POST } from "@/app/lib/api-client";
+import { rDocumentParaphraseUrl } from "@/app/lib/endpoints";
 
 function TakeLesson() {
   const [currentVideo, setCurrentVideo] = useState<any>();
@@ -34,7 +36,7 @@ function TakeLesson() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [videoEnded, setVideoEnded] = useState<boolean>(false);
   const [videosWatched, setVideosWatched] = useState<any[]>([]);
-  const [expandedTopicId, setExpandedTopicId] = useState<any>();
+  const [currentQuiz, setCurrentQuiz] = useState<IQuizQuestion[]>([]);
   const cookies = new Cookies();
   const loggedInUser = cookies.get('loggedInUser');
   const userID = cookies.get('userID');
@@ -42,7 +44,11 @@ function TakeLesson() {
   console.log('loggedInUser', loggedInUser)
 
   const topicRef = useRef<HTMLLIElement>(null);
-
+  interface IQuizQuestion  {
+    question: string;
+    options: string[];
+    answer: string;
+  };
   const searchParams = useSearchParams();
   const moduleId = searchParams.get("moduleId");
 
@@ -69,6 +75,20 @@ function TakeLesson() {
     } finally {
       setLoading(false);
       }
+
+    
+    
+  }
+
+  const getQuizQuestions = async (videoId:string) => {
+    const payload = {
+      videoId:videoId
+    }
+    const res = await POST(payload,`${rDocumentParaphraseUrl}/api/v1/topicQuiz/generate`);
+    debugger;
+   
+    setCurrentQuiz(res?.data);
+    
   }
 
   async function fetchTopics(topicId: string) {
@@ -182,6 +202,7 @@ function TakeLesson() {
   };
 
   const handleSubTopicClick = (subTopic: TopicElement, index: number) => {
+    setCurrentQuiz([]);
     setVideoLoader(true);
     setCheckedSubTopics((prev) => ({
       ...prev,
@@ -192,6 +213,11 @@ function TakeLesson() {
     setCurrentIndex(index);
     setVideoEnded(false); // Reset videoEnded state when a new video is selected
     setVideoLoader(false);
+
+    debugger;
+    const questions = getQuizQuestions(subTopic.id);
+    
+
     // setExpandedTopicId(subTopic.id);
   };
 
@@ -208,6 +234,9 @@ function TakeLesson() {
       const previousSubTopic = expandedTopics[currentVideo.topicId][currentIndex - 1];
       if (previousSubTopic) {
         setCurrentVideo(previousSubTopic);
+        setCurrentQuiz([]);
+
+        const questions = getQuizQuestions(previousSubTopic.id);
         setCheckedSubTopics((prev) => ({
           ...prev,
           [previousSubTopic.id]: true,
@@ -219,6 +248,7 @@ function TakeLesson() {
   };
 
   const handleNext = () => {
+
     console.log("Current index before next:", currentIndex);  // Debugging log
   
     if (!videoEnded) {
@@ -233,6 +263,8 @@ function TakeLesson() {
       const nextSubTopic = currentTopicSubTopics[nextIndex];
       if (nextSubTopic) {
         setCurrentVideo(nextSubTopic);
+        setCurrentQuiz([]);
+        const questions = getQuizQuestions(nextSubTopic.id);
         setCheckedSubTopics((prev) => ({
           ...prev,
           [nextSubTopic.id]: true,
@@ -246,6 +278,8 @@ function TakeLesson() {
   const handleVideoEnd = () => {
     setVideoEnded(true);
   };
+
+
 
  
 
@@ -685,7 +719,7 @@ function TakeLesson() {
           </div>
           :
           <div className="inner">
-            <LessonQuiz setVideoEnded={setVideoEnded} handleNext={handleNext} />
+            <LessonQuiz firstQuiz={currentQuiz} setVideoEnded={setVideoEnded} handleNext={handleNext} currentVideo={currentVideo} />
           </div>}
         </div>
       </div>

@@ -1,4 +1,4 @@
-$primary-color: #fe457a;
+$primary-color: #FE457A;
 
 .loginPage {
   height: 100vh;
@@ -6,8 +6,7 @@ $primary-color: #fe457a;
   flex-direction: column;
   background-size: cover;
   background-position: center;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("/images/login/image.jpg") !important;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../public/login/image.jpg') !important;
 }
 
 .loginContainer {
@@ -24,7 +23,7 @@ $primary-color: #fe457a;
   text-align: left;
   display: flex;
   flex-direction: column;
-  min-height: 400px; // Adjust this value as needed
+  min-height: 400px;
   justify-content: space-between;
 }
 
@@ -40,13 +39,13 @@ $primary-color: #fe457a;
   padding-bottom: 10px;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     bottom: 0;
     width: 100%;
     height: 20px;
-    background-image: url("../../../public/svg/underline-curve.svg"); // Use your custom SVG
+    background-image: url('./underline-curve.svg'); // Updated path
     background-size: contain;
     background-repeat: no-repeat;
   }
@@ -65,7 +64,7 @@ $primary-color: #fe457a;
 .input {
   width: 100%;
   padding: 15px;
-  border: 2px solid #fe457a !important;
+  border: 2px solid $primary-color !important;
   border-radius: 10px;
   font-size: 16px;
   background-color: white !important;
@@ -77,7 +76,7 @@ $primary-color: #fe457a;
 
   &:focus {
     outline: none;
-    border-color: darken(#fe457a, 10%) !important;
+    border-color: darken($primary-color, 10%) !important;
   }
 }
 
@@ -123,19 +122,6 @@ $primary-color: #fe457a;
 
 .requiredField {
   position: relative;
-
-  &::after {
-    content: "*";
-    color: $primary-color;
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-}
-
-.formGroup {
-  position: relative;
 }
 
 .asterisk {
@@ -149,9 +135,9 @@ $primary-color: #fe457a;
 .signUpPrompt {
   text-align: center;
   font-size: 14px;
-  margin-top: auto; // This will push the prompt to the bottom of the form wrapper
-  padding-top: 20px; // Add some padding at the top
-  margin-bottom: 20px; // Add some margin at the bottom to move it down further
+  margin-top: auto;
+  padding-top: 20px;
+  margin-bottom: 20px;
 
   a {
     color: $primary-color;
@@ -162,4 +148,14 @@ $primary-color: #fe457a;
       text-decoration: underline;
     }
   }
+}
+
+// Add this class for the password toggle icon
+.passwordToggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #999;
 }

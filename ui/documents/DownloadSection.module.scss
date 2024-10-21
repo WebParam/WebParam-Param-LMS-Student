@@ -1,0 +1,38 @@
+.downloadSection {
+    margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif!important;
+    p {
+      
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+  
+    .downloadButtons {
+      display: flex;
+      gap: 10px;
+    }
+  
+    .downloadButton {
+      background: transparent;
+      color: black;
+      border: 1px solid #e0e0e0;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      margin-left: 0;
+      gap: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: #051C48;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      i {
+        font-size: 1.2em;
+      }
+    }
+  }

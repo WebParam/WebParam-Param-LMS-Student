@@ -23,85 +23,40 @@ export default function SendResetEmail() {
 
     const res = await sendOtp(payload);
 
-    if (res) {
-      cookies.set("resetEmail", email);
-      console.log(res);
-      router.push("/forgot-password/otp");
+        if (res) {
+            cookies.set('resetEmail', email);
+            console.log(res);
+            router.push('/forgot-password/otp')
+        }
+        
+        console.log(res);
+
     }
 
-    console.log(res);
-  }
-
-  return (
-    <div className="reset-password-container">
-      <div
-        className="left-container d-md-block d-none"
-        data-aos="zoom-out-right"
-        style={{
-          backgroundImage: `url(${imageCover.src})`,
-          backgroundSize: "60%",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundColor: "#24345C",
-        }}
-      ></div>
-      <div
-        className="reset-password-inner"
-        style={{ display: "flex", flexDirection: "column" }}
-      >
-        <h3>To reset your password</h3>
-        <p>Please insert your details.</p>
-        <form
-          onSubmit={handleEmailSubmit}
-          className="rbt-profile-row rbt-default-form row row--15"
-        >
-          <div className="col-12">
-            <div className="">
-              <input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+    return (
+        <div className='reset-password-container'>
+            <div className='reset-password-inner'>
+                <h5>To reset your password,</h5>
+                <p>please insert your details.</p>
+                <form onSubmit={handleEmailSubmit}>
+                    <div className="input-group">
+                        <input
+                            id="email"
+                            type="email"
+                            placeholder="Enter your username or email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button 
+                        type="submit"
+                        className="reset-button"
+                    >
+                        Reset Password
+                    </button>
+                </form>
             </div>
-          </div>
-          <div className="col-12 mt--10">
-            <div
-              className="button-container"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <button
-                type="submit"
-                className="forgot-password-button btn text-light  "
-                style={{
-                  height: "50px",
-                  fontSize: "18px",
-                  backgroundColor: "#fe457a;",
-                }}
-              >
-                Reset Password
-              </button>
-              <Link
-                href={"/login"}
-                className=""
-                style={{
-                  color: "#24345C",
-                  textDecoration: "underline",
-                  cursor: "pointer",
-                }}
-              >
-                Back to login
-              </Link>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+        </div>
+    );
 }
