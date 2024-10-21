@@ -8,35 +8,31 @@ import { getNotifications } from '@/app/api/notifications/notification';
 import DropdownItems from '@/ui/student/messages/DropdownItems';
 import SearchInput from '@/ui/student/messages/SearchInput';
 import styles from './Messages.module.scss'
+import { MessageData } from '@/interfaces/messages/messages-interface';
+import loaderStyles from "@/ui/loader-ui/loader.module.css";
 
 export default function Message() {
-  const [imageError, setImageError] = useState(false);
+  const [imageError, setImageError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [messages, setMessages] = useState<MessageData[]>([]);
+  const [showMessage, setShowMessage] = useState<MessageData | null>(null);
 
   async function fetchNotifications(userId: string) {
-    console.log('responseff:1')
+    setLoading(true);
     try {
-      const res = await getNotifications('66851cd94b5009327c77bbe4');
-      console.log("responseff:2 ", res.data.data);
-      // setNotifications(res.data.data);
-      // setLoading(false); // Set loading to false once notifications are fetched
+      const res = await getNotifications(userId);
+      setLoading(false);
+      console.log(res.data.data, "resres");
+      setMessages(res.data.data);
     } catch (error) {
-      console.error("responseff:3 Error fetching notifications:", error);
-      // setLoading(false);
+      setLoading(false);
+      console.error("Error fetching notifications:", error);
     }
   }
+
   useEffect(() => {
-    fetchNotifications('');
+    fetchNotifications('66851cd94b5009327c77bbe4');
   }, [])
-  const data = `
-    <div>
-      <p>Subject: <strong>Reminder: Monthly Check-In Past Due</strong></p>
-      <p>Hello Nicole,</p>
-      <p>
-        I noticed that your monthly check-in is past due. It's important that you complete it as soon as possible, as it is mandatory for all participants in the program. We value your comfort and experience during the program and encourage you to submit your check-in promptly.
-      </p>
-      <p>Kind regards,<br />Bongani Kufa</p>
-    </div>
-  `;
 
   return (
     <div className={styles.messageContainer}>
@@ -49,63 +45,71 @@ export default function Message() {
           <DropdownItems />
         </div>
 
-        {[...Array(5)].map((_, index) => (
-          <button
-            key={index}
-            className={styles.listMessages}
-            style={index === 0 ? { backgroundColor: 'rgba(254, 69, 122, 0.05)' } : {}}
-          >
-            <div className={styles.innerContent}>
-              <div className={styles.circle}></div>
-              <div className={styles.messageDetails}>
-                <div className={styles.messageHeading}>Monthly Check-In</div>
-                <div className={styles.messagePera}>
-                  Hey Nicole, we noticed that your Hey Nicole, we noticed that your Hey Nicole, Hey
-                  Nicole, we noticed that your Hey Nicole, we noticed that your Hey Nicole, we noticed
-                  Hey Nicole, we noticed that your Hey Nicole, we noticed that your Hey Nicole, we
-                  noticed we noticed that your
-                </div>
-                <div className={styles.messageIno}>
-                  <div className={styles.senderName}>Bongani Kufa</div>
-                  <div className={styles.messageTime}>2:32pm</div>
+        {loading ? (
+          <div className='d-flex justify-content-center align-content-center'>
+            <span className={loaderStyles.loaderButton}></span>
+          </div>
+        ) : (
+          messages.map((message, index) => (
+            <button
+              key={message.id}
+              className={styles.listMessages}
+              style={message.isRead ? { backgroundColor: 'rgba(254, 69, 122, 0.05)' } : {}}
+              onClick={() => setShowMessage(message)} // Corrected function name here
+            >
+              <div className={styles.innerContent}>
+                {message.isRead ? <div className={styles.isRead}></div> : <div className={styles.notRead}></div>}
+                <div className={styles.messageDetails}>
+                  <div className={styles.messageHeading}>{message.title ?? 'No Title'}</div>
+                  <div className={styles.messagePeraSection}>
+                    <p className={styles.messagePera}>{message.message}</p>
+                    <div className={styles.messageIno}>
+                      <div className={styles.senderName}>{message.senderName ?? 'Unknown Sender'}</div>
+                      <div className={styles.messageTime}>2:32pm</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </button>
-        ))}
+            </button>
+          ))
+        )}
       </div>
 
       <div className={styles.showMessage}>
         <SearchInput />
-        <div className={styles.profileInfoSection}>
-          <div className={styles.profileInfo}>
-            <div className={styles.profileAvatar}>
-              {imageError ? (
-                <Image
-                  src={dummyImg}
-                  alt="Profile Avatar"
-                  width={40}
-                  height={40}
-                  className={styles.profileImage}
-                />
-              ) : (
-                <Image
-                  src={Img}
-                  alt="Profile Avatar"
-                  width={40}
-                  height={40}
-                  className={styles.profileImage}
-                  onError={() => setImageError(true)}
-                />
-              )}
+        {showMessage && (
+          <>
+            <div className={styles.profileInfoSection}>
+              <div className={styles.profileInfo}>
+                <div className={styles.profileAvatar}>
+                  {imageError ? (
+                    <Image
+                      src={dummyImg}
+                      alt="Profile Avatar"
+                      width={40}
+                      height={40}
+                      className={styles.profileImage}
+                    />
+                  ) : (
+                    <Image
+                      src={Img}
+                      alt="Profile Avatar"
+                      width={40}
+                      height={40}
+                      className={styles.profileImage}
+                      onError={() => setImageError(true)}
+                    />
+                  )}
+                </div>
+                <div className={styles.profileName}>{showMessage.senderName ?? 'Unknown Sender'}</div>
+              </div>
+              <div className={styles.msgTime}>2:32pm</div>
             </div>
-            <div className={styles.profileName}>Bongani Kufa</div>
-          </div>
-          <div className={styles.msgTime}>2:32pm</div>
-        </div>
-        <div className={styles.line} />
-        <div className={styles.viewMsgHeading}>Monthly Check-In</div>
-        <div dangerouslySetInnerHTML={{ __html: data }} />
+            <div className={styles.line} />
+            <div className={styles.viewMsgHeading}>{showMessage.title ?? 'No Title'}</div>
+            <div dangerouslySetInnerHTML={{ __html: showMessage.message }} />
+          </>
+        )}
       </div>
     </div>
   );
