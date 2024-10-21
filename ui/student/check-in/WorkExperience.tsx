@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import styles from '../CheckIn.module.scss'
-import { StepProps } from '../page';
-import HappyDefaultIcon from '../svg/HappyDefaultIcon';
-import OkayDefualtIcon from '../svg/OkayDefualtIcon';
-import UnhappyDefaultIcon from '../svg/UnhappyDefaultIcon';
+import styles from '@/app/(protected)/student/check-in//CheckIn.module.scss'
 import ProgressBar from './ProgressBar';
 import ProgressIndicator from './ProgressIndicator';
+import Image from 'next/image';
+import { StepProps } from '@/app/(protected)/student/check-in/page';
 
 interface WorkExperienceProps extends StepProps {
     heading: string;
@@ -14,6 +12,7 @@ interface WorkExperienceProps extends StepProps {
 
 export default function WorkExperience({ step, goToStep, stepTitle, heading }: WorkExperienceProps) {
     const [currentProgressStep, setCurrentProgressStep] = useState(4);
+    const [hovered, setHovered] = useState({ happy: false, okay: false, unhappy: false });
     const totalSteps = 10;
     return (
         <div className={styles.detailsCard}>
@@ -33,22 +32,45 @@ export default function WorkExperience({ step, goToStep, stepTitle, heading }: W
                     </div>
                 </div>
                 <div className={styles.feedbackReactSection}>
-                    <div className={styles.feedbackReact}>
-                        <div className={styles.reactIcon}>
-                            <HappyDefaultIcon />
-                        </div>
+                    <button className={styles.feedbackReact}
+                        onMouseEnter={() => setHovered({ ...hovered, happy: true })}
+                        onMouseLeave={() => setHovered({ ...hovered, happy: false })}
+                    >
+                        <Image
+                            src={hovered.happy ? '/svg/happyActiveIcon.svg' : '/svg/happyDefaultIcon.svg'}
+                            alt="Happy Icon"
+                            width={40}
+                            height={40}
+                        />
+
                         <div className={styles.title}>Happy</div>
-                    </div>
-                    <div className={styles.feedbackReact}>
-                        <div className={styles.reactIcon}>
-                            <OkayDefualtIcon />
-                        </div>
+                    </button>
+                    <button
+                        className={styles.feedbackReact}
+                        onMouseEnter={() => setHovered({ ...hovered, okay: true })}
+                        onMouseLeave={() => setHovered({ ...hovered, okay: false })}
+                    >
+                        <Image
+                            src={hovered.okay ? '/svg/okayActiveIcon.svg' : '/svg/okayDefaultIcon.svg'}
+                            alt="Okay Icon"
+                            width={40}
+                            height={40}
+                        />
                         <div className={styles.title}>Okay</div>
-                    </div>
-                    <div className={styles.feedbackReact}>
-                        <UnhappyDefaultIcon />
+                    </button>
+                    <button
+                        className={styles.feedbackReact}
+                        onMouseEnter={() => setHovered({ ...hovered, unhappy: true })}
+                        onMouseLeave={() => setHovered({ ...hovered, unhappy: false })}
+                    >
+                        <Image
+                            src={hovered.unhappy ? '/svg/unhappyAciveIcon.svg' : '/svg/unhappyDefaultIcon.svg'}
+                            alt="Unhappy Icon"
+                            width={40}
+                            height={40}
+                        />
                         <div className={styles.title}>Unhappy</div>
-                    </div>
+                    </button>
                 </div>
 
                 <div className={styles.questionSection}>
@@ -148,7 +170,7 @@ export default function WorkExperience({ step, goToStep, stepTitle, heading }: W
                         (Optional)
                     </div>
                 </div>
-                <textarea name="" id="" rows={4} className={styles.textArea} />
+                <textarea name="" id="" rows={4} placeholder='Type your Answer' className={styles.textArea} />
             </div>
         </div>
     );

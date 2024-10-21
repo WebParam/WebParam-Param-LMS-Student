@@ -271,18 +271,20 @@ $padding-mobile: '1.25rem';
                     margin-bottom: 55px;
 
                     .feedbackReact {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-
-                        .title {
-                            font-size: 17.32px;
-                            font-weight: 400;
-                            color: $text-color;
-                        }
+                      display: flex;
+                      flex-direction: column;
+                      align-items: center;
+                      border: transparent;
+                      background-color: transparent;
+                      cursor: pointer;
+                      .title {
+                        font-size: 17.32px;
+                        font-weight: 400;
+                        color: $text-color;
+                      }
                     }
-                }
-                .feedbackReactStart{
+                  }
+                .feedbackReactStart {
                     justify-content: start !important;
                 }
 
@@ -308,6 +310,11 @@ $padding-mobile: '1.25rem';
                             font-weight: 400;
                             color: $text-color;
                         }
+                        .reactButton:hover {
+                            background-color: #666666;
+                            color: #FFFFFF
+                        }
+
 
                         .title {
                             height: 40px;
@@ -321,7 +328,7 @@ $padding-mobile: '1.25rem';
                     }
                 }
 
-                .matchYourJobStart{
+                .matchYourJobStart {
                     justify-content: start !important;
                 }
 
@@ -342,6 +349,10 @@ $padding-mobile: '1.25rem';
                         font-weight: 400;
                         color: $text-color;
                         border-radius: 50px;
+                    }
+                    .workLoadButton:hover {
+                        background-color: #666666;
+                        color: #FFFFFF;
                     }
                 }
 
@@ -465,7 +476,8 @@ $padding-mobile: '1.25rem';
                 justify-content: space-between;
 
                 .prevButton,
-                .nextButton {
+                .nextButton,
+                .submitButton {
                     display: flex;
                     align-items: center;
                     gap: 1rem;
@@ -480,6 +492,20 @@ $padding-mobile: '1.25rem';
                     &:active {
                         color: #FE457A;
                     }
+
+                }
+
+                .prevButton,
+                .nextButton,
+                .submitButton {
+                    color: #C4C4C4;
+                    transition: color 0.3s ease-in-out;
+                }
+
+                .prevButton:hover,
+                .nextButton:hover,
+                .submitButton:hover {
+                    color: #FE457A;
                 }
 
                 .prevButton {
@@ -487,6 +513,10 @@ $padding-mobile: '1.25rem';
                 }
 
                 .nextButton {
+                    margin-left: auto;
+                    justify-content: flex-end;
+                }
+                .submitButton {
                     margin-left: auto;
                     justify-content: flex-end;
                 }

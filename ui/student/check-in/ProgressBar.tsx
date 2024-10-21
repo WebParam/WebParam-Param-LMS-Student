@@ -1,6 +1,6 @@
-import { StepProps } from "../page";
-import styles from "../CheckIn.module.scss";
-import CurvedCornerIcon from "../svg/CurvedCornerIcon";
+import { StepProps } from "@/app/(protected)/student/check-in/page";
+import styles from "@/app/(protected)/student/check-in/CheckIn.module.scss";
+import CurvedCornerIcon from "@/app/(protected)/student/check-in/svg/CurvedCornerIcon";
 
 export default function ProgressBar({ step, goToStep }: StepProps) {
     return (

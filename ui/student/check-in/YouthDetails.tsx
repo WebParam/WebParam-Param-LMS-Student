@@ -1,9 +1,8 @@
 
 import { useState } from 'react';
-import styles from '../CheckIn.module.scss'
-import { StepProps } from '../page';
+import styles from '@/app/(protected)/student/check-in/CheckIn.module.scss'
 import ProgressBar from './ProgressBar';
-import NextDefaultIcon from '../svg/NextDefaultIcon';
+import { StepProps } from '@/app/(protected)/student/check-in/page';
 
 interface YouthDetailsProps extends StepProps {
     heading: string;

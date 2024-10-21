@@ -1,5 +1,5 @@
 import React from "react";
-import styles from '../CheckIn.module.scss';
+import styles from '@/app/(protected)/student/check-in/CheckIn.module.scss';
 
 interface ProgressIndicatorProps {
     progressSteps: number[]; // Assuming each step is a number
