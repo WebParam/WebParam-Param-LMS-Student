@@ -150,14 +150,21 @@ $padding-mobile: 1.25rem;
                 width: 100%;
                 display: flex;
                 padding: 2.25rem;
-                gap: 1.5;
+                align-items: flex-start;
+                gap: 1.5rem;
                 align-items: center;
 
-                .circle {
+                .isRead {
                     width: 0.6875rem;
                     height: 0.6875rem;
                     background-color: #fe457a;
                     border-radius: 50%;
+                    margin-bottom: 20px;
+                }
+
+                .notRead {
+                    width: 0.6875rem;
+                    height: 0.6875rem;
                 }
 
                 .messageDetails {
@@ -172,33 +179,39 @@ $padding-mobile: 1.25rem;
                         color: #666666;
                     }
 
-                    .messagePera {
-                        font-size: '1.125rem';
-                        font-weight: 600;
-                        color: #666666;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 1;
-                        -webkit-box-orient: vertical;
-                    }
-
-                    .messageIno {
+                    .messagePeraSection {
                         display: flex;
-                        flex-direction: row;
-                        justify-content: space-between;
-                        align-items: center;
+                        flex-direction: column;
+                        text-align: left;
 
-                        .senderName {
-                            font-weight: 400;
-                            font-size: '1.125rem';
-                            color: #c4c4c4;
+                        .messagePera {
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #666666;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 1;
+                            -webkit-box-orient: vertical;
                         }
 
-                        .messageTime {
-                            font-weight: 400;
-                            font-size: '1.125rem';
-                            color: #666666;
+                        .messageIno {
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            // align-items: center;
+
+                            .senderName {
+                                font-weight: 400;
+                                font-size: '1.125rem';
+                                color: #c4c4c4;
+                            }
+
+                            .messageTime {
+                                font-weight: 400;
+                                font-size: '1.125rem';
+                                color: #666666;
+                            }
                         }
                     }
                 }
@@ -215,7 +228,7 @@ $padding-mobile: 1.25rem;
         background-color: #f2f2f2;
         display: flex;
         flex-direction: column;
-        padding: 48px 96px;
+        padding: 94px 48px !important;
 
         .searchContainer {
             display: flex;
