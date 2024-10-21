@@ -102,14 +102,14 @@ function CompletedAssessment() {
                 </p>
               </th>
               <td>
-                <p className="b3 text-align-center" style={{ textAlign: 'left' }}>{assessment?.mark}</p>
+                <p className="b3 text-align-center" style={{ textAlign: 'left' }}>{assessment?.mark}/{assessment?.assessment?.totalMarks}</p>
               </td>
               <td>
                 <div className={`rbt-button-group justify-content-end ${styles.container}`}>
                   <Link
                     className={`rbt-btn btn-xs bg-primary-opacity radius-round ${styles.ViewLink}`}
                     title="View"
-                    href={`/student/assessments/marked-assessment?id=${assessment?.assessment?.id}`}
+                    href={`/student/assessments/marked-assessment?id=${assessment?.assessment?.id}&mark=${assessment?.mark}`}
                   >
                     <i className="float-left bi bi-eye pl--0" />
                     <span className="viewButtonText">View</span>

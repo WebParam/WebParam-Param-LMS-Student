@@ -12,6 +12,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [errorMessage2, setErrorMessage2] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [hasError, setHasError] = useState<any>({ email: false, password: false });
     const [modalMessageShow, setModalMessageShow] = useState(false);
@@ -48,8 +49,8 @@ export default function LoginPage() {
         const res = await LoginUser(payload);
             setIsLoading(false);
             debugger;
-            if (res == null) {
-                setErrorMessage('User not found');
+            if (res.data.message) {
+                setErrorMessage(res?.data?.message);
                 return;
             }
             debugger;
@@ -85,7 +86,8 @@ export default function LoginPage() {
               }
             }
         } catch (error: any) {
-            setErrorMessage('Network Error please try again');
+            setErrorMessage(error?.response?.data?.message);
+            console.log("Error:", error);
             setIsLoading(false);
         }
       
@@ -104,8 +106,16 @@ export default function LoginPage() {
         }
 
         const res = await ResendSMS(payload);
+
+        if (res == undefined||null) {
+          setErrorMessage2('We couldn\'t find the number you entered please try again.');
+          setResending(false);
+          return;
+        }
+        
+
         debugger;
-        if(res.status ==200 ){
+        if(res?.data){
           cookies.set("activate-email", res?.data?.email);
           router.push('/activate-account');
         }else{
@@ -152,6 +162,9 @@ export default function LoginPage() {
             className="number-input"
             maxLength={12}
             onChange={(e) => setContact(e.target.value)} />}
+            {errorMessage2 && (
+            <span className="errorMessage">{errorMessage2}</span>
+          )}
           <button type="submit">Activate</button>
         </form>
       </div>
