@@ -14,7 +14,7 @@ import { readUserData } from '@/app/lib/endpoints';
 import { GET } from '@/app/lib/api-client';
 import { useProgressContext } from '@/context/progress-card-context/progress-context';
 import './userProfile.scss';
-import '@/app/(protected)/user-profile/UserProfile.module.css';
+// import '@/app/(protected)/user-profile/UserProfile.module.css';
 
 // Import SVG files
 import q1 from '@/app/(protected)/user-profile/svg/q1.svg';
@@ -33,6 +33,7 @@ export default function Profile({ student, codes }: any) {
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [province, setProvince] = useState("");
+  const [provinceCode, setProvinceCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [bio, setBio] = useState("");
   const [profilePic, setProfilePic] = useState("");
@@ -47,32 +48,26 @@ export default function Profile({ student, codes }: any) {
   const { setBiographyPercentage } = useProgressContext();
 
     useEffect(() => {
-        
         getUserProfile();
     }, [profilePic]);
 
-    
     useEffect(() => {
-        
         getUserProfile();
-    },[profilePic])
-    
+    }, [profilePic]);
     
     useEffect(() => {
         getUserProfile();
-        setProvince(student?.data?.country)
-        console.log("codes index 4:", codes.filter((code:any)=>code.Type===4)[0]?.Codes)
-        setGenderCodes(codes.filter((code:any)=>code.Type===4)[0]?.Codes)
+        setProvince(student?.data?.country);
+        console.log("codes index 4:", codes.filter((code:any)=>code.Type===4)[0]?.Codes);
+        setGenderCodes(codes.filter((code:any)=>code.Type===4)[0]?.Codes);
         calculateEmptyFieldsPercentage();
 
         if (user) {
-            setEmail(user?.data?.email)
+            setEmail(user?.data?.email);
         }
-
     }, []);
 
   async function getUserProfile() {
-    
     if (!user?.data?.id && !user?.id) return;
     const res = await getStudentProfile(user.data.id || user.id);
 
@@ -95,12 +90,12 @@ export default function Profile({ student, codes }: any) {
             setBio(res.data.data.bio);
             setId(res.data.data.id);
 
-            cookies.set("profilePic", res.data.data.profilePicture)
+            cookies.set("profilePic", res.data.data.profilePicture);
 
             if (res.data.data.firstName && res.data.data.surname) {
-              cookies.set("username", `${res.data.data.firstName} ${res.data.data.surname}`)
+              cookies.set("username", `${res.data.data.firstName} ${res.data.data.surname}`);
             } else {
-              cookies.set("username", `${res.data.data.email}`)
+              cookies.set("username", `${res.data.data.email}`);
             }
         }
     }
@@ -129,7 +124,7 @@ export default function Profile({ student, codes }: any) {
 
         if (res) {
             calculateEmptyFieldsPercentage();
-            router.push('/student/student-profile?tab=democraticLegal')
+            router.push('/student/student-profile?tab=democraticLegal');
         }
         console.log(res);
         getUserProfile();
@@ -228,19 +223,19 @@ export default function Profile({ student, codes }: any) {
                     <div className="profile-details">
                         <h2>{firstName} {surname}</h2>
                         <p>Youth Role | Host Placement Partner</p>
-                        <p><i className="feather-map-pin"></i> {province}, South Africa</p>
+                        <p><i className="feather-map-pin"></i> {provinceCode ? `${provinceCode}, ` : ''}{province}, South Africa</p>
                         <p>Date Started: July 2022</p>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <button
-                                onClick={() => document.getElementById('profilePicUpload')?.click()}
-                                className="edit-profile-button"
-                            >
-                                Edit Profile
-                            </button>
-                            <button className="send-message-button">
-                                <i className="far fa-envelope"></i>
-                                Send Message
-                            </button>
+                        <div className="profile-actions">
+                          <button
+                            onClick={() => document.getElementById('profilePicUpload')?.click()}
+                            className="edit-profile-button"
+                          >
+                            Edit Profile
+                          </button>
+                          <button className="send-message-button">
+                            <i className="far fa-envelope"></i>
+                            Send Message
+                          </button>
                         </div>
                         <input
                             type="file"
@@ -294,62 +289,62 @@ export default function Profile({ student, codes }: any) {
             </div>
 
             <div className="p-4">
-            <div className="card border-0">
-              <div className="card-body">
-                <h3 className="mb-5 fs-2 text-start" style={{ color: '#FE457A !important', marginLeft: '80px' }}>Program Journey Summary</h3>
-                <div className="d-flex justify-content-start" style={{ marginLeft: '50px' }}>
-                  <div className="text-center mx-2">
-                    <Image
-                      src={q1}
-                      alt="Quarter 1"
-                      className="me-3"
-                      style={{ width: "50px", height: "50px" }}
-                    />
-                    <p className=" fs-5">Quarter 1 Complete</p>
-                  </div>
-                  <div className="text-center mx-2">
-                    <Image
-                      src={q2}
-                      alt="Quarter 2"
-                      className="me-2"
-                      style={{ width: "50px", height: "50px" }}
-                    />
-                    <p className="fs-5">Quarter 2 Complete</p>
-                  </div>
-                  <div className="text-center mx-2">
-                    <Image
-                      src={q3}
-                      alt="Quarter 3"
-                      className="me-2"
-                      style={{ width: "50px", height: "50px" }}
-                    />
-                    <p className="fs-5">Quarter 3 Complete</p>
-                  </div>
-                  <div className="text-center mx-2">
-                    <Image
-                      src={q4}
-                      alt="Quarter 4"
-                      className="me-2"
-                      style={{ width: "50px", height: "50px" }}
-                    />
-                    <p className="fs-5">Quarter 4 Complete</p>
-                  </div>
-                  <div className="text-center mx-2">
-                    <Image
-                      src={q5}
-                      alt="Complete"
-                      className="me-2"
-                      style={{ width: "50px", height: "50px" }}
-                    />
-                    <p className="fs-5">Complete!</p>
+              <div className="card border-0">
+                <div className="card-body">
+                  <h3 className="mb-5 fs-2 text-start program-journey-summary">Program Journey Summary</h3>
+                  <div className="program-journey-container">
+                    <div className="program-journey-items">
+                      <div className="program-journey-item">
+                        <Image
+                          src={q1}
+                          alt="Quarter 1"
+                          width={50}
+                          height={50}
+                        />
+                        <p>Quarter 1 Complete</p>
+                      </div>
+                      <div className="program-journey-item">
+                        <Image
+                          src={q2}
+                          alt="Quarter 2"
+                          width={50}
+                          height={50}
+                        />
+                        <p>Quarter 2 Complete</p>
+                      </div>
+                      <div className="program-journey-item">
+                        <Image
+                          src={q3}
+                          alt="Quarter 3"
+                          width={50}
+                          height={50}
+                        />
+                        <p>Quarter 3 Complete</p>
+                      </div>
+                      <div className="program-journey-item">
+                        <Image
+                          src={q4}
+                          alt="Quarter 4"
+                          width={50}
+                          height={50}
+                        />
+                        <p>Quarter 4 Complete</p>
+                      </div>
+                      <div className="program-journey-item">
+                        <Image
+                          src={q5}
+                          alt="Complete"
+                          width={50}
+                          height={50}
+                        />
+                        <p>Complete!</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
         </div>
-      
-            
         </>
     );
 }

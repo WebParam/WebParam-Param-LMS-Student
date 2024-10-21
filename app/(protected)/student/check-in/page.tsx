@@ -39,8 +39,7 @@ export default function CheckIn() {
       <div className={styles.cardContainer}>
         <div className={styles.cardHeader}>
           <div className="d-flex flex-column">
-            <h1>Youth Programme Monthly Check-in 2024</h1>
-            <p>This survey will take approximately 8 minutes to complete</p>
+            
             <h1 className={styles.heading}>
               Youth Programme Monthly Check-in 2023
               {(step === 2 || step === 3) &&
@@ -64,7 +63,7 @@ export default function CheckIn() {
           {step === 2 && <WorkExperience step={step} goToStep={goToStep} stepTitle={'Tell us about work...'} heading={'Work Experience'} />}
           {step === 3 && <Learning step={step} goToStep={goToStep} stepTitle={'One more...'} heading={'Learning'} />}
           {step === 4 && <OverallReView step={step} goToStep={goToStep} stepTitle={'And we are done...'} heading={'Overall View'} />}
-          {step > 4 && <StepComponent step={step} />}
+          {step === 5 && <StepComponent step={step} />}
           <div className={styles.formFooter}>
             {step > 0 && (
               <button type="submit" className={`${styles.prevButton}`} onClick={() => prevStep()}>

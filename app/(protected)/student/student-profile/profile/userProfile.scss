@@ -259,12 +259,12 @@
   }
 
   .user-profile-header {
-    background-color:#051C480D;
+    background-color: #051C480D;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 20px;
   }
 
@@ -280,6 +280,8 @@
 
   .profile-details {
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 
     h2 {
       font-size: 28px;
@@ -294,37 +296,47 @@
     }
   }
 
+  .profile-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
   .edit-profile-button {
-    background-color: white;
+    background-color: transparent;
     color: #007bff;
     padding: 8px 20px;
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border: none;
     outline: none;
-    margin-left: 10px !important;
   }
 
   .send-message-button {
-    background-color: transparent;
-    color: #007bff;
-    border: 2px solid gray;
-    padding: 8px 20px;
-    border-radius: 11px;
+    background-color: white;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
     cursor: pointer;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: normal;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 
     i {
-      margin-right: 5px;
+      margin-right: 8px;
+      font-size: 16px;
+    }
+
+    &:hover {
+      background-color: #f8f8f8;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -366,3 +378,35 @@
       margin-bottom: 7px;
     }
   }
+
+.program-journey-summary {
+  color: #FE457A;
+  margin-left: 80px;
+}
+
+.program-journey-container {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 80px;
+}
+
+.program-journey-items {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 0;
+}
+
+.program-journey-item {
+  text-align: center;
+  margin: 0 10px;
+
+  img {
+    width: 50px;
+    height: 50px;
+  }
+
+  p {
+    font-size: 14px;
+    margin-top: 5px;
+  }
+}
