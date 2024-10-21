@@ -12,8 +12,16 @@ import Cookies from 'universal-cookie';
 import { Modal } from 'react-bootstrap';
 import { readUserData } from '@/app/lib/endpoints';
 import { GET } from '@/app/lib/api-client';
-import MaintenanceModal from '@/ui/banner/MaintanceModal';
 import { useProgressContext } from '@/context/progress-card-context/progress-context';
+import './userProfile.scss';
+import '@/app/(protected)/user-profile/UserProfile.module.css';
+
+// Import SVG files
+import q1 from '@/app/(protected)/user-profile/svg/q1.svg';
+import q2 from '@/app/(protected)/user-profile/svg/q2.svg';
+import q3 from '@/app/(protected)/user-profile/svg/q3.svg';
+import q4 from '@/app/(protected)/user-profile/svg/q4.svg';
+import q5 from '@/app/(protected)/user-profile/svg/q5.svg';
 
 export default function Profile({ student, codes }: any) {
   const [firstName, setFirstName] = useState("");
@@ -208,227 +216,140 @@ export default function Profile({ student, codes }: any) {
             aria-labelledby="Personal Information"
         >
             <div className="rbt-dashboard-content-wrapper">
-                <div
-                    className="tutor-bg-photo height-245"
-                    style={{
-                        backgroundImage: coverImage ? `url(${coverImage})` : `url(${coverImageLocal})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
-                />
-                <div className="rbt-tutor-information">
-                    <div className="rbt-tutor-information-left">
-                        <div className="thumbnail rbt-avatars size-lg position-relative">
-                            <Image
-                                alt="Instructor"
-                                loading="lazy"
-                                width={300}
-                                height={300}
-                                decoding="async"
-                                data-nimg={1}
-                                src={`${profilePic}` || defaultImage.src}
-                                style={{ color: 'transparent', height: '120px !important' }}
-                            />
-                            <div className="rbt-edit-photo-inner">
-                                <button
-                                    className="rbt-edit-photo"
-                                    title="Upload Photo"
-                                    onClick={() => document.getElementById('profilePicUpload')?.click()}
-                                >
-                                    <i className="feather-camera" />
-                                </button>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleProfilePicChange}
-                                    style={{ display: 'none' }}
-                                    id="profilePicUpload"
-                                />
-                            </div>
+                <div className="user-profile-header">
+                    <div className="profile-picture">
+                        <Image
+                            alt="Profile Picture"
+                            src={`${profilePic}` || defaultImage.src}
+                            width={200}
+                            height={200}
+                        />
+                    </div>
+                    <div className="profile-details">
+                        <h2>{firstName} {surname}</h2>
+                        <p>Youth Role | Host Placement Partner</p>
+                        <p><i className="feather-map-pin"></i> {province}, South Africa</p>
+                        <p>Date Started: July 2022</p>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <button
+                                onClick={() => document.getElementById('profilePicUpload')?.click()}
+                                className="edit-profile-button"
+                            >
+                                Edit Profile
+                            </button>
+                            <button className="send-message-button">
+                                <i className="far fa-envelope"></i>
+                                Send Message
+                            </button>
+                        </div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleProfilePicChange}
+                            style={{ display: 'none' }}
+                            id="profilePicUpload"
+                        />
+                    </div>
+                </div>
+                <div style={{ display: 'flex', gap: '20px' }}>
+                    <div className="bio-section">
+                        <div style={{ padding: '10px 15px' }}>
+                            <h5>Personal Bio</h5>
+                        </div>
+                        <div style={{ padding: '15px' }}>
+                            <p><strong>Full Name:</strong> {firstName} {surname}</p>
+                            <p><strong>Email Address:</strong> {email}</p>
+                            <p><strong>ID Number:</strong> {idNumber}</p>
+                            <p><strong>Mobile Number:</strong> {phoneNumber}</p>
+                            <p><strong>Gender:</strong> {gender}</p>
+                            <p><strong>Race:</strong> Black</p>
+                            <p><strong>Disability:</strong> None</p>
                         </div>
                     </div>
-                    {/* <div className="rbt-tutor-information-right">
-                        <div className="tutor-btn">
-                            <a className="rbt-btn btn-sm btn-border color-white radius-round-10">
-                                Edit Cover Photo
-                            </a>
+                    <div className="professional-bio">
+                        <div style={{ padding: '10px 15px' }}>
+                            <h5>Professional Bio</h5>
                         </div>
-                    </div> */}
+                        <div style={{ padding: '15px' }}>
+                            <p style={{ fontSize: '10px!important', color: 'black!important' }}><strong>Highest Qualification:</strong> Diploma Certificate</p>
+                            <p style={{ fontSize: '10px!important' }}><strong>Currently enrolled in studies:</strong> No</p>
+                            <p style={{ fontSize: '10px!important' }}><strong>Drivers License:</strong> Yes</p>
+                            <p style={{ fontSize: '10px!important' }}><strong>Type of License:</strong> Code 10</p>
+                            <p style={{ fontSize: '10px!important' }}><strong>Asset Assigned:</strong> Yes</p>
+                            <p style={{ fontSize: '10px!important' }}><strong>Asset Type:</strong> Vehicle</p>
+                            <p style={{ fontSize: '10px!important' }}><strong>Asset Model:</strong> Toyota Hilux</p>
+                            <p style={{ fontSize: '10px!important' }}><strong>License Registration Plate:</strong> CA 123-456</p>
+                            <p style={{ fontSize: '10px' }}><strong>Tracker Status:</strong> Active</p>
+                            <p><strong>Insurance status:</strong> Covered</p>
+                            <p><strong>Incident/Accident reports:</strong> None</p>
+                            <p><strong>Host Placement:</strong> Local Municipality</p>
+                            <p><strong>Programme Enrollment:</strong> Learnership name/YES programme</p>
+                            <p><strong>Programme Status:</strong> Active</p>
+                            <p><strong>Bank Account Information:</strong> On file</p>
+                            <p><strong>Contract:</strong> Signed</p>
+                            <p><strong>Criminal Background check:</strong> Clear</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <form onSubmit={handleSubmit} className="rbt-profile-row rbt-default-form row row--15" style={{minWidth:'100%'}}>
-                <div className="col-lg-6 col-md-6 col-sm-6 col-12">
-                    <div className="rbt-form-group">
-                        <label htmlFor="firstname">First Name</label>
-                        <input
-                            type="text"
-                            name="fullName"
-                            placeholder="Enter Full Name"
-                            value={firstName}
-                            id="firstname"
-                            required
-                            onChange={(e) => setFirstName(e.target.value)}
-                            onKeyDown={(e) => {
-                                // Prevent numeric input
-                                if (/\d/.test(e.key)) {
-                                    e.preventDefault();
-                                }
-                            }}
-                        />
-                    </div>
-                </div>
-                <div className="col-lg-6 col-md-6 col-sm-6 col-12">
-                    <div className="rbt-form-group">
-                        <label htmlFor="lastname">Last Name</label>
-                        <input
-                            type="text"
-                            name="surname"
-                            placeholder="Enter Surname"
-                            value={surname}
-                            id="lastname"
-                            required
-                            onChange={(e) => setSurname(e.target.value)}
-                            onKeyDown={(e) => {
-                                // Prevent numeric input
-                                if (/\d/.test(e.key)) {
-                                    e.preventDefault();
-                                }
-                            }}
-                        />
-                    </div>
-                </div>
-                <div className="col-lg-6 col-md-6 col-sm-6 col-12">
-                    <div className="rbt-form-group">
-                        <label htmlFor="idNumber">ID number</label>
-                        <input
-                            type="text"
-                            name="idNumber"
-                            placeholder="Enter your Id number or passport"
-                            value={idNumber}
-                            required
-                            onChange={(e) => setIdNumber(e.target.value)}
-                            pattern="[0-9]*" 
-                            onKeyDown={(e) => {
-                                // Prevent numeric input
-                                if (!/\d/.test(e.key) && e.key !== "Backspace" && e.key !== "Tab" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
-                                    e.preventDefault();
-                                }
-                            }}
-                        />
-                    </div>
-                </div>
-                <div className="col-lg-6 col-md-6 col-sm-6 col-12">
-                    <div className="rbt-form-group">
-                        <label htmlFor="email">Email Address</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={email}
-                            // onChange={(e)=> setEmail(e.target.value)}
-                            readOnly
-                        />
-                    </div>
-                </div>
 
-               
-                <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{ marginTop: '10px' }}>
-                    <div className="rbt-form-group">
-                        <label htmlFor="date">Date Of Birth</label>
-                        <input
-                            type="date"
-                            name="date"
-                            value={dateOfBirth == "0001-01-01" ? getTodayDate() : dateOfBirth}
-                            required
-                            onChange={(e) => setDateOfBirth(e.target.value)}
-                            
-                        />
-                    </div>
+            <div className="p-4">
+            <div className="card border-0">
+              <div className="card-body">
+                <h3 className="mb-5 fs-2 text-start" style={{ color: '#FE457A !important', marginLeft: '80px' }}>Program Journey Summary</h3>
+                <div className="d-flex justify-content-start" style={{ marginLeft: '50px' }}>
+                  <div className="text-center mx-2">
+                    <Image
+                      src={q1}
+                      alt="Quarter 1"
+                      className="me-3"
+                      style={{ width: "50px", height: "50px" }}
+                    />
+                    <p className=" fs-5">Quarter 1 Complete</p>
+                  </div>
+                  <div className="text-center mx-2">
+                    <Image
+                      src={q2}
+                      alt="Quarter 2"
+                      className="me-2"
+                      style={{ width: "50px", height: "50px" }}
+                    />
+                    <p className="fs-5">Quarter 2 Complete</p>
+                  </div>
+                  <div className="text-center mx-2">
+                    <Image
+                      src={q3}
+                      alt="Quarter 3"
+                      className="me-2"
+                      style={{ width: "50px", height: "50px" }}
+                    />
+                    <p className="fs-5">Quarter 3 Complete</p>
+                  </div>
+                  <div className="text-center mx-2">
+                    <Image
+                      src={q4}
+                      alt="Quarter 4"
+                      className="me-2"
+                      style={{ width: "50px", height: "50px" }}
+                    />
+                    <p className="fs-5">Quarter 4 Complete</p>
+                  </div>
+                  <div className="text-center mx-2">
+                    <Image
+                      src={q5}
+                      alt="Complete"
+                      className="me-2"
+                      style={{ width: "50px", height: "50px" }}
+                    />
+                    <p className="fs-5">Complete!</p>
+                  </div>
                 </div>
-                <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{ marginTop: '10px' }}>
-                    <div className="rbt-form-group">
-                        <label htmlFor="city">City</label>
-                        <input
-                            type="text"
-                            name="city"
-                            placeholder="Enter city name"
-                            value={city}
-                            required
-                            onChange={(e) => setCity(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (/\d/.test(e.key)) {
-                                    e.preventDefault();
-                                }
-                            }}
-                        />
-                    </div>
-                </div>
-                <div className="col-lg-6 col-md-6 col-sm-6 col-12">
-                    <div className="rbt-form-group">
-                        <label htmlFor="phoneNumber">Phone Number</label>
-                        <input
-                            type="tel"
-                            name="phoneNumber"
-                            placeholder="Enter your phone number"
-                            value={phoneNumber}
-                            required
-                            onChange={(e) => {
-                                const numericValue = e.target.value.replace(/\D/g, '')
-                                setPhoneNumber(numericValue);
-                            }}
-                        />
-                    </div>
-                </div>
-                <div className="col-lg-6 col-md-6 col-sm-6 col-12">
-                    <div className="filter-select rbt-modern-select rbt-form-group">
-                        <label htmlFor="gender">Gender</label>
-                        <select
-                            id="gender"
-                            name="gender"
-                            value={gender}
-                            required
-                            onChange={(e) => setGender(e.target.value)}
-                            className="w-100">                                
-                            <option value={""} >Select</option>
-                            {
-                            genderCodes && genderCodes?.map((item:any, index:number) => (
-                                <option key={index} value={`${item.Code}`} className="text-dark">{item.Description}</option>
-                            ))
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div className="col-12">
-                    <div className="rbt-form-group">
-                        <br/>
-                        <label htmlFor="bio">Biography</label>
-                        <textarea
-                            name="bio"
-                            id="bio"
-                            cols={30}
-                            rows={10}
-                            value={bio}
-                            onChange={(e) => setBio(e.target.value)}
-                            placeholder="Enter your biography"
-                        />
-                    </div>
-                </div>
-                <div className="col-12">
-                    <button
-                        className="btn-sm mr--10 hover-icon-reverse w-100 text-light"
-                        style={{height:'40px', border:'none', backgroundColor:`${process.env.NEXT_PUBLIC_PRIMARY_COLOR??'rgb(36, 52, 92)'}`, borderRadius:'8px  '}}
-                        type="submit"
-                        disabled={isSubmitting}
-                    >
-                        <span className="icon-reverse-wrapper">
-                            <span className="btn-text text-light">Save & Proceed</span>
-                            <span className="btn-icon">
-                                <i className="feather-arrow-right" />
-                            </span>
-                        </span>
-                    </button>
-                </div>
-            </form>
+              </div>
+            </div>
+          </div>
         </div>
+      
+            
         </>
     );
 }

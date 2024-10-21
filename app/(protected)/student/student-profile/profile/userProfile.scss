@@ -3,10 +3,16 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-family: 'Montserrat', sans-serif !important;
 
     & h3 {
         text-align: center;
         width: 100%;
+        color: #FE457A !important;
+    }
+
+    & h5 {
+        color: #FE457A !important;
     }
 
     & form {
@@ -32,6 +38,7 @@
         & select {
             border: 1px solid gray;
             border-radius: 20px;
+            font-family: 'Montserrat', sans-serif !important;
         }
 
         & button {
@@ -42,6 +49,7 @@
             border-radius: 4px;
             color: white;
             margin: 25px auto;
+            font-family: 'Montserrat', sans-serif !important;
         }
     }
 }
@@ -50,6 +58,7 @@
     width: 100%;
     height: fit-content;
     margin: 0 0 50px 150px;
+    font-family: 'Montserrat', sans-serif !important;
 
     & h4 {
         color: #05A602;
@@ -69,6 +78,7 @@
             border: none;
             border-radius: 8px;
             box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            font-family: 'Montserrat', sans-serif !important;
         }
 
         & :first-child {
@@ -132,6 +142,7 @@
                 padding: 10px  15px;
                 color: white;
                 border-radius: 10px;
+                font-family: 'Montserrat', sans-serif !important;
             }
         }
     }
@@ -175,3 +186,183 @@
         }
     }
 }
+
+.rbt-dashboard-content-wrapper {
+    position: relative;
+    font-family: 'Montserrat', sans-serif !important;
+  }
+  
+  .tutor-bg-photo {
+    width: 100%;
+    height: 245px;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .rbt-tutor-information {
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  .rbt-tutor-information-left {
+    margin-right: 20px;
+  }
+  
+  .rbt-tutor-information-right {
+    flex-grow: 1;
+  }
+  
+  .rbt-tutor-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .rbt-tutor-role,
+  .rbt-tutor-location,
+  .rbt-tutor-date-started {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 5px;
+  }
+  
+  .rbt-tutor-actions {
+    margin-top: 10px;
+  }
+  
+  .rbt-profile-bio-wrapper {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+
+    p {
+      font-size: 10px!important;
+      color: black!important;
+      margin-bottom: 5px;
+
+      strong {
+        font-size: 10px!important;
+        color: black!important;
+      }
+    }
+  }
+
+  .user-profile-header h5 {
+    color: #FE457A !important;
+    font-family: 'Montserrat', sans-serif !important;
+  }
+
+  .user-profile-header {
+    background-color:#051C480D;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .profile-picture {
+    margin-right: 40px;
+    margin-left: 50px;
+
+    img {
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  .profile-details {
+    flex-grow: 1;
+
+    h2 {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #6c757d;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+  }
+
+  .edit-profile-button {
+    background-color: white;
+    color: #007bff;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    outline: none;
+    margin-left: 10px !important;
+  }
+
+  .send-message-button {
+    background-color: transparent;
+    color: #007bff;
+    border: 2px solid gray;
+    padding: 8px 20px;
+    border-radius: 11px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
+    i {
+      margin-right: 5px;
+    }
+  }
+
+  .bio-section {
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    overflow: hidden;
+    max-height: 300px;
+    margin-left: 100px;
+
+    h5 {
+      margin: 0;
+      color: #FE457A;
+    }
+
+    p {
+      font-size: 12px;
+      color: black;
+      margin-bottom: 7px;
+    }
+  }
+
+  .professional-bio {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-left: 100px!important;
+    width: 40% !important;
+
+    h5 {
+      margin: 0;
+      color: #FE457A;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    p {
+      font-size: 10px !important;
+      color: black !important;
+      margin-bottom: 7px;
+    }
+  }

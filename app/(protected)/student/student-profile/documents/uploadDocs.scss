@@ -1,5 +1,3 @@
-
-
 @media (min-width: 768px) {
 .documents-container {
     display: flex;
@@ -410,3 +408,81 @@
                 }
             }
     }
+
+.manage-documents-container {
+  padding: 20px;
+
+  h1, h2 {
+    margin-bottom: 20px;
+  }
+
+  .download-section {
+    margin-bottom: 20px;
+
+    .download-links {
+      display: flex;
+      gap: 20px;
+
+      .download-link {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-decoration: none;
+        color: inherit;
+
+        span {
+          margin-left: 5px;
+          color: #666;
+        }
+
+        i {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+
+  .note-section {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+
+  .documents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+
+    .document-card {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+
+      .document-icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+
+      .upload-button {
+        margin-top: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+  }
+}
