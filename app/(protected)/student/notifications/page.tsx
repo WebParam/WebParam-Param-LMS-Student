@@ -8,6 +8,7 @@ import moment from "moment";
 import Cookies from "universal-cookie";
 import NotificationsSkeleton from "./loading";
 import styles from "../../../../styles/modal/NotificationsModal.module.css"
+import { updateTimeSpent } from '@/app/api/trackTimeSpent/timeSpent';
 
 export default function Notifications() {
   const [showNotification, setShowNotification] = useState(false);
@@ -19,6 +20,7 @@ export default function Notifications() {
   const [unreadCount, setUnreadCount] = useState(0);
   const cookies = new Cookies();
 
+  const userId = cookies.get("userID");
   const user = cookies.get("loggedInUser");
 
   async function fetchNotifications(userId: string) {
@@ -34,9 +36,8 @@ export default function Notifications() {
   }
 
   useEffect(() => {
-    if (user) {
-      console.log("user", String(user.data.id));
-      fetchNotifications(user?.data?.id || user?.userId);
+    if (userId||user) {
+      Promise.all([fetchNotifications(userId || user?.data?.data?.id), updateTimeSpent()])
     }
 
     console.log("response: ", notifications);

@@ -68,7 +68,7 @@ function MarkedAssessmentPage() {
     async function getAssessment() {
         try {
             const response = await GET(`${rAssessmentUrl}/api/v1/StudentAnswers/GetStudentAssessmentAnswer/${userID || loggedInUser?.userId}/${id}`);
-        
+            debugger;
             setAssessment(response?.data?.data);
         } catch (error) {
             console.error(error);

@@ -8,6 +8,7 @@ import { GET } from '@/app/lib/api-client';
 import Cookies from 'universal-cookie';
 import { useSearchParams } from 'next/navigation';
 import { rAssessmentUrl } from '@/app/lib/endpoints';
+import { updateTimeSpent } from '@/app/api/trackTimeSpent/timeSpent';
 
 type Assessment = {
     mark: number;
@@ -35,13 +36,14 @@ function CompletedAssessment() {
   const type = searchParams.get('type');
 
   useEffect(() => {
-    fetchAssessments();
+    Promise.all([fetchAssessments(), updateTimeSpent()])
   }, []);
 
   async function fetchAssessments() {
     try {
       const response = await GET(`${rAssessmentUrl}/api/v1/StudentAnswers/GetStudentAssessments/${userID || loggedInUser?.userId}`);
-      setAssessments(response.data);
+      debugger;
+      setAssessments(response?.data?.data);
     } catch (error) {
       console.error("Error fetching assessments:", error);
     }
@@ -54,11 +56,10 @@ function CompletedAssessment() {
     }, 700);
   }
 
-  debugger;
   useEffect(() => {
     if(assessments.length > 0){    
       debugger;
-    const filteredAssessments = assessments?.filter((assessment: Assessment) => assessment.assessment.type === (type === 'summative' ? 0:1));
+    const filteredAssessments = assessments?.filter((assessment: Assessment) => assessment?.assessment?.type === (type === 'summative' ? 0:1));
     setFilteredAssessments(filteredAssessments);
     }
   }, [assessments]);
@@ -79,7 +80,7 @@ function CompletedAssessment() {
         backdrop="static"
       >
         <div className="d-flex justify-content-center align-items-center" style={{ height: '100px' }}>
-          <div className="spinner-border" role="status" />
+          <div className="spinner-border text-primary" role="status" />
         </div>
       </Modal>
 
@@ -118,7 +119,7 @@ function CompletedAssessment() {
                     title="Download assessment"
                     href={`https://khumla-dev-assessment-read.azurewebsites.net/api/v1/StudentAnswers/DownloadStudentAssignment/${assessment?.assessment?.id}`}
                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    onClick={handleDownload}
+                    onClick={() => {handleDownload(), updateTimeSpent()}}
                   >
                     <i className="bi bi-box-arrow-down" style={{ paddingLeft: '0' }}></i>
                   </Link>
