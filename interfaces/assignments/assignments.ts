@@ -1,13 +1,22 @@
 export interface IAssignment {
-    id: string;
-    knowledgeId: string;
-    title: string;
-    description: string;
-    blobUrl: string;
-    rubrics: Rubric[];
-    scheduledDate: string;
-    isPublished: boolean;
+  id: string;
+  knowledgeId: string;
+  title: string;
+  description: string;
+  scheduledDate: string;
+  isPublished: boolean;
+  blobUrl: string;
+  creatingUserId: string;
+  createdAt: string;
+  modifiedAt: string;
+}
+
+  export interface IAllStudentAssignment {
+    userId: string;
+    isSubmitted: boolean;
+    assessment: IAssignment;
   }
+
   
   interface Rubric {
     label: string;
