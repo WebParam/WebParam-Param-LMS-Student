@@ -32,11 +32,11 @@ interface UserInfo {
 }
 
 interface NotesProps {
-  topicId: string;
-  elementId: string;
+  topicId?: string;
+  elementId?: string;
 }
 
-const Notes = ({ topicId, elementId }: NotesProps) => {
+const Notes = ({ topicId = "defaultTopicId", elementId = "defaultElementId" }: NotesProps) => {
   const [body, setBody] = useState<string>("");
   const [notes, setNotes] = useState<NoteData[]>([]);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
