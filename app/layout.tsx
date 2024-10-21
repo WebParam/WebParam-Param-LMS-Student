@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import { ToastContainer } from "react-toastify";
 import BootstrapClient from "@/ui/bootstrapclient/bootstrap-client";
 import Navbar from "@/ui/navbar/navbar";
 
@@ -22,6 +21,7 @@ import { LessonProvider } from "@/context/lesson-context/lesson-context";
 import { Provider } from "./providers";
 import { CourseIdProvider } from "@/context/courseId-context/courseId-context";
 import { ProgressContextProvider } from "@/context/progress-card-context/progress-context";
+import { Toaster, toast } from 'sonner'
 // import FlagSmithProvider from "./FlagSmithProvider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -67,6 +67,7 @@ export default function RootLayout({
               <CourseIdProvider>
               <ProgressContextProvider>
                   <Navbar />
+                  <Toaster richColors />
                   {/* <FlagSmithProvider> */}
                   <>{children}</>
                   {/* </FlagSmithProvider> */}
@@ -74,8 +75,6 @@ export default function RootLayout({
                 </CourseIdProvider>
             </Provider>
             <BootstrapClient />
-
-            <ToastContainer />
           </LessonProvider>
         </UserProvider>
       </body>

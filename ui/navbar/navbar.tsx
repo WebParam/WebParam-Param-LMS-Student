@@ -79,6 +79,7 @@ const Navbar = () => {
                   fontSize: "50px"}}> 
                   thooto
                 </Link>
+                
               </div>
 
               {showBanner &&

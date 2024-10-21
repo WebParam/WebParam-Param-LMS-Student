@@ -1,11 +1,13 @@
 import { POST, PUT } from "@/app/lib/api-client";
 import { wActivityUrl } from "@/app/lib/endpoints";
 import axios from "axios";
+import { toast } from "sonner";
 
 type TrackTimeSpentPayload = {
     courseId: string;
     userId: string;
 }
+
 
 
 export async function TrackTimeSpent(payload:TrackTimeSpentPayload) {
@@ -38,7 +40,6 @@ export async function UpdateTimeSpent(id: string) {
 
 export async function updateTimeSpent() {
     const id = localStorage.getItem('trackTimeSpentId');
-
     const startTime = localStorage.getItem('startTimeTrack') ??"";
 
     const endTime = new Date().toString();
@@ -48,7 +49,12 @@ export async function updateTimeSpent() {
     console.log('Time spent:', timeSpentInMinutes.toFixed(0));
 
     if (parseInt(timeSpentInMinutes.toFixed(0)) > 20) {
-        window.location.href = '/login';
+        toast.error('Session expired. Redirecting to login page...');
+        setTimeout(() => {
+            localStorage.removeItem('trackTimeSpentId');
+            localStorage.removeItem('startTimeTrack');
+            window.location.href = '/login';
+        }, 3000);
         return;
     }
 

@@ -54,12 +54,11 @@
     "react-responsive-modal": "^6.4.2",
     "react-scroll": "^1.9.0",
     "react-swipeable": "^7.0.1",
-    "react-toastify": "^10.0.5",
     "react-youtube": "^10.1.0",
     "sass": "^1.77.4",
+    "sonner": "^1.5.0",
     "universal-cookie": "^7.1.4",
-    "webpack": "^5.93.0",
-    "zustand": "^4.5.5"
+    "webpack": "^5.93.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^6.0.0",
