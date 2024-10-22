@@ -1,0 +1,120 @@
+.fileUploadContainer {
+  background-color: transparent;
+  // border-radius: 8px;
+  // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  position: relative;  // Add this if not already present
+  padding-bottom: 5px;  // Add some bottom padding to make room for the button
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  position: relative;
+  
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    width: calc(100% - 100px);  // Adjust based on padding
+    border-bottom: 2px solid lightgray;
+  }
+}
+
+.header h5 {
+  margin: 0;
+  font-size: 18px;
+  color: #666666!important;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  right: 80px; // Align to the right
+  color: #666666!important;
+}
+
+.content {
+  display: flex;
+  justify-content:flex-end; // Align items to the start
+  align-items: center; // Align items vertically
+  padding: 20px;
+  border-bottom: 1px solid transparent;
+  position: relative; // Allow absolute positioning
+}
+
+.uploadSection {
+  flex: 0 0 45%;
+  padding-right: 20px;
+}
+
+.fileTypes {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  height: 300px; // Increased height
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropzone:hover {
+  border-color: #999;
+}
+
+.browse {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.sizeLimit {
+  font-size: 12px;
+  color: #dc3545;
+  margin-top: 10px;
+}
+
+.footer {
+  padding: 0; // Remove padding to align with content
+  text-align: left; // Align text to the left
+  margin-top: 0; // Remove margin to align with content
+  border-top: 1px solid transparent;
+}
+
+.saveButton {
+  background-color: #ff4b82;
+  color: white;
+  border: none;
+  padding: 8px 30px; // Increased horizontal padding to increase width
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  right: 80px; // Move to the right
+  bottom: 45px; // Move up
+}
+
+.saveButton:hover {
+  background-color: #ff3372;
+}
