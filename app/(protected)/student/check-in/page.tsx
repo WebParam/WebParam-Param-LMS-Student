@@ -14,8 +14,8 @@ import NextIcon from "./svg/NextIcon";
 import StepsAndForm from "@/ui/student/check-in/StepsAndForm";
 
 export interface StepProps {
-  step?: number;
-  goToStep?: (step: number) => void;
+  step: number;
+  goToStep: (step: number) => void;
 };
 
 export default function CheckIn() {

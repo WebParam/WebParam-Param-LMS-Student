@@ -3,7 +3,7 @@ import { StepProps } from '@/app/(protected)/student/check-in/page';
 import BackIcon from '@/app/(protected)/student/check-in/svg/BackIcon';
 import NextIcon from '@/app/(protected)/student/check-in/svg/NextIcon';
 
-interface StepsFormProps extends StepProps {
+interface StepsFormProps {
     nextStep: () => void;
 }
 
