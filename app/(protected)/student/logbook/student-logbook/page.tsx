@@ -113,8 +113,16 @@ export default function StudentLogbook() {
         {logbooks.length > 0 ? (
           logbooks.map((logbook, index) => (
             <div key={index} className="card" style={{ boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', borderRadius: '8px', overflow: 'hidden' }}>
+              <h5 className="card-title" style={{ 
+                backgroundColor: '#25355c', 
+                color: 'white', 
+                padding: '20px 20px', 
+                margin: 0,
+                fontSize: '1.4rem'
+              }}>
+                Student Logbook Entry
+              </h5>
               <div className="card-body" style={{ padding: '20px' }}>
-                <h5 className="card-title" style={{ marginBottom: '15px', color: '#25355c' }}>Student Logbook Entry</h5>
                 <p className="card-text" style={{ marginBottom: '15px' }}>
                   <strong>Date Updated:</strong> {logbook.dateUpdated
                     ? formatDate(logbook.dateUpdated)

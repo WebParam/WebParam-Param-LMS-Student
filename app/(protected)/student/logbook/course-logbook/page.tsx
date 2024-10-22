@@ -41,35 +41,21 @@ export default function CourseLogbook() {
           <p>There are currently no logbooks for this course.</p>
         </div>
       ) : (
-        <div
-          className="logbook-entries"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            gap: "20px",
-            marginTop: "20px",
-          }}
-        >
+        <div className="logbook-entries" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '20px' }}>
           {logbooks.map((logbook, index) => (
-            <div
-              key={index}
-              className="card"
-              style={{
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                borderRadius: "8px",
-                overflow: "hidden",
-              }}
-            >
-              <div className="card-body" style={{ padding: "20px" }}>
-                <h5
-                  className="card-title"
-                  style={{ marginBottom: "15px", color: "#25355c" }}
-                >
-                  Course Logbook Entry
-                </h5>
-                <p className="card-text" style={{ marginBottom: "15px" }}>
-                  <strong>Date Updated:</strong>{" "}
-                  {logbook.dateUpdated
+            <div key={index} className="card" style={{ boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', borderRadius: '8px', overflow: 'hidden' }}>
+              <h5 className="card-title" style={{ 
+                backgroundColor: '#25355c', 
+                color: 'white', 
+                padding: '20px 20px', 
+                margin: 0,
+                fontSize: '1.4rem'
+              }}>
+                Course Logbook Entry
+              </h5>
+              <div className="card-body" style={{ padding: '20px' }}>
+                <p className="card-text" style={{ marginBottom: '15px' }}>
+                  <strong>Date Updated:</strong> {logbook.dateUpdated
                     ? formatDate(logbook.dateUpdated)
                     : "N/A"}
                 </p>
@@ -97,3 +83,4 @@ export default function CourseLogbook() {
     </div>
   );
 }
+
