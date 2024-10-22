@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { getCourseLogbooksByCourse } from "@/actions/logbook-actions/logbook-action";
 import { useCourseId } from "@/context/courseId-context/courseId-context";
