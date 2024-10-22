@@ -18,8 +18,6 @@ interface Document {
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ acceptedFileTypes, maxFileSize, visible = true }) => {
-  if (!visible) return null;
-
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
 
@@ -32,6 +30,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ acceptedFileTypes, maxFileSize,
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  if (!visible) return null;
 
   const simulateUpload = (file: File) => {
     const newDocument = { name: file.name, progress: 0 };
