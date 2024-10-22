@@ -22,6 +22,7 @@ import { LessonProvider } from "@/context/lesson-context/lesson-context";
 import { Provider } from "./providers";
 import { CourseIdProvider } from "@/context/courseId-context/courseId-context";
 import { ProgressContextProvider } from "@/context/progress-card-context/progress-context";
+import Analytics from "@/ui/bootstrapclient/Analytics";
 // import FlagSmithProvider from "./FlagSmithProvider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -61,23 +62,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <UserProvider>
-          <LessonProvider>
-            <Provider>
-              <CourseIdProvider>
-              <ProgressContextProvider>
-                  <Navbar />
-                  {/* <FlagSmithProvider> */}
-                  <>{children}</>
-                  {/* </FlagSmithProvider> */}
-                </ProgressContextProvider>
+        <Analytics />
+          <UserProvider>
+            <LessonProvider>
+              <Provider>
+                <CourseIdProvider>
+                  <ProgressContextProvider>
+                    <Navbar />
+                    {/* <FlagSmithProvider> */}
+                    <>{children}</>
+                    {/* </FlagSmithProvider> */}
+                  </ProgressContextProvider>
                 </CourseIdProvider>
-            </Provider>
-            <BootstrapClient />
+              </Provider>
+              <BootstrapClient />
 
-            <ToastContainer />
-          </LessonProvider>
-        </UserProvider>
+              <ToastContainer />
+            </LessonProvider>
+          </UserProvider>
+        <Analytics />
       </body>
     </html>
   );
