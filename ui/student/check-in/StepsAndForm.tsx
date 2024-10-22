@@ -1,7 +1,13 @@
 import styles from '@/app/(protected)/student/check-in/CheckIn.module.scss'
 import { StepProps } from '@/app/(protected)/student/check-in/page';
+import BackIcon from '@/app/(protected)/student/check-in/svg/BackIcon';
+import NextIcon from '@/app/(protected)/student/check-in/svg/NextIcon';
 
-export default function StepsAndForm({ step, goToStep }: StepProps) {
+interface StepsFormProps extends StepProps {
+    nextStep: () => void;
+}
+
+export default function StepsAndForm({ nextStep }: StepsFormProps) {
     return (
         <div>
             <div className={styles.stepsContainer}>
@@ -32,6 +38,20 @@ export default function StepsAndForm({ step, goToStep }: StepProps) {
                     <li>Why do you believe so?</li>
                     <li>Any other questions or queries?</li>
                 </ul>
+            </div>
+            <div className={styles.formFooter}>
+                <button
+                    type="button"
+                    className={`${styles.nextButton}`}
+                    onClick={() => {
+                        if (nextStep) {
+                            nextStep()
+                        }
+                    }}
+                >
+                    {'NEXT'}
+                    <NextIcon />
+                </button>
             </div>
         </div>
     );
