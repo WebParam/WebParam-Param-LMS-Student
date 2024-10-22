@@ -76,7 +76,6 @@ export default function RootLayout({
                 </CourseIdProvider>
               </Provider>
               <BootstrapClient />
-
               <ToastContainer />
             </LessonProvider>
           </UserProvider>
