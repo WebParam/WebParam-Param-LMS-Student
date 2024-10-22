@@ -8,7 +8,7 @@ export const leaderboard = [
         "points": 91
     },
     {
-        "name": "s.Dzodzo",
+        "name": "Sim Dzodzo",
         "points": 87
     },
     {

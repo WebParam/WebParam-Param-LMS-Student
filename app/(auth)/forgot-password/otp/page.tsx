@@ -17,7 +17,6 @@ export default function Otp(){
         console.log(otp);
 
         if (password != retypePassword) {
-            alert('Passwords do not match');
             return;
         }
 

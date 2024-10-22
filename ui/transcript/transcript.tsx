@@ -52,15 +52,15 @@ const Transcript = ({currentVideo}:any) => {
     <div className="container mt-4 pb-5">
       <div className="row">
         <div className="col-md-5 mb-3">
-          <label className="form-label fw-bold underline-2">Transcript</label>
+          <h6 className="form-label fw-bold ">Transcript</h6>
         </div>
       </div>
 
       <div className="row mt-3">
         <div className="mb-3">
           <div className="mt-2">
-            {currentVideo?.videoScript.split('**').map((item:string) => (
-              <p>{item}</p>
+            {currentVideo?.videoScript?.split('**').map((item:string) => (
+                <p className="videoPar">{item}</p>
             ))}
           </div>
         </div>

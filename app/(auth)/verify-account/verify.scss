@@ -1,0 +1,312 @@
+
+
+.rbt-btn {
+    text-align: center !important;
+}
+
+
+
+.login-container {
+    height: 100%;
+    width: 100%;
+    overflow: hidden !important; 
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    position: relative;
+
+    .left-container {
+        width: 45%;
+        height: 100vh;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+
+        @media (max-width: 768px) {
+            position: absolute;
+            
+            background-color: #24345C !important;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(50px) opacity(60%) brightness(0.8);
+            perspective: 1000px;
+            transform: translateZ(100px);
+            box-shadow: none;
+        }
+    }
+}
+
+.login-inner {
+    background-color: #24345C;
+    width: 55%;
+    height: 100vh;
+    position: absolute;
+    text-align: center;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    padding: 0 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    & input[type="password"]:focus,
+    input[type="email"]:focus {
+       border: 1px solid #24345C;
+    }
+
+    @media (max-width: 768px) {
+        width: 100%;
+        padding: 0 30px;
+        background-color: transparent;
+        filter: brightness(1);
+        z-index: 1;
+        color: #252525;
+
+        
+
+        & input[type="email"],
+        & input[type="password"] {
+            height: 50px !important;
+            font-size: 14px;
+
+            &::placeholder {
+                font-size: 14px !important;
+            }
+
+            @media (max-width: 1280px) {
+                color: #252525;
+                border: 1px solid #252525;
+            }
+        }
+    }
+
+    @media (max-width: 1280px) {
+        padding: 0 30px;
+    }
+
+}
+
+.auth-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 768px) {
+        gap: 10px;
+        align-items: center;
+    }
+
+    & p {
+        margin: 0;
+    }
+
+    & a {
+        color: #2597ac;
+
+        @media (max-width: 768px) {
+            color: whitesmoke;
+        }
+
+        &:hover {
+            color: #24345C;
+            text-decoration: underline;
+        }
+    }
+}
+
+.form-switch input[type=checkbox]:checked {
+    background-color: #24345C;
+    border: none;
+}
+
+.remember-me {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+
+    @media (max-width: 380px) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 14px;
+    }
+}
+
+
+form {
+    max-width: 400px;
+}
+
+input[type="email"].error,
+input[type="password"].error {
+    border: 1px solid tomato;
+    animation: shake 0.5s 2;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(5px); }
+    50% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+}
+
+
+.verify-card {
+    width: 400px;
+    height: 300px;
+    // background-color: #24345C;
+    background-color: white;
+    border-radius: 10px;
+    // padding: 20px 20px 10px 20px;
+
+    & img {
+        width: 85%;
+        height: 80%;
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+        
+    }
+}
+
+.verify {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: white !important;
+
+    & h1 {
+        font-size: 34px;
+        text-align: center;
+        color: whitesmoke;
+
+        @media (max-width: 768px) {
+            color: #252525;
+            font-size: 24px;
+        }
+    }
+
+    & > p {
+        font-weight: 400;
+        // font-size: 16px;
+        max-width: 100% !important;
+        text-align: center;
+
+        width: 300px !important;
+        font-size: 12px;
+        color: #252525;
+        
+        @media (min-width: 768px) {
+            display: none;
+        }
+    }   
+
+    & form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        & .otpContainer {
+            display: flex;
+            gap: 15px;
+
+            & input {
+                width: 50px;
+                height: 50px;
+                border: 1px solid gray;
+                outline: none;
+            }
+
+            @media (max-width: 768px) {
+                & input {
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+        }
+
+
+        & button {
+            background-color: rgb(255, 255, 255);;
+            height: 50px;
+            width: 100%;
+            border: none;
+            border-radius: 4px;
+            color: #24345C;
+            margin-top: 15px;
+
+            @media (max-width: 768px) {
+                background-color: #24345C;
+                color: whitesmoke;
+            }
+
+            &:hover {
+                background-color: #000000;
+                color: #fbfbfb;
+            }
+        }
+
+
+        & .account {
+            flex-direction: row;
+            gap: 5px;
+            align-items: center;
+            color: darkgray;
+
+            & a {
+                text-decoration: underline;
+                color: blue;
+                cursor: pointer;
+                margin-left: 5px;
+            }
+
+            @media (max-width: 768px) {
+                color: #252525;
+            }
+        }
+    }
+}
+
+.errorMessage {
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    transition: .5s;
+    color: tomato;
+    opacity: .8;
+    font-size: 16px;
+    text-align: center;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+
+.para-text {
+    width: 300px !important;
+    font-size: 12px;
+    color: #252525;
+    
+    @media (min-width: 768px) {
+        display: none;
+    }
+}

@@ -6,10 +6,13 @@ import Cookies from "universal-cookie";
 import { statsSAAreaCodeOptions } from "./data";
 import { useRouter } from "next/navigation";
 import { readUserData } from "@/app/lib/endpoints";
+import { GET } from "@/app/lib/api-client";
+import { useProgressContext } from "@/context/progress-card-context/progress-context";
 
 export default function DemocraticLegal({ student }: any) {
   const cookies = new Cookies();
   const user = cookies.get("loggedInUser");
+  const {setDemographicLegalPercentage} = useProgressContext(); // Use context values
 
   const [equityCode, setEquityCode] = useState('');
   const [nationalityCode, setNationalityCode] = useState('');
@@ -28,10 +31,11 @@ export default function DemocraticLegal({ student }: any) {
   const router = useRouter();
 
   async function getInputCodes() {
-    const res = await axios.get(`${readUserData}/api/v1/Student/GetCodes`);
+    // const res = await axios.get(`${readUserData}/api/v1/Student/GetCodes`);
+    const res = await GET(`${readUserData}/api/v1/Student/GetCodes`);
 
-    console.log("codes:", res.data.data);
-    setCodes(res.data.data);
+    console.log("codes:", res?.data.data);
+    setCodes(res?.data.data);
   }
 
   function setStudentContactInformation(student: any) {
@@ -52,15 +56,17 @@ export default function DemocraticLegal({ student }: any) {
 
   useEffect(() => {
     setStudentContactInformation(student);
+    calculateDemographicLegalPercentage();
   }, [student]);
 
   useEffect(() => {
     getInputCodes();
+    calculateDemographicLegalPercentage();
   }, []);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-    debugger;
+    
     setIsSubmitting(true);
 
       const payload = {
@@ -85,6 +91,7 @@ export default function DemocraticLegal({ student }: any) {
       if (res) {
         console.log('response', res);
         setIsSubmitting(false);
+        calculateDemographicLegalPercentage();
         router.push('/student/student-profile?tab=ContactInformation')
       }
   }
@@ -101,6 +108,35 @@ export default function DemocraticLegal({ student }: any) {
     'Limpopo': statsSAAreaCodeOptions.filter((option) => option.value.startsWith('LIM')),
   };
 
+  const calculateDemographicLegalPercentage = () => {
+    const fields = [
+      equityCode,
+      nationalityCode,
+      homeLanguageCode,
+      immigrantStatus,
+      popiActAgree,
+      popiActDate,
+      citizenStatusCode,
+      socioeconomicCode,
+      disabilityCode,
+      disabilityRating,
+      provinceCode,
+      statsSAAreaCode
+    ];
+
+    const totalFields = fields.length;
+    
+    // Filter the fields that are empty (empty strings, null, or undefined)
+    const emptyFields = fields.filter(field => field).length;
+    
+    // Calculate percentage of empty fields
+    const percentage = (emptyFields / totalFields) * 100;
+    if (typeof window !== "undefined") {
+      localStorage.setItem('demographicLegalPercentage', percentage.toString());
+      setDemographicLegalPercentage(percentage);
+    }
+};
+
 
   return (
     <div
@@ -113,6 +149,7 @@ export default function DemocraticLegal({ student }: any) {
     <form
   onSubmit={handleSubmit}
   className="rbt-profile-row rbt-default-form row row--15"
+  style={{minWidth:'100%'}}
 >
   <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{marginBottom:'15px'}}>
     <div className="rbt-form-group">
@@ -123,7 +160,7 @@ export default function DemocraticLegal({ student }: any) {
       id=""
       required
       onChange={(e) => setEquityCode(e.target.value)}>
-        <option value="">select</option>
+        <option value="">Select</option>
         {
          codes && codes[1]?.codes?.map((item:any, index:number) => (
             <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -144,7 +181,7 @@ export default function DemocraticLegal({ student }: any) {
         required
         onChange={(e) => setNationalityCode(e.target.value)}
       >
-        <option value="">select</option>
+        <option value="">Select</option>
         {
          codes && codes[2]?.codes?.map((item:any, index:number) => (
             <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -163,7 +200,7 @@ export default function DemocraticLegal({ student }: any) {
         required
         onChange={(e) => setHomeLanguageCode(e.target.value)}
       >
-        <option value="">select</option>
+        <option value="">Select</option>
         {
          codes && codes[3]?.codes?.map((item:any, index:number) => (
             <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -182,7 +219,7 @@ export default function DemocraticLegal({ student }: any) {
         required
         onChange={(e) => setCitizenStatusCode(e.target.value)}
       >
-        <option value="">select</option>
+        <option value="">Select</option>
         {
          codes && codes[5]?.codes?.map((item:any, index:number) => (
             <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -201,7 +238,7 @@ export default function DemocraticLegal({ student }: any) {
         required
         onChange={(e) => setSocioeconomicCode(e.target.value)}
       >
-        <option value="">select</option>
+        <option value="">Select</option>
         {
          codes && codes[6]?.codes?.map((item:any, index:number) => (
             <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -220,7 +257,7 @@ export default function DemocraticLegal({ student }: any) {
         required
         onChange={(e) => setDisabilityCode(e.target.value)}
       >
-        <option value="">select</option>
+        <option value="">Select</option>
         {
          codes && codes[7]?.codes?.map((item:any, index:number) => (
             <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -241,7 +278,7 @@ export default function DemocraticLegal({ student }: any) {
         required
         onChange={(e) => setDisabilityRating(e.target.value)}
       >
-        <option value="">select</option>
+        <option value="">Select</option>
         {
          codes && codes[8]?.codes?.map((item:any, index:number) => (
             <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -261,7 +298,7 @@ export default function DemocraticLegal({ student }: any) {
         required
         onChange={(e) => setImmigrantStatus(e.target.value)}
       >
-        <option value="">select</option>
+        <option value="">Select</option>
         {
          codes && codes[9]?.codes?.map((item:any, index:number) => (
             <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -279,7 +316,7 @@ export default function DemocraticLegal({ student }: any) {
         id="popiActAgree"
         onChange={(e) => setPopiActAgree(e.target.value)}
       >
-        <option value="">select</option>
+        <option value="">Select</option>
         {
          codes && codes[12]?.codes?.map((item:any, index:number) => (
             <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -310,7 +347,7 @@ export default function DemocraticLegal({ student }: any) {
         required
         onChange={(e) => setProvinceCode(e.target.value)}
         >
-        <option value="">select</option>
+        <option value="">Select</option>
         {
          codes && codes[11]?.codes?.map((item:any, index:number) => (
             <option key={index} value={`${item.code}`} className="text-dark">{item.description}</option>
@@ -353,12 +390,12 @@ export default function DemocraticLegal({ student }: any) {
       </button> */}
       <button
         className="btn-sm mr--10 hover-icon-reverse w-100"
-        style={{height:'40px', border:'none', backgroundColor:'rgb(36, 52, 92)', borderRadius:'8px  '}}
+        style={{height:'40px', border:'none', backgroundColor:`${process.env.NEXT_PUBLIC_PRIMARY_COLOR??'rgb(36, 52, 92)'}`, borderRadius:'8px  '}}
         type="submit"
         disabled={isSubmitting}
     >
         <span className="icon-reverse-wrapper">
-            <span className="btn-text text-light">Proceed</span>
+            <span className="btn-text text-light">Save & Proceed</span>
             <span className="btn-icon text-light">
                 <i className="feather-arrow-right" />
             </span>

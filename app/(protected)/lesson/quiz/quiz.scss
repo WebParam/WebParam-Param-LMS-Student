@@ -1,0 +1,21 @@
+
+.quize-top-meta {
+
+    @media (max-width: 468px) {
+        & {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        & .quize-top-left,
+        & .quize-top-right {
+            flex: 1 1 100%;
+            margin-bottom: 10px;
+        }
+        
+        
+        
+    }
+
+}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import UserData from "@/data/user/user.json";
+import Cookies from "universal-cookie";
 
 const UserStudent = ({ closeDropdown }: { closeDropdown: () => void }) => {
   const handleLinkClick = (link: string) => {
@@ -8,6 +9,12 @@ const UserStudent = ({ closeDropdown }: { closeDropdown: () => void }) => {
 
     closeDropdown();
   };
+
+  const cookies = new Cookies();
+
+  const user = cookies.get("username");
+
+  console.log("user in nav",user);
 
   return (
     <div className="rbt-user-menu-list-wrapper">
@@ -24,7 +31,7 @@ const UserStudent = ({ closeDropdown }: { closeDropdown: () => void }) => {
                 />
               </div>
               <div className="admin-info">
-                <span className="name">{person.name}</span>
+                <span className="name">{user??person.name}</span>
                 <Link
                   className="rbt-btn-link color-primary"
                   href="/student/student-profile"

@@ -6,3 +6,29 @@
         line-height: 14px;
     }
 }
+
+.nav {
+    flex-wrap: nowrap !important;
+    padding: 0 10px !important;
+}
+
+@media (max-width: 768px) {
+    .enrolled-courses_navTabs__AyU86 {
+        justify-content: flex-start !important;
+        overflow-x: scroll !important;
+        overflow-y: hidden !important;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .title {
+        font-size: 15px !important;
+    }
+}
+
+.rbt-btn {
+    padding: 16px;
+    @media (max-width: 600px) {
+        padding: 0 16px;
+    }
+}

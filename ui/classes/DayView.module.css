@@ -1,0 +1,108 @@
+.dayViewWrapper {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgb(36, 52, 92);
+    color: white;
+  }
+  
+  .header h2 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: white;
+  }
+  
+  .monthButton {
+    background: none;
+    border: 1px solid white;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    color: white;
+    cursor: pointer;
+    padding: 5px 15px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .monthButton:hover {
+    background-color: white;
+    color: rgb(36, 52, 92);
+  }
+  
+  .timeSlots {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .timeSlot {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    min-height: 60px;
+    position: relative;
+  }
+  
+  .time {
+    width: 60px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    font-weight: bold;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .event {
+    flex-grow: 1;
+    padding: 5px 10px;
+  }
+  
+  .hasEvent {
+    background-color: #e6f3ff;
+  }
+  
+  .eventContent {
+    position: relative;
+    z-index: 2;
+    background-color: transparent;
+    border-radius: 4px;
+    padding: 10px;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .eventContent h3 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    flex-shrink: 0;
+    width: 150px; 
+  }
+  
+  .eventContent p {
+    margin: 0 0 5px 0;
+    font-size: 0.9rem;
+    flex-grow: 1;
+  }
+  
+  .eventContent a {
+    color: #0066cc;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  .eventContent a:hover {
+    text-decoration: underline;
+  }
+  
+  .eventType {
+    margin-left: 20px; 
+    font-style: italic;
+    color: #666;
+  }

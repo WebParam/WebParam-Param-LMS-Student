@@ -910,10 +910,7 @@ p.b3 {
   }
 }
 
-p.b4 {
-  font-size: var(--font-size-b4);
-  line-height: var(--line-height-b4);
-}
+
 
 @media only screen and (max-width: 767px) {
   p.b4 {
@@ -14523,7 +14520,7 @@ fieldset:disabled {
 
 .rbt-btn {
   padding: 0 26px;
-  background: var(--color-primary);
+  background:  rgb(36, 52, 92);
   height: 60px;
   line-height: 60px;
   color: var(--color-white);
@@ -15080,6 +15077,16 @@ fieldset:disabled {
   }
 }
 
+.rbt-btn.btn-navy {
+  background: rgb(36, 52, 92);
+  color: var(--color-white);
+}
+
+.rbt-btn.btn-navy:hover {
+  background-color: rgb(46, 62, 102);
+  color: var(--color-white);
+}
+
 .rbt-btn i {
   padding-left: 6px;
   display: inline-block;
@@ -15094,7 +15101,7 @@ fieldset:disabled {
 }
 
 .rbt-btn.btn-border-gradient {
-  background: linear-gradient(90deg, #CFA2E8, #637FEA);
+  background:  rgb(36, 52, 92);
   border: none;
   outline: none;
   cursor: pointer;
@@ -22933,7 +22940,7 @@ ul.testimonial-thumb-wrapper li a.active .thumb img {
 }
 
 .tab-button-style-2 li a .title {
-  font-size: 18px;
+  font-size: 14px;
   margin-bottom: 0;
   font-weight: 500;
 }
@@ -30583,7 +30590,7 @@ Course Sidebar
 
 .rbt-lesson-rightsidebar .rbt-checkbox-wrapper label,
 .rbt-lesson-rightsidebar .rbt-form-check label {
-  border: 2px solid var(--color-border);
+  border: 1px solid rgba(96,96,96,0.1);
   height: 40px;
   display: flex;
   align-items: center;

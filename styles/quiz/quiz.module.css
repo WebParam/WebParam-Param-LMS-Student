@@ -10,9 +10,45 @@
     background-color: #d4edda;
     color: #155724;
 }
-  
+
 .wrong {
     background-color: #f8d7da;
     color: #721c24;
 }
-  
+
+.quize-top-meta {
+    display: flex;
+    justify-content: space-between;
+}
+
+.quize-top-left,
+.quize-top-right {
+    margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    .quize-top-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .quize-top-left,
+    .quize-top-right {
+        flex: 1 1 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* Hide the content tab by default */
+#content-tab-4,
+#content-4 {
+    display: none;
+}
+
+/* Show the content tab only on small screens */
+@media only screen and (max-width: 767px) {
+    #content-tab-4,
+    #content-4 {
+        display: block;
+    }
+}

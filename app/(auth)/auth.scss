@@ -40,10 +40,41 @@
     justify-content: center;
     align-items: center;
 
+    @media (max-width: 468px) {
+        width: 90%;
+    }
+
+    &-inner {
+        @media (max-width: 468px) {
+            width: 90%;
+        }
+    }
+
+    .remember-me {
+
+        @media (max-width: 468px) {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+
+            & :nth-child(n) {
+                display: flex;
+                
+                align-items: center;
+            }
+        }
+
+    }
+
     & h1 {
         font-size: 34px;
         width: 100%;
         text-wrap: nowrap;
+
+        @media (max-width: 468px) {
+        text-wrap: wrap;
+        text-align: center;
+        }
     }
    
     & > p {
@@ -109,7 +140,7 @@
 
 
         & button {
-            background-color: #05A602;
+            background-color: rgb(36, 52, 92);;
             height: 50px;
             width: 100%;
             border: none;

@@ -1,5 +1,5 @@
 // context/lesson-context/lesson-context.tsx
-
+"use client";
 import {
   createContext,
   useContext,

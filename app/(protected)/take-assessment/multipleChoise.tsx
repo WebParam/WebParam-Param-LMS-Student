@@ -1,123 +1,168 @@
-import React, { useState } from 'react';
+"use client";
 
-const MultipleChoiceQuestions = ({setIsInteracted}:any) => {
-  const questions = [
-    {
-      question: "What is the primary role of a project manager?",
-      options: [
-        "To develop software",
-        "To design marketing strategies",
-        "To oversee and manage project progress",
-        "To manage the company’s finances"
-      ],
-      answer: "To oversee and manage project progress"
-    },
-    {
-      question: "Which document outlines the objectives, scope, and participants in a project?",
-      options: [
-        "Project Charter",
-        "Business Plan",
-        "Risk Management Plan",
-        "Stakeholder Analysis"
-      ],
-      answer: "Project Charter"
-    },
-    {
-      question: "What is a Gantt Chart used for?",
-      options: [
-        "Tracking project milestones",
-        "Managing project budget",
-        "Scheduling project tasks",
-        "Conducting risk analysis"
-      ],
-      answer: "Scheduling project tasks"
-    },
-    {
-      question: "What does the term 'scope creep' refer to in project management?",
-      options: [
-        "Increased project costs",
-        "Uncontrolled changes in the project scope",
-        "Delays in project timeline",
-        "Decrease in project quality"
-      ],
-      answer: "Uncontrolled changes in the project scope"
-    },
-    {
-      question: "What is the critical path in project management?",
-      options: [
-        "The sequence of project activities which add the most value",
-        "The longest path through the project schedule",
-        "The path with the most dependencies",
-        "The sequence of activities that leads to project failure"
-      ],
-      answer: "The longest path through the project schedule"
+import React, { useState, useEffect } from 'react';
+import { rQuestionsThootoUrl, rOptionsThootoUrl } from '../../lib/endpoints';
+
+type Option = {
+  id: string;
+  label: string;
+  questionId: string;
+  isCorrect: boolean;
+  description: string;
+};
+
+type Question = {
+  id: string;
+  title: string;
+  type: string;
+  options: Option[];
+  score: string;
+};
+
+type MultipleChoiceQuestionsProps = {
+  assessmentId: string;
+  setIsInteracted: (interacted: boolean) => void;
+  submitMultipleChoice: boolean;
+  setSubmitMultipleChoice: (submit: boolean) => void;
+  setMultipleChoiceAnswers: (answers: any[]) => void;
+};
+
+const MultipleChoiceQuestions: React.FC<MultipleChoiceQuestionsProps> = ({
+  assessmentId,
+  setIsInteracted,
+  submitMultipleChoice,
+  setSubmitMultipleChoice,
+  setMultipleChoiceAnswers,
+}) => {
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [selectedAnswers, setSelectedAnswers] = useState<Option[]>([]);
+  const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
+
+  useEffect(() => {
+    const fetchQuestionsAndOptions = async () => {
+      try {
+        console.log("Fetching questions for assessmentId:", assessmentId);
+
+        const questionsResponse = await fetch(`${rQuestionsThootoUrl}/GetQuestions/${assessmentId}`, {
+          headers: {
+            'Client-Key': clientKey || '',
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          } as HeadersInit,
+        });
+        const questionsData = await questionsResponse.json();
+        console.log("Questions data:", questionsData);
+
+        if (Array.isArray(questionsData.data)) {
+          const multipleChoiceQuestions = questionsData.data.filter((question: any) => question.questionType === "Quiz");
+          console.log("Filtered questions:", multipleChoiceQuestions);
+
+          const questionsWithOptions = await Promise.all(
+            multipleChoiceQuestions.map(async (question: any) => {
+              const optionsResponse = await fetch(`${rOptionsThootoUrl}/GetOptions/${question.id}`, {
+                headers: {
+                  'Client-Key': clientKey || '',
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                } as HeadersInit,
+              });
+              const optionsData = await optionsResponse.json();
+              console.log(`Options data for question ${question.id}:`, optionsData);
+
+              return {
+                ...question,
+                options: Array.isArray(optionsData.data) ? optionsData.data : [],
+              };
+            })
+          );
+
+          setQuestions(questionsWithOptions);
+          setSelectedAnswers(Array(questionsWithOptions.length).fill(null));
+        } else {
+          console.error("Unexpected questions data format:", questionsData);
+        }
+      } catch (error) {
+        console.error("Error fetching questions and options:", error);
+      }
+    };
+
+    if (assessmentId) {
+      fetchQuestionsAndOptions();
+    } else {
+      console.error("assessmentId is not defined");
     }
-  ];
+  }, [assessmentId, clientKey]);
 
-  const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(null));
-
-  const handleOptionChange = (questionIndex:any, option:any) => {
-    debugger;
-
-    if (!setIsInteracted) {
-       setIsInteracted(true); 
+  useEffect(() => {
+    if (submitMultipleChoice) {
+      handleSubmitAnswers();
+      setSubmitMultipleChoice(false);
     }
+  }, [submitMultipleChoice]);
+
+  const handleOptionChange = (questionIndex: number, option: Option) => {
     const updatedAnswers = [...selectedAnswers];
     updatedAnswers[questionIndex] = option;
     setSelectedAnswers(updatedAnswers);
+    setIsInteracted(true);
   };
 
-  const checkAnswers = () => {
-    const correctAnswers = questions.map(q => q.answer);
-    let score = 0;
-    for (let i = 0; i < correctAnswers.length; i++) {
-      if (selectedAnswers[i] === correctAnswers[i]) {
-        score += 1;
-      }
-    }
-    alert(`You scored ${score} out of ${questions.length}`);
+  const handleSubmitAnswers = () => {
+    const answers = questions.map((question, index) => ({
+      questionId: question.id,
+      description: question.title,
+      questionType: question.type,
+      options: question.options,
+      studentMultipleChoiceAnswer: selectedAnswers[index] ? [selectedAnswers[index]] : [],
+      studentLongTextAnswer: "",
+      rubrics: [],
+      moderatorFeedBack: "",
+      score: 0,
+    }));
+
+    setMultipleChoiceAnswers(answers);
   };
 
   return (
     <div>
       {questions.map((q, index) => (
-        <div key={index} style={{ marginBottom: '30px' }}>
-          <h3 style={{fontSize:'21px'}}>{`${index + 1}. ${q.question}`}</h3>
-          {q.options.map((option, i) => (
-            <div key={i}>
-              <label style={{
-                border: `${selectedAnswers[index] === option ? '2px solid rgb(36, 52, 92)':'2px solid var(--color-border)'}`,
-                height: '40px',
-                display: 'flex',
-                alignItems: 'center',
-                padding: '20px',
-                borderRadius: '6px',
-                paddingLeft: '30px',
-                cursor: 'pointer',
-                marginTop:'5px'
+        <div key={q.id} style={{ marginBottom: '30px' }}>
+          <h3 style={{ fontSize: '21px' }}>{`${index + 1}. ${q.title}`}</h3>
+          {Array.isArray(q.options) ? q.options.map((option) => (
+            <div key={option.id}>
+              <label
+                style={{
+                  border: `${selectedAnswers[index]?.id === option.id ? `2px solid ${process.env.NEXT_PUBLIC_PRIMARY_COLOR ?? 'rgb(36, 52, 92)'}` : '2px solid var(--color-border)'}`,
+                  height: '40px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '20px',
+                  borderRadius: '6px',
+                  paddingLeft: '30px',
+                  cursor: 'pointer',
+                  marginTop: '5px',
                 }}
-                >
-                    
+              >
                 <input
                   type="radio"
                   name={`question-${index}`}
-                  value={option}
-                  checked={selectedAnswers[index] === option}
+                  value={option.label}
+                  checked={selectedAnswers[index]?.id === option.id}
                   onChange={() => handleOptionChange(index, option)}
                 />
-                {option}
+                {option.description}
               </label>
             </div>
-            
-          ))}
-        <div className="quize-top-left mt-2">
+          )) : (
+            <p>No options available for this question.</p>
+          )}
+          <div className="quize-top-left mt-2">
             <span>
-                Marks: <strong>5</strong>
+              Marks: <strong>{q.score}</strong>
             </span>
-        </div>
+          </div>
         </div>
       ))}
-
     </div>
   );
 };

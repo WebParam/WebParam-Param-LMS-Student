@@ -1,10 +1,13 @@
 "use client";
+import './notifications.scss';
 import { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { getNotifications, markNotificationRead } from "@/app/api/notifications/notification";
 import { notificationType } from "@/app/Utils/notificationInterface";
+import moment from "moment";
 import Cookies from "universal-cookie";
 import NotificationsSkeleton from "./loading";
+import styles from "../../../../styles/modal/NotificationsModal.module.css"
 
 export default function Notifications() {
   const [showNotification, setShowNotification] = useState(false);
@@ -12,7 +15,8 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState<notificationType[]>([]);
   const [notification, setNotification] = useState<notificationType | null>(null);
   const [isReadLoader, setIsReadLoader] = useState(false);
-  const [loading, setLoading] = useState(true); // Add a loading state
+  const [loading, setLoading] = useState(true);
+  const [unreadCount, setUnreadCount] = useState(0);
   const cookies = new Cookies();
 
   const user = cookies.get("loggedInUser");
@@ -20,23 +24,27 @@ export default function Notifications() {
   async function fetchNotifications(userId: string) {
     try {
       const res = await getNotifications(userId);
+      console.log("response: ", res.data.data);
       setNotifications(res.data.data);
       setLoading(false); // Set loading to false once notifications are fetched
-      console.log("response: ", res.data.data);
     } catch (error) {
       console.error("Error fetching notifications:", error);
-      setLoading(false); // Ensure loading state is false on error
+      setLoading(false);
     }
   }
 
   useEffect(() => {
     if (user) {
       console.log("user", String(user.data.id));
-      fetchNotifications(user.data.id || user.data.userId);
+      fetchNotifications(user?.data?.id || user?.userId);
     }
 
     console.log("response: ", notifications);
   }, [isReadLoader]);
+
+  useEffect(() => {
+    setUnreadCount(notifications.filter((item) => !item.isRead).length);
+  }, [notifications]);
 
   async function handleShowNotification(notif: notificationType) {
     const index = notifications.findIndex((alert) => alert.id === notif.id);
@@ -47,8 +55,18 @@ export default function Notifications() {
     setShowNotification(true);
 
     if (noti?.isRead === false) {
-      const markAsRead = await markNotificationRead(notif.id);
-      if (markAsRead.status === 200) {
+      try {
+        const markAsRead = await markNotificationRead(notif.id);
+        if (markAsRead.status === 200) {
+          const updatedNotifications = notifications.map((alert) =>
+            alert.id === notif.id ? { ...alert, isRead: true } : alert
+          );
+          setNotifications(updatedNotifications);
+          setIsReadLoader(false);
+          setUnreadCount(unreadCount - 1);
+        }
+      } catch (error) {
+        console.error("Error marking notification as read:", error);
         setIsReadLoader(false);
       }
     }
@@ -79,8 +97,7 @@ export default function Notifications() {
           </div>
         </div>
       </div>
-      
-    )
+    );
   }
 
   return (
@@ -92,17 +109,18 @@ export default function Notifications() {
         show={showNotification}
         onHide={() => setShowNotification(false)}
         centered
+        contentClassName={styles.customModalContent}
       >
         <Modal.Header className="modal-header">
           <h5 className="modal-title" id="staticBackdropLabel">
-            Received: <span style={{ fontWeight: "400", fontSize: "15px" }}>{notification?.createdAt.split("T")[0]}</span>
+            Received: <span style={{ fontWeight: "400", fontSize: "15px" }}>{moment(notification?.createdAt).fromNow()}</span>
           </h5>
           <button type="button" onClick={() => setShowNotification(false)} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </Modal.Header>
         {isReadLoader && notification?.isRead === false ? (
           <div style={{ height: "70px", width: "100%" }} className="d-flex justify-content-center align-items-center flex-column gap-2">
             <div className="spinner-border text-dark" role="status" />
-            <p>opening message...</p>
+            <p>unboxing message...</p>
           </div>
         ) : (
           <>
@@ -142,16 +160,21 @@ export default function Notifications() {
                       <th>Message</th>
                       <th>
                         <button type="button" className="btn btn-dark">
-                          Unread <span className="badge bg-light text-dark ms-1">{notifications.filter((item) => item.isRead === false).length}</span>
+                          Unread <span className="badge bg-light text-dark ms-1">{unreadCount}</span>
                         </button>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     {notifications.length > 0 ? (
-                      notifications.map((alert) => (
-                        <tr key={alert.id} onClick={() => handleShowNotification(alert)} style={{ cursor: "pointer" }}>
-                          <td>{alert.createdAt.split("T")[0]}</td>
+                      notifications.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((alert) => (
+                        <tr 
+                        key={alert.id} 
+                        onClick={() => handleShowNotification(alert)} 
+                        style={{ cursor: "pointer"}}
+                        className={`${alert.isRead ? "" : "unread"}`}
+                        >
+                          <td>{moment(alert.createdAt).fromNow()}</td>
                           <td>
                             <p className="b2" style={{ fontWeight: `${alert.isRead ? "400" : "700"}` }}>{alert.message}</p>
                           </td>

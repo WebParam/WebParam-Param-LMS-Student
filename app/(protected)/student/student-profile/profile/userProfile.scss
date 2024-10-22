@@ -26,9 +26,8 @@
             display: flex;
             flex-direction: column;
             width: 600px;
-
         }
-        
+
         & input,
         & select {
             border: 1px solid gray;
@@ -90,65 +89,89 @@
         align-items: center;
 
         & .docContainer {
-          padding: 10px;
-          width: 200px;
-          box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          border-radius: 12px;
-
-          & h3 {
-            font-size: 14px;
-            text-align: center;
-          }
-
-          & div {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #F1F1F1;
+            padding: 10px;
+            width: 200px;
             box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-            color: #05A602;
-            margin-bottom: 10px;
-            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
 
-            & :first-child {
-                transform: scale(1.7);
+            & h3 {
+                font-size: 14px;
+                text-align: center;
             }
-          }
 
-          & input {
-            background-color: #05A602;
-            color: transparent;
-            display: none;
-          }
+            & div {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                margin: 0 auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: #F1F1F1;
+                box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+                color: #05A602;
+                margin-bottom: 10px;
 
-          & label {
-            background-color: #05A602;
-            padding: 10px  15px;
-            color: white;
-            border-radius: 10px;
-          }
+                & :first-child {
+                    transform: scale(1.7);
+                }
+            }
+
+            & input {
+                background-color: #05A602;
+                color: transparent;
+                display: none;
+            }
+
+            & label {
+                background-color: #05A602;
+                padding: 10px  15px;
+                color: white;
+                border-radius: 10px;
+            }
         }
     }
 }
 
-.rightArrow,
-.leftArrow {
-    transform: scale(2);
-    cursor: pointer;
-}
+@media only screen and (max-width: 767px) {
+    .userProfile {
+        & form {
+            width: 90%;
 
-.tutor-bg-photo {
-    // background-image: url('./cover.png') !important;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    filter: brightness(40%);
+            & > .rowInputContainer,
+            & .inputContainer {
+                width: 100%;
+            }
+
+            & button {
+                width: 100%;
+            }
+        }
+    }
+
+    .documents {
+        margin: 0 0 50px 0;
+
+        & .documents_btns {
+            flex-direction: column;
+            gap: 5px;
+
+            & button {
+                width: 100%;
+            }
+        }
+
+        & .requiredDocs {
+            flex-direction: column;
+            gap: 10px;
+
+            & .docContainer {
+                width: 100%;
+            }
+        }
+    }
 }
