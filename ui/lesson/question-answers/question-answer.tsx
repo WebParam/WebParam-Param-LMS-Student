@@ -20,45 +20,89 @@ interface Comment {
   creatingUserName: string;
 }
 
+interface UserInfo {
+  firstName: string;
+  surname: string;
+}
+
 const QuestionAndAnswers = ({ elementId }: QnAProps) => {
   const [body, setBody] = useState("");
   const [title, setTitle] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
+  const [fullName, setFullName] = useState<string>("");
+
   const cookies = new Cookies();
   const userID = cookies.get('userID');
+  const referenceId = elementId;
 
   const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
 
-  const fetchComments = async () => {
-    if (!clientKey) {
-      console.error("Client-Key is not defined");
-      return;
-    }
-  
-    try {
-      const response = await fetch(`${rCommentUrl}/api/v1/GetCommentsByReference/${elementId}`, {
-        headers: {
-          "Client-Key": clientKey,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-  
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Fetched Data :",result.data)
-        setComments(result.data);
-      } else {
-        console.error("Failed to fetch comments:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-    }
-  };
-
   useEffect(() => {
+    console.log("UseEffect Fired:");
+    console.log("Fetching comments with userID:", userID, "and elementId:", elementId);
+  
+    const fetchStudentInfo = async (userId: string) => {
+      if (!clientKey) {
+        console.error("Client-Key is not defined");
+        return;
+      }
+  
+      try {
+        const response = await fetch(`${readUserData}/api/v1/Student/GetStudentInformation/${userId}`, {
+          headers: new Headers({
+            "Client-Key": clientKey,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          }),
+        });
+  
+        if (response.ok) {
+          const result = await response.json();
+          const data: UserInfo = result.data;
+          
+          setFullName(`${data.firstName || ''} ${data.surname || ''}`.trim());
+        } else {
+          console.error("Failed to fetch student information:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching student information:", error);
+      }
+    };
+  
+    if (userID) {
+      fetchStudentInfo(userID);
+    }
+
+    const fetchComments = async () => {
+      if (!clientKey) {
+        console.error("Client-Key is not defined");
+        return;
+      }
+    
+      const url = `${rCommentUrl}/api/v1/Comments/GetCommentsByReference?referenceId=${elementId}`;
+    
+      try {
+        const response = await fetch(url, {
+          headers: {
+            "Client-Key": clientKey,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          setComments(data);
+        } else {
+          console.error("Failed to fetch comments:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
+
     fetchComments();
-  }, [elementId]);
+  }, [elementId, userID]);
 
   const handleChange = (value: string) => {
     setBody(value);
@@ -81,10 +125,11 @@ const QuestionAndAnswers = ({ elementId }: QnAProps) => {
       commentType: 0,
       state: 0,
       title: title,
+      creatingUserName:fullName
     };
 
     try {
-      const response = await fetch("https://thooto-dev-be-comment-write.azurewebsites.net/api/v1/Comments/AddComment", {
+      const response = await fetch(`${wCommentUrl}/api/v1/Comments/AddComment`, {
         method: "POST",
         headers: {
           "Client-Key": clientKey,
