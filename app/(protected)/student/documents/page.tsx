@@ -5,6 +5,7 @@ import styles from './documents.module.scss';
 import DocumentList from '@/ui/documents/DocumentList';
 import DownloadSection from '@/ui/documents/DocumentSection';
 import AlertInfo from '@/ui/documents/AlertInfo';
+import FileUpload from '@/app/components/FileUpload';
 
 export default function ManageDocuments() {
   return (
