@@ -632,7 +632,10 @@ function TakeLesson() {
                           role="tabpanel"
                           aria-labelledby="q&a-tab-4"
                         >
-                          <QuestionAndAnswers />
+                          <QuestionAndAnswers 
+                            //topicId={currentVideo?.topicId}
+                            elementId={currentVideo?.id}
+                          />
                         </div>
                       )}
                       {activeTab === 'notes' && (
