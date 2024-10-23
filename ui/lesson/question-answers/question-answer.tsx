@@ -8,7 +8,7 @@ import Cookies from "universal-cookie";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface QnAProps {
-  elementId?: string; // Make elementId optional
+  elementId?: string;
 }
 
 interface Comment {
