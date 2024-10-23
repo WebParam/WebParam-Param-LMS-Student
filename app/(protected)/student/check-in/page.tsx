@@ -57,43 +57,11 @@ export default function CheckIn() {
         </div>
 
         <div className={styles.bodyContainer}>
-          {step === 0 && <StepsAndForm step={step} goToStep={goToStep} />}
-          {step === 1 && <YouthDetails step={step} goToStep={goToStep} stepTitle={'Let’s Start...'} heading={'Youth Details'} />}
-          {step === 2 && <WorkExperience step={step} goToStep={goToStep} stepTitle={'Tell us about work...'} heading={'Work Experience'} />}
-          {step === 3 && <Learning step={step} goToStep={goToStep} stepTitle={'One more...'} heading={'Learning'} />}
-          {step === 4 && <OverallReView step={step} goToStep={goToStep} stepTitle={'And we are done...'} heading={'Overall View'} />}
-          <div className={styles.formFooter}>
-            {step > 0 && (
-              <button
-                type="button"
-                className={`${styles.prevButton}`}
-                onClick={() => prevStep()}
-              >
-                <BackIcon />
-                {'BACK'}
-              </button>
-            )}
-            {step < 4 && (
-              <button
-                type="button"
-                className={`${styles.nextButton}`}
-                onClick={() => nextStep()}
-              >
-                {'NEXT'}
-                <NextIcon />
-              </button>
-            )}
-            {step === 4 && (
-              <button
-                type="submit"
-                className={`${styles.submitButton}`}
-                onClick={() => nextStep()}
-              >
-                {'SUBMIT'}
-                <SubmitIcon />
-              </button>
-            )}
-          </div>
+          {step === 0 && <StepsAndForm nextStep={nextStep} />}
+          {step === 1 && <YouthDetails step={step} goToStep={goToStep} prevStep={prevStep} stepTitle={'Let’s Start...'} heading={'Youth Details'} />}
+          {step === 2 && <WorkExperience step={step} goToStep={goToStep} prevStep={prevStep} stepTitle={'Tell us about work...'} heading={'Work Experience'} />}
+          {step === 3 && <Learning step={step} goToStep={goToStep} prevStep={prevStep} stepTitle={'One more...'} heading={'Learning'} />}
+          {step === 4 && <OverallReView step={step} goToStep={goToStep} prevStep={prevStep} stepTitle={'And we are done...'} heading={'Overall View'} />}
 
         </div>
 

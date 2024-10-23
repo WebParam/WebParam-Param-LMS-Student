@@ -21,7 +21,13 @@ $padding-mobile: '1.25rem';
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
     padding: 5.875rem 0 3.125rem;
+
+    .errorText {
+        color: red;
+        font-size: 12px;
+    }
 
     .cardContainer {
         background-color: $secondary-color;
@@ -271,19 +277,21 @@ $padding-mobile: '1.25rem';
                     margin-bottom: 55px;
 
                     .feedbackReact {
-                      display: flex;
-                      flex-direction: column;
-                      align-items: center;
-                      border: transparent;
-                      background-color: transparent;
-                      cursor: pointer;
-                      .title {
-                        font-size: 17.32px;
-                        font-weight: 400;
-                        color: $text-color;
-                      }
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        border: transparent;
+                        background-color: transparent;
+                        cursor: pointer;
+
+                        .title {
+                            font-size: 17.32px;
+                            font-weight: 400;
+                            color: $text-color;
+                        }
                     }
-                  }
+                }
+
                 .feedbackReactStart {
                     justify-content: start !important;
                 }
@@ -310,9 +318,15 @@ $padding-mobile: '1.25rem';
                             font-weight: 400;
                             color: $text-color;
                         }
+
                         .reactButton:hover {
                             background-color: #666666;
                             color: #FFFFFF
+                        }
+
+                        .reactButtonSelected {
+                            background-color: #666666;
+                            color: #FFFFFF;
                         }
 
 
@@ -350,6 +364,12 @@ $padding-mobile: '1.25rem';
                         color: $text-color;
                         border-radius: 50px;
                     }
+
+                    .workLoadButtonSelected {
+                        background-color: #666666;
+                        color: #FFFFFF;
+                    }
+
                     .workLoadButton:hover {
                         background-color: #666666;
                         color: #FFFFFF;
@@ -431,6 +451,7 @@ $padding-mobile: '1.25rem';
                     color: #000000;
                     font-size: 18px;
                     font-weight: 400;
+                    margin-bottom: 80px;
                 }
 
 
@@ -516,6 +537,7 @@ $padding-mobile: '1.25rem';
                     margin-left: auto;
                     justify-content: flex-end;
                 }
+
                 .submitButton {
                     margin-left: auto;
                     justify-content: flex-end;
@@ -757,6 +779,7 @@ $padding-mobile: '1.25rem';
                 }
 
             }
+
             .listContainer {
                 .list {
                     padding-left: 0rem !important;
@@ -888,6 +911,10 @@ $padding-mobile: '1.25rem';
                         padding: 4px 12px !important;
                         font-size: 12px !important;
                     }
+                }
+
+                .textArea {
+                    margin-bottom: 10px !important;
                 }
 
             }
