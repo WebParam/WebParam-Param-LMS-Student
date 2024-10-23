@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   getStudentAssignments,
-  getStudentUnmarkedAssignments,
   uploadAssignment,
 } from "@/app/api/assignments/assignments";
 import {
+  IAllStudentAssignment,
   IAssignment,
   ISubmittedAssignment,
 } from "@/interfaces/assignments/assignments";
@@ -14,9 +14,10 @@ import Cookies from "universal-cookie";
 import NoAssignmentsCard from "./NoAssignmentsCard";
 
 export default function ActiveAssignment() {
-  const [assignments, setAssignments] = useState<IAssignment[]>([]);
+  const [assignments, setAssignments] = useState<IAllStudentAssignment[]>([]);
   const searchParams = useSearchParams();
   const moduleId = searchParams.get("moduleId");
+  const refreshId = searchParams.get("refreshId");
   const cookies = new Cookies();
   const loggedInUser = cookies.get("loggedInUser");
 
@@ -28,7 +29,6 @@ export default function ActiveAssignment() {
      {
       const assignmentsData = await getStudentAssignments(loggedInUser?.data?.id,moduleId!);
       setAssignments(assignmentsData);
-      console.log("Assignments",assignmentsData)
     } catch (error) {
       console.error(error);
     }
@@ -36,14 +36,18 @@ export default function ActiveAssignment() {
 
   useEffect(() => {
     fetchAssignments();
-  }, []);
+  }, [refreshId]);
 
   return (
     <div>
-      {assignments.length > 0 ? (
-        assignments.map((assignment: IAssignment, index) => (
-          <AssignmentCard key={index} assignment={assignment} />
-        ))
+      {assignments && assignments.length > 0 ? (
+        assignments.filter(assignment => assignment.assessment.isPublished).length > 0 ? (
+          assignments.filter(assignment => assignment.assessment.isPublished).map((assignment: IAllStudentAssignment, index) => (
+            <AssignmentCard key={index} assignment={assignment} />
+          ))
+        ) : (
+          <NoAssignmentsCard />
+        )
       ) : (
         <NoAssignmentsCard />
       )}
@@ -52,7 +56,7 @@ export default function ActiveAssignment() {
 }
 
 type assignment = {
-  assignment: IAssignment;
+  assignment: IAllStudentAssignment;
 };
 
 function AssignmentCard({ assignment }: assignment) {
@@ -82,10 +86,10 @@ function AssignmentCard({ assignment }: assignment) {
           const content = e.target?.result;
           if (content) {
             const formData = new FormData();
-            formData.append("AssignmentId", assignment.id);
-            formData.append("Title", assignment.title);
-            formData.append("Description", assignment.description);
-            formData.append("DueDate", assignment.scheduledDate);
+            formData.append("AssignmentId", assignment.assessment.id);
+            formData.append("Title", assignment.assessment.title);
+            formData.append("Description", assignment.assessment.description);
+            formData.append("DueDate", assignment.assessment.scheduledDate);
             formData.append("UserId", userId);
             formData.append("FacilitatorId", "");
             formData.append("file", file);
@@ -124,23 +128,6 @@ function AssignmentCard({ assignment }: assignment) {
     }
   };
 
-  const getSubmittedAssignments = async () => {
-    try {
-      const assignments = await getStudentUnmarkedAssignments(
-        userId,
-        moduleId!
-      );
-      setStudentSubmittedAssignments(assignments);
-      console.log("Submitted Assignments", assignments);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getSubmittedAssignments();
-  }, []);
-
   return (
     <>
       {assignmentSubmitted && (
@@ -169,18 +156,22 @@ function AssignmentCard({ assignment }: assignment) {
         <tbody>
           <tr>
             <th>
-              <span className="h6 mb--5">{assignment.title}</span>
+              <span className="h6 mb--5">{assignment.assessment.title}</span>
             </th>
             <td>
               <p className="b3">
-                {new Date(assignment.scheduledDate).toLocaleDateString()}
+                {new Date(assignment.assessment.scheduledDate).toLocaleDateString()}
               </p>
             </td>
             <td>
-              <p className="b3">{refreshId ? "Submitted" : "N/A"}</p>
+              <p className="b3">{assignment.isSubmitted ? "Submitted" : "N/A"}</p>
             </td>
             <td>
-              <div className="rbt-button-group justify-content-end">
+              <div
+              style={{
+                width:"150px"
+              }}
+              className="rbt-button-group justify-content-end">
                 <a
                 style={{
                   cursor : "pointer"
