@@ -33,7 +33,6 @@ const QuestionAndAnswers = ({ elementId }: QnAProps) => {
 
   const cookies = new Cookies();
   const userID = cookies.get('userID');
-  const referenceId = elementId;
 
   const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
 
@@ -91,8 +90,10 @@ const QuestionAndAnswers = ({ elementId }: QnAProps) => {
         });
     
         if (response.ok) {
-          const data = await response.json();
-          setComments(data);
+          const result = await response.json();
+          console.log("Fecth comments :",result);
+          const commentsData = result.map((item: any) => item.data);
+          setComments(commentsData);
         } else {
           console.error("Failed to fetch comments:", response.statusText);
         }
@@ -117,17 +118,19 @@ const QuestionAndAnswers = ({ elementId }: QnAProps) => {
       console.error("Client-Key is not defined");
       return;
     }
-
+  
+    const strippedBody = body.replace(/<\/?[^>]+(>|$)/g, "");
+  
     const newComment = {
-      message: body,
+      message: strippedBody,
       creatingUser: userID,
       referenceId: elementId,
       commentType: 0,
       state: 0,
       title: title,
-      creatingUserName:fullName
+      creatingUserName: fullName
     };
-
+  
     try {
       const response = await fetch(`${wCommentUrl}/api/v1/Comments/AddComment`, {
         method: "POST",
@@ -138,7 +141,7 @@ const QuestionAndAnswers = ({ elementId }: QnAProps) => {
         },
         body: JSON.stringify(newComment),
       });
-
+  
       if (response.ok) {
         const postedComment = await response.json();
         setComments([...comments, postedComment]);
