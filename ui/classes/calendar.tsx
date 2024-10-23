@@ -289,7 +289,7 @@ const Calendar: React.FC = () => {
         <div className={styles.viewSelector}>
           <button
             onClick={() => setActiveView("list")}
-            className={activeView === "list" ? styles.activeView : ""}
+            className={activeView.includes("list") ? styles.activeView : ""}
           >
             List View
           </button>
