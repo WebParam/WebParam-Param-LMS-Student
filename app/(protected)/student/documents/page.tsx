@@ -1,13 +1,23 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './documents.module.scss';
 import DocumentList from '@/ui/documents/DocumentList';
 import DownloadSection from '@/ui/documents/DocumentSection';
 import AlertInfo from '@/ui/documents/AlertInfo';
 import FileUpload from '@/app/components/FileUpload';
 
-export default function ManageDocuments() {
+const ManageDocuments = () => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
+
   return (
     <div className={styles['documents-container']}>
       <div className={styles['content-wrapper']}>
@@ -27,4 +37,6 @@ export default function ManageDocuments() {
       </div>
     </div>
   );
-}
+};
+
+export default ManageDocuments;

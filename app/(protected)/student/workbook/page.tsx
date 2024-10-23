@@ -33,15 +33,15 @@ export default function WorkbookPage(){
 
 
     return <div>Workbook 
-        {data?.map((item:any)=>(
-            <div>
+        {data?.map((item:any, index:number) => (
+            <div key={item.id || index}>
                 <h1>{item?.totalMarks}</h1>
                 <p>{item?.description}</p>
             </div>
         ))}
 
-        {questions?.map((item:any)=>(
-            <div>
+        {questions?.map((item:any, index:number) => (
+            <div key={item.id || index}>
                 <h1>{item?.question}</h1>
             </div>
         ))}
