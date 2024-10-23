@@ -40,21 +40,15 @@ export async function ResendSMS(payload: any) {
 }
 
 export async function LoginUser(payload: any) {
-    const headers = {
-        'Client-Key': 'ec51852d24b1450faff0a868e84d05e5',
-        'Content-Type': 'application/json',
-    };
     try {
-        const res = await axios.post(
-            `${writeUserData}/api/v1/Users/Login`,
-            payload,
-            { headers }
-        );
+        const res = await POST(payload, `${writeUserData}/api/v1/Users/Login`);
+        debugger;
         return res;
-    } catch (error) {
-        console.error("Error creating survey:", error);
-        throw error;
+
+    } catch (error: any) {
+        console.log(error);
     }
+
 }
 
 export async function sendOtp(payload: any) {
