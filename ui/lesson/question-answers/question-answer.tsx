@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { rCommentUrl, wCommentUrl, readUserData } from "@/app/lib/endpoints";
 import Cookies from "universal-cookie";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -29,23 +30,24 @@ const QuestionAndAnswers = ({ elementId }: QnAProps) => {
   const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
 
   const fetchComments = async () => {
+    if (!clientKey) {
+      console.error("Client-Key is not defined");
+      return;
+    }
+  
     try {
-      const headers: HeadersInit = {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      };
-
-      if (clientKey) {
-        headers["Client-Key"] = clientKey;
-      }
-
-      const response = await fetch(`https://thooto-dev-be-comment-read.azurewebsites.net/api/v1/Comments/${elementId}`, {
-        headers,
+      const response = await fetch(`${rCommentUrl}/api/v1/GetCommentsByReference/${elementId}`, {
+        headers: {
+          "Client-Key": clientKey,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       });
-
+  
       if (response.ok) {
-        const data = await response.json();
-        setComments(data);
+        const result = await response.json();
+        console.log("Fetched Data :",result.data)
+        setComments(result.data);
       } else {
         console.error("Failed to fetch comments:", response.statusText);
       }
