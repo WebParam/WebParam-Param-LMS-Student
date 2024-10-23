@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import BootstrapClient from "@/ui/bootstrapclient/bootstrap-client";
 import Navbar from "@/ui/navbar/navbar";
 

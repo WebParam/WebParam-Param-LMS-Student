@@ -1,28 +1,35 @@
 import { useState } from 'react';
-import { Formik } from 'formik';
+import { ErrorMessage, Formik } from 'formik';
 import styles from '@/app/(protected)/student/check-in/CheckIn.module.scss'
 import { StepProps } from '@/app/(protected)/student/check-in/page';
 import Image from 'next/image';
 import ProgressBar from './ProgressBar';
 import BackIcon from '@/app/(protected)/student/check-in/svg/BackIcon';
 import NextIcon from '@/app/(protected)/student/check-in/svg/NextIcon';
+import * as Yup from 'yup';
 
 interface LearningProps {
     heading: string;
     stepTitle: string;
     step: number;
     goToStep: (step: number) => void;
-    nextStep: () => void;
     prevStep: () => void;
 }
 
-export default function Learning({ step, goToStep, prevStep, nextStep, stepTitle, heading }: LearningProps) {
+const validationSchema = Yup.object({
+    monthlyWorkExperienceRating: Yup.string().required('Work experience rating is required'),
+    jobDescriptionMatch: Yup.string().required('Job description match is required'),
+    additionalComments: Yup.string().required('Additional comments is required'),
+});
+
+export default function Learning({ step, goToStep, prevStep, stepTitle, heading }: LearningProps) {
     const [hovered, setHovered] = useState({ happy: false, okay: false, unhappy: false });
+    const learningData = JSON.parse(sessionStorage.getItem('learning') || '{}');
 
     const initialValues = {
-        workExperienceRating: '',
-        jobDescriptionMatch: '',
-        additionalComments: '',
+        monthlyWorkExperienceRating: learningData.monthlyWorkExperienceRating || '',
+        jobDescriptionMatch: learningData.jobDescriptionMatch || '',
+        additionalComments: learningData.additionalComments || '',
     };
 
     const handleSubmit = (values: typeof initialValues, actions: any, goToStep: (step: number) => void) => {
@@ -34,6 +41,7 @@ export default function Learning({ step, goToStep, prevStep, nextStep, stepTitle
     return (
         <Formik
             initialValues={initialValues}
+            validationSchema={validationSchema}
             onSubmit={(values, actions) => handleSubmit(values, actions, goToStep)}
         >
             {({ isSubmitting, handleSubmit, setFieldValue, values }) => (
@@ -57,12 +65,12 @@ export default function Learning({ step, goToStep, prevStep, nextStep, stepTitle
                             <div className={`${styles.feedbackReactSection} ${styles.feedbackReactStart}`}>
                                 <button className={styles.feedbackReact}
                                     type="button"
-                                    onClick={() => setFieldValue('workExperienceRating', 'happy')}
+                                    onClick={() => setFieldValue('monthlyWorkExperienceRating', 'happy')}
                                     onMouseEnter={() => setHovered({ ...hovered, happy: true })}
                                     onMouseLeave={() => setHovered({ ...hovered, happy: false })}
                                 >
                                     <Image
-                                        src={hovered.happy || values.workExperienceRating === 'happy' ? '/svg/happyActiveIcon.svg' : '/svg/happyDefaultIcon.svg'}
+                                        src={hovered.happy || values.monthlyWorkExperienceRating === 'happy' ? '/svg/happyActiveIcon.svg' : '/svg/happyDefaultIcon.svg'}
                                         alt="Happy Icon"
                                         width={40}
                                         height={40}
@@ -73,12 +81,12 @@ export default function Learning({ step, goToStep, prevStep, nextStep, stepTitle
                                 <button
                                     className={styles.feedbackReact}
                                     type="button"
-                                    onClick={() => setFieldValue('workExperienceRating', 'okay')}
+                                    onClick={() => setFieldValue('monthlyWorkExperienceRating', 'okay')}
                                     onMouseEnter={() => setHovered({ ...hovered, okay: true })}
                                     onMouseLeave={() => setHovered({ ...hovered, okay: false })}
                                 >
                                     <Image
-                                        src={hovered.okay || values.workExperienceRating === 'okay' ? '/svg/okayActiveIcon.svg' : '/svg/okayDefaultIcon.svg'}
+                                        src={hovered.okay || values.monthlyWorkExperienceRating === 'okay' ? '/svg/okayActiveIcon.svg' : '/svg/okayDefaultIcon.svg'}
                                         alt="Okay Icon"
                                         width={40}
                                         height={40}
@@ -88,12 +96,12 @@ export default function Learning({ step, goToStep, prevStep, nextStep, stepTitle
                                 <button
                                     className={styles.feedbackReact}
                                     type="button"
-                                    onClick={() => setFieldValue('workExperienceRating', 'unhappy')}
+                                    onClick={() => setFieldValue('monthlyWorkExperienceRating', 'unhappy')}
                                     onMouseEnter={() => setHovered({ ...hovered, unhappy: true })}
                                     onMouseLeave={() => setHovered({ ...hovered, unhappy: false })}
                                 >
                                     <Image
-                                        src={hovered.unhappy || values.workExperienceRating === 'unhappy' ? '/svg/unhappyAciveIcon.svg' : '/svg/unhappyDefaultIcon.svg'}
+                                        src={hovered.unhappy || values.monthlyWorkExperienceRating === 'unhappy' ? '/svg/unhappyAciveIcon.svg' : '/svg/unhappyDefaultIcon.svg'}
                                         alt="Unhappy Icon"
                                         width={40}
                                         height={40}
@@ -101,6 +109,7 @@ export default function Learning({ step, goToStep, prevStep, nextStep, stepTitle
                                     <div className={styles.title}>Unhappy</div>
                                 </button>
                             </div>
+                            <ErrorMessage name="monthlyWorkExperienceRating" component="div" className={styles.errorText} />
 
                             <div className={styles.questionSection}>
                                 <div className={styles.questionNo}>
@@ -130,6 +139,7 @@ export default function Learning({ step, goToStep, prevStep, nextStep, stepTitle
                                     </div>
                                 ))}
                             </div>
+                            <ErrorMessage name="jobDescriptionMatch" component="div" className={styles.errorText} />
 
                             <div className={styles.questionSection}>
                                 <div className={styles.questionSection}>
@@ -144,7 +154,9 @@ export default function Learning({ step, goToStep, prevStep, nextStep, stepTitle
                                 className={styles.textArea}
                                 onChange={(e) => setFieldValue('additionalComments', e.target.value)}
                             />
+                            <ErrorMessage name="additionalComments" component="div" className={styles.errorText} />
                         </div>
+
                         <div className={styles.formFooter}>
                             <button
                                 type="button"

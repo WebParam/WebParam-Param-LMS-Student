@@ -1,0 +1,72 @@
+.headerContainer {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profileInfo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profileImage {
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+  
+  .textInfo h2 {
+    margin: 0;
+    color: #24345c;
+    font-size: 24px;
+  }
+  
+  .textInfo p {
+    margin: 5px 0;
+    color: #606060;
+    font-size: 14px;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .editButton, .messageButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .editButton {
+    background-color: #24345c;
+    color: white;
+  }
+  
+  .messageButton {
+    background-color: white;
+    color: #24345c;
+    border: 1px solid #24345c;
+  }
+  
+  @media (max-width: 768px) {
+    .headerContainer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .buttonGroup {
+      margin-top: 20px;
+      width: 100%;
+    }
+  
+    .editButton, .messageButton {
+      flex: 1;
+    }
+  }

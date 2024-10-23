@@ -12,7 +12,6 @@ interface YouthDetailsProps extends StepProps {
     stepTitle: string;
     step: number;
     goToStep: (step: number) => void;
-    nextStep: () => void;
     prevStep: () => void;
 }
 
@@ -23,12 +22,14 @@ const validationSchema = Yup.object({
     hostPartner: Yup.string().required('Host partner is required'),
 });
 
-export default function YouthDetails({ step, goToStep, nextStep, prevStep, stepTitle, heading }: YouthDetailsProps) {
+export default function YouthDetails({ step, goToStep, prevStep, stepTitle, heading }: YouthDetailsProps) {
+    const surveyData = JSON.parse(sessionStorage.getItem('survey') || '{}');
+
     const initialValues = {
-        name: '',
-        monthReporting: '',
-        emailAddress: '',
-        hostPartner: '',
+        name: surveyData.name || '',
+        monthReporting: surveyData.monthReporting || '',
+        emailAddress: surveyData.emailAddress || '',
+        hostPartner: surveyData.hostPartner || '',
     };
 
     const months = [

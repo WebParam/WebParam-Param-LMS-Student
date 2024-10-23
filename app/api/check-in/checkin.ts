@@ -16,14 +16,16 @@ interface LearningExperience {
 }
 
 interface Survey {
-    userId: string;
-    name: string;
-    surname: string;
-    monthReporting: string;
-    emailAddress: string;
-    hostPartner: string;
-    workExperience: WorkExperience;
-    learningExperience: LearningExperience;
+    survey: {
+        userId: string;
+        name: string;
+        surname: string;
+        monthReporting: string;
+        emailAddress: string;
+        hostPartner: string;
+        workExperience: WorkExperience;
+        learningExperience: LearningExperience;
+    }
 }
 
 

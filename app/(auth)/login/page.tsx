@@ -49,12 +49,12 @@ export default function LoginPage() {
       try {
         const res = await LoginUser(payload);
             setIsLoading(false);
-            debugger;
+           
             if (res == null) {
                 setErrorMessage('User not found');
                 return;
             }
-            debugger;
+           
             
             if (res.data.data) {
                 
@@ -108,7 +108,7 @@ export default function LoginPage() {
         }
 
         const res = await ResendSMS(payload);
-        debugger;
+       
         if(res.status ==200 ){
           cookies.set("activate-email", res?.data?.email);
           router.push('/activate-account');

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function Page() {
   return (
     <div
@@ -10,7 +12,7 @@ export default function Page() {
       }}
     >
       <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px" }}>
-        <img
+        <Image
           src="/images/offline/nowifi.gif"
           alt="No WiFi"
           width={200}

@@ -1,6 +1,4 @@
 import styles from '@/app/(protected)/student/check-in/CheckIn.module.scss'
-import { StepProps } from '@/app/(protected)/student/check-in/page';
-import BackIcon from '@/app/(protected)/student/check-in/svg/BackIcon';
 import NextIcon from '@/app/(protected)/student/check-in/svg/NextIcon';
 
 interface StepsFormProps {

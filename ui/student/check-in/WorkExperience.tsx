@@ -1,38 +1,44 @@
 import { useState } from 'react';
-import { Formik } from 'formik';
+import { ErrorMessage, Formik } from 'formik';
 import styles from '@/app/(protected)/student/check-in//CheckIn.module.scss'
 import ProgressBar from './ProgressBar';
 import ProgressIndicator from './ProgressIndicator';
 import Image from 'next/image';
-import { StepProps } from '@/app/(protected)/student/check-in/page';
 import BackIcon from '@/app/(protected)/student/check-in/svg/BackIcon';
 import NextIcon from '@/app/(protected)/student/check-in/svg/NextIcon';
+import * as Yup from 'yup';
 
 interface WorkExperienceProps {
     heading: string;
     stepTitle: string;
     step: number;
     goToStep: (step: number) => void;
-    nextStep: () => void;
     prevStep: () => void;
 }
 
-export default function WorkExperience({ step, goToStep, nextStep, prevStep, stepTitle, heading }: WorkExperienceProps) {
-    const [currentProgressStep, setCurrentProgressStep] = useState(4);
+const validationSchema = Yup.object({
+    workExperienceRating: Yup.string().required('Work experience rating is required'),
+    jobDescriptionMatch: Yup.string().required('Job description match is required'),
+    workloadStatement: Yup.string().required('Work load statement is required'),
+    additionalComments: Yup.string().required('Additional comments is required'),
+});
+
+export default function WorkExperience({ step, goToStep, prevStep, stepTitle, heading }: WorkExperienceProps) {
     const [hovered, setHovered] = useState({ happy: false, okay: false, unhappy: false });
     const totalSteps = 10;
+    const experienceData = JSON.parse(sessionStorage.getItem('experience') || '{}');
+    const [currentProgressStep, setCurrentProgressStep] = useState(experienceData.supervisorFeedback || 4);
 
     const initialValues = {
-        workExperienceRating: '',
-        jobDescriptionMatch: '',
-        supervisorFeedback: 0,
-        workloadStatement: '',
-        additionalComments: '',
+        workExperienceRating: experienceData.workExperienceRating || '',
+        jobDescriptionMatch: experienceData.jobDescriptionMatch || '',
+        supervisorFeedback: experienceData.supervisorFeedback || 0,
+        workloadStatement: experienceData.workloadStatement || '',
+        additionalComments: experienceData.additionalComments || '',
     };
 
     const handleSubmit = (values: typeof initialValues, actions: any, goToStep: (step: number) => void) => {
         values.supervisorFeedback = currentProgressStep;
-        console.log(values, "valuesvalues")
         sessionStorage.setItem('experience', JSON.stringify(values));
         goToStep(3);
         actions.setSubmitting(false);
@@ -41,6 +47,7 @@ export default function WorkExperience({ step, goToStep, nextStep, prevStep, ste
     return (
         <Formik
             initialValues={initialValues}
+            validationSchema={validationSchema}
             onSubmit={(values, actions) => handleSubmit(values, actions, goToStep)}
         >
             {({ isSubmitting, handleSubmit, setFieldValue, values }) => (
@@ -108,6 +115,7 @@ export default function WorkExperience({ step, goToStep, nextStep, prevStep, ste
                                     <div className={styles.title}>Unhappy</div>
                                 </button>
                             </div>
+                            <ErrorMessage name="workExperienceRating" component="div" className={styles.errorText} />
 
                             <div className={styles.questionSection}>
                                 <div className={styles.questionNo}>
@@ -137,6 +145,7 @@ export default function WorkExperience({ step, goToStep, nextStep, prevStep, ste
                                     </div>
                                 ))}
                             </div>
+                            <ErrorMessage name="jobDescriptionMatch" component="div" className={styles.errorText} />
 
                             <div className={styles.questionSection}>
                                 <div className={styles.questionNo}>
@@ -157,6 +166,7 @@ export default function WorkExperience({ step, goToStep, nextStep, prevStep, ste
                                         {option}
                                     </div>
                                 ))}
+                                <ErrorMessage name="workloadStatement" component="div" className={styles.errorText} />
                             </div>
 
                             <div className={styles.questionSection}>
@@ -197,6 +207,7 @@ export default function WorkExperience({ step, goToStep, nextStep, prevStep, ste
                                 className={styles.textArea}
                                 onChange={(e) => setFieldValue('additionalComments', e.target.value)}
                             />
+                            <ErrorMessage name="additionalComments" component="div" className={styles.errorText} />
                         </div>
                         <div className={styles.formFooter}>
                             <button

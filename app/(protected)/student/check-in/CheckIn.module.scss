@@ -21,6 +21,7 @@ $padding-mobile: '1.25rem';
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
     padding: 5.875rem 0 3.125rem;
 
     .errorText {
@@ -363,6 +364,7 @@ $padding-mobile: '1.25rem';
                         color: $text-color;
                         border-radius: 50px;
                     }
+
                     .workLoadButtonSelected {
                         background-color: #666666;
                         color: #FFFFFF;
@@ -449,6 +451,7 @@ $padding-mobile: '1.25rem';
                     color: #000000;
                     font-size: 18px;
                     font-weight: 400;
+                    margin-bottom: 80px;
                 }
 
 
@@ -908,6 +911,10 @@ $padding-mobile: '1.25rem';
                         padding: 4px 12px !important;
                         font-size: 12px !important;
                     }
+                }
+
+                .textArea {
+                    margin-bottom: 10px !important;
                 }
 
             }

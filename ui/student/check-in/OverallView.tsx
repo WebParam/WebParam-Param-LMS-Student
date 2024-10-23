@@ -4,43 +4,53 @@ import ProgressBar from './ProgressBar';
 import SubmitIcon from './SubmitIcon';
 import BackIcon from '@/app/(protected)/student/check-in/svg/BackIcon';
 import { postCreateSurvey } from '@/app/api/check-in/checkin';
+import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
 
 interface OverallReViewrops {
     heading: string;
     stepTitle: string;
     step: number;
     goToStep: (step: number) => void;
-    nextStep: () => void;
     prevStep: () => void;
 }
 
-export default function OverallReView({ step, goToStep, nextStep, prevStep, stepTitle, heading }: OverallReViewrops) {
-
+export default function OverallReView({ step, goToStep, prevStep, stepTitle, heading }: OverallReViewrops) {
+    const userId = Cookies.get('userID');
     const handleSubmit = async () => {
-        const survey = JSON.parse(sessionStorage.getItem('survey') || '{}');
-        const experience = JSON.parse(sessionStorage.getItem('experience') || '{}');
-        const learning = JSON.parse(sessionStorage.getItem('learning') || '{}');
-        const combinedSurvey = {
-            ...survey,
-            surname: '-',
-            workExperience: experience,
-            learningExperience: learning
-        };
-
-        console.log(combinedSurvey, 'combinedSurvey')
-
         try {
+            const survey = JSON.parse(sessionStorage.getItem('survey') || '{}');
+            const experience = JSON.parse(sessionStorage.getItem('experience') || '{}');
+            const learning = JSON.parse(sessionStorage.getItem('learning') || '{}');
+
+            const combinedSurvey = {
+                survey: {
+                    ...survey,
+                    surname: survey.name.split[0],
+                    "userId": userId,
+                    workExperience: experience,
+                    learningExperience: learning,
+                }
+            };
             const response = await postCreateSurvey(combinedSurvey);
 
             if (response.status >= 200 && response.status < 300) {
-                goToStep(1);
+                sessionStorage.removeItem('survey');
+                sessionStorage.removeItem('experience');
+                sessionStorage.removeItem('learning');
+                toast.success('Create survey successfully');
+                goToStep(0);
             } else {
-                console.error('Failed to create survey', response.data);
+                toast.error('Failed to create survey!');
             }
         } catch (error) {
-            console.error('An error occurred:', error);
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Something went wrong!');
+            }
         }
-    }
+    };
 
     return (
         <div className={styles.detailsCard}>
