@@ -8,7 +8,7 @@ import Cookies from "universal-cookie";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface QnAProps {
-  elementId: string;
+  elementId?: string; // Make elementId optional
 }
 
 interface Comment {
@@ -25,7 +25,7 @@ interface UserInfo {
   surname: string;
 }
 
-const QuestionAndAnswers = ({ elementId }: QnAProps) => {
+const QuestionAndAnswers = ({ elementId = "defaultElementId" }: QnAProps) => {
   const [body, setBody] = useState("");
   const [title, setTitle] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
@@ -91,7 +91,7 @@ const QuestionAndAnswers = ({ elementId }: QnAProps) => {
     
         if (response.ok) {
           const result = await response.json();
-          console.log("Fecth comments :",result);
+          console.log("Fetched comments:", result);
           const commentsData = result.map((item: any) => item.data);
           setComments(commentsData);
         } else {
@@ -103,7 +103,7 @@ const QuestionAndAnswers = ({ elementId }: QnAProps) => {
     };
 
     fetchComments();
-  }, [elementId, userID,comments]);
+  }, [elementId, userID]);
 
   const handleChange = (value: string) => {
     setBody(value);
