@@ -103,7 +103,7 @@ const QuestionAndAnswers = ({ elementId }: QnAProps) => {
     };
 
     fetchComments();
-  }, [elementId, userID]);
+  }, [elementId, userID,comments]);
 
   const handleChange = (value: string) => {
     setBody(value);
