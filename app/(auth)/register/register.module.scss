@@ -1,5 +1,5 @@
-$primary-color: #FE457A;
-$secondary-color: #051C48;
+$primary-color: #fe457a;
+$secondary-color: #051c48;
 
 .registerPage {
   min-height: 100vh;
@@ -82,7 +82,8 @@ $secondary-color: #051C48;
   flex: 1;
   position: relative;
 
-  input, select {
+  input,
+  select {
     width: 100%;
     padding: 15px;
     border: 1px solid #ccc;
@@ -132,7 +133,7 @@ $secondary-color: #051C48;
   max-width: 200px;
   margin: 5px auto 20px; // Reduced top margin to move it up
   margin-left: -8px; // Move button to the left
-   margin-top: -35px !important;
+  margin-top: -35px !important;
   display: block;
 
   &:hover {
@@ -142,7 +143,7 @@ $secondary-color: #051C48;
 
 .requiredFieldsNote {
   font-size: 14px;
-  color: #FE457A;
+  color: #fe457a;
   text-align: right;
   margin-top: -75px;
 }
@@ -166,4 +167,21 @@ $secondary-color: #051C48;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.loginPrompt {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.loginLink {
+  color: #fe457a; // Change this to your desired color
+  text-decoration: none; // Removes the underline
+  font-weight: bold;
+}
+
+.loginLink:hover {
+  text-decoration: none; // Optional: Add underline on hover
+  color: #fe457a; // Change this to your desired color
+  transform: scale(1.05); /* Scale up by 5% on hover */
 }

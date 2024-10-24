@@ -12,7 +12,7 @@ export default function StudentLayout({
   return (
     <div className="d-flex">
       <StudentDashboardSidebar />
-      <div className="flex-grow-1" style={{ marginLeft: "20%" }}>
+      <div className="flex-grow-1" style={{ marginLeft: "25%" }}>
         {children}
       </div>
     </div>

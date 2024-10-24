@@ -2,9 +2,9 @@
   position: fixed; /* Make the sidebar fixed */
   top: 0;
   left: 0;
-  width: 20%; /* Adjust width as needed for responsiveness */
+  width: 25%; /* Adjust width as needed for responsiveness */
   height: 100vh; /* Full screen height */
-  overflow: hidden; /* Prevent overflow */
+  overflow: auto; /* Prevent overflow */
   background-color: #fff; /* or any preferred background */
   display: flex;
   flex-direction: column;
@@ -16,6 +16,7 @@
   text-decoration: none; /* Optional to remove underline if any */
   transition: color 0.3s ease, transform 0.3s ease; /* Add transition for transform */
   color: inherit; /* Ensure the color is inherited from the parent */
+  font-size: 1.5rem;
 }
 
 .sidebarLink:hover {
@@ -36,4 +37,10 @@
 .username {
   color: #051c48;
   text-transform: capitalize;
+}
+
+@media (max-width: 1092px) {
+  .sidebarLink {
+    font-size: 1.3rem;
+  }
 }

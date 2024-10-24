@@ -118,7 +118,7 @@ const StudentDashboardSidebar: React.FC = () => {
                 <li className="mb-4" key={index} role="presentation">
                   <Link
                     href={data.link}
-                    className={`d-flex align-items-center fs-3 ${
+                    className={`d-flex align-items-center  ${
                       styles.sidebarLink
                     } ${
                       basePath === data.link.split("?")[0]
