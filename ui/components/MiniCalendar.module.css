@@ -1,0 +1,73 @@
+.miniCalendar {
+  width: 80%;
+  background-color: white;
+  border-radius: 10px;
+  font-family: "Montserrat", sans-serif;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  margin-bottom: 15px;
+}
+
+.monthYear {
+  font-weight: bolder;
+  font-size: 1.4em;
+}
+
+.chevron {
+  cursor: pointer;
+  font-size: 1.2em;
+  margin: 0 10px; /* Add margin to the sides of the chevrons */
+}
+
+.separator {
+  width: calc(100% - 20px); /* Subtract the total horizontal margin */
+  height: 1px;
+  background-color: #ccc;
+  margin: 10px 10px 15px; /* Add horizontal margin to match the chevrons */
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.weekday {
+  text-align: center;
+  font-size: 0.9em;
+  font-weight: bolder;
+  color: #888;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.day,
+.emptyDay {
+  text-align: center;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+}
+
+.today {
+  background-color: #d9d9d9;
+  color: #888;
+  border-radius: 50%;
+}

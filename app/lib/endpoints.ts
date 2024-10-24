@@ -1,9 +1,10 @@
-
 const test = "testing";
-const env = process.env.NEXT_PUBLIC_API_ENV == "production" ? "prod" : process.env.NEXT_PUBLIC_API_ENV;
+const env =
+  process.env.NEXT_PUBLIC_API_ENV == "production"
+    ? "prod"
+    : process.env.NEXT_PUBLIC_API_ENV;
 
 // const env = "dev"
-
 
 export const writeUserData = `https://thooto-${env}-be-user-write.azurewebsites.net`;
 
@@ -27,7 +28,8 @@ export const rQuizUrl = `https://thooto-${env}-be-quiz-read.azurewebsites.net`;
 
 export const wAudioGenerateUrl = `https://thooto-${env}-be-audio-generate.azurewebsites.net`;
 
-export const wAssessmentUrl = "https://thooto-development-assessment-write.azurewebsites.net";
+export const wAssessmentUrl =
+  "https://thooto-development-assessment-write.azurewebsites.net";
 
 export const twAssessmentUrl = `https://thooto-${test}-assessment-write.azurewebsites.net`;
 
@@ -65,12 +67,11 @@ export const wLoogBookUrl = `https://thooto-${env}-be-logbook-write.azurewebsite
 
 export const rLoogBookUrl = `https://thooto-${env}-be-logbook-read.azurewebsites.net`;
 
-export const wCreateCheckin = `https://thooto-${env}-be-workbooks-write.azurewebsites.net`;
-
-
 // New endpoints
 export const rAssessmentThootoUrl = `https://thooto-${env}-be-assessment-read.azurewebsites.net`;
 export const wAssessmentThootoUrl = `https://thooto-${env}-be-assessment-write.azurewebsites.net`;
 export const rQuestionsThootoUrl = `https://thooto-${env}-be-assessment-read.azurewebsites.net/api/v1/Questions`;
 export const rOptionsThootoUrl = `https://thooto-${env}-be-assessment-read.azurewebsites.net/api/v1/Options`;
 export const wStudentAnswersThootoUrl = `https://thooto-${env}-be-assessment-write.azurewebsites.net/api/v1/StudentAnswers`;
+
+export const rClassSessionsThootoUrl = `https://thooto-dev-be-logbook-read.azurewebsites.net/api/v1/ClassSessions/GetClassSessions/6697a17f3623e8c4ecd54540/Course`;

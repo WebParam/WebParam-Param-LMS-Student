@@ -1,113 +1,218 @@
 .calendarWrapper {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 16px;
-    background-color: rgb(36, 52, 92);
-  }
-  
-  .header h2 {
-    font-size: 16px;
-    margin: 0;
-    text-align: center;
-    color: white;
-  }
-  
-  .header h2 span {
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-  }
-  
-  .header button {
-    background: none;
-    border: none;
-    font-size: 20px;
-    font-weight: 600;
-    cursor: pointer;
-    color: white;
-    padding: 4px 8px;
-  }
-  
-  .calendar {
-    padding: 8px;
-  }
-  
-  .weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    margin-bottom: 4px;
-    border: 1px solid transparent;
-    padding: 8px 4px;
-    border-radius: 4px;
-  }
-  
-  .weekdays div {
-    text-align: center;
-    font-weight: bold;
-    color: rgb(36, 52, 92);
-    font-size: 12px;
-  }
-  
-  .days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    padding: 0 4px;
-  }
-  
-  .day, .emptyDay {
-    aspect-ratio: 1;
-    background-color: #fff;
-    border-radius: 4px;
-    padding: 2px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    font-size: 11px;
-  }
-  
-  .day {
-    font-size: 11px;
-    font-weight: bold;
-    color: rgb(36, 52, 92);
-  }
-  
-  .day .content {
-    font-size: 9px;
-    overflow: hidden;
-    text-align: center;
-  }
-  
-  .today {
-    background-color: #fff;
-  }
-  
-  .today span {
-    color: #fff;
-    background-color: rgb(36, 52, 92);
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 10px;
-  }
+  width: 100%;
+  max-width: 95%;
+  height: 90vh;
+  margin: 0 auto;
+  font-family: "Montserrat", sans-serif;
+  background-color: #fff;
+  border-radius: 3%;
+  overflow: hidden;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #fff;
+}
+
+.monthSelector {
+  display: flex;
+  align-items: center;
+}
+
+.monthSelector button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  font-weight: 300;
+  cursor: pointer;
+  color: #666666;
+  padding: 4px 8px;
+}
+
+.viewSelector {
+  display: flex;
+  align-items: center;
+  margin-right: 3%;
+}
+
+.viewSelector button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #666666;
+  padding: 4px 8px;
+}
+
+.viewSelector span {
+  color: #ff69b4; /* Pink color for the separator */
+  margin: 0 8px;
+}
+
+.activeView {
+  color: #ff69b4 !important; /* Pink color for active view */
+}
+
+.header h2 {
+  font-size: 28px; /* Increased from 24px */
+  margin: 10px;
+  text-align: center;
+  color: #666666; /* Changed text color to black */
+}
+
+.header h2 span {
+  font-size: 28px; /* Increased from 20px */
+  font-weight: bold;
+  margin: 10px;
+  color: #666666;
+}
+
+.calendar {
+  padding: 12px;
+  padding-left: 120px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.weekdays,
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+  padding: 8px 4px;
+  border-radius: 4px;
+  border: none;
+}
+
+.days {
+  flex: 1;
+  min-height: 0;
+}
+
+.weekdays div {
+  text-align: left;
+  font-weight: bolder;
+  color: rgb(36, 52, 92);
+  font-size: 14px; /* Increased from 12px */
+  background-color: #fff;
+  border: none;
+  font-weight: bold; /* Make weekdays bold */
+  color: #666666; /* Set color to #666666 */
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.day,
+.emptyDay {
+  aspect-ratio: auto;
+  min-height: 0;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 2px;
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  position: relative;
+  font-size: 13px; /* Increased from 11px */
+}
+
+.day {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  align-items: left; /* Center children horizontally */
+  justify-content: flex-start; /* Align items to the top */
+  position: relative;
+  height: 100%; /* Ensure the day takes full height */
+  font-size: 11px;
+  font-weight: bold;
+  color: rgb(36, 52, 92);
+}
+
+.day .content {
+  font-size: 11px; /* Increased from 9px */
+  overflow: hidden;
+  text-align: center;
+}
+
+.today {
+  background-color: #fff;
+}
+
+.today span {
+  color: black;
+  background-color: rgb(36, 52, 92);
+  border-radius: 50%;
+  width: 22px; /* Increased from 18px */
+  height: 22px; /* Increased from 18px */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px; /* Increased from 10px */
+}
+
+.day span {
+  margin-bottom: 5px; /* Add margin to separate the date from the event */
+  font-weight: 300; /* Make numbers thin */
+  color: #666666; /* Set color to #666666 */
+}
+
+.classSession {
+  background-color: #ffecf2;
+  margin-top: 2px; /* Reduced from 5px */
+  padding: 8px 8px; /* Reduced top/bottom padding from 14px to 8px */
+  width: 100%;
+  height: auto; /* Changed from 9vh to auto */
+  text-align: left;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
+  font-size: xx-small;
+}
+
+.classSession a {
+  font-weight: normal; /* Ensure the font is not bold */
+  text-decoration: none; /* Optional: remove underline */
+  color: inherit; /* Optional: inherit color from parent */
+}
+
+.notificationButton {
+  position: absolute;
+  bottom: 2px; /* Reduced from 10px */
+  right: 2px; /* Reduced from 5px */
+  background-color: #ffecf2;
+  color: #666666;
+  border: 0.5px solid #666666;
+  padding: 8px; /* Reduced from 13px */
+  border-radius: 50%;
+  width: 20px; /* Reduced from 24px */
+  height: 20px; /* Reduced from 24px */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 12px; /* Reduced from 14px */
+}
