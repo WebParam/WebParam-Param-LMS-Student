@@ -2,28 +2,113 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import notesData from "@/data/sample/sample.json";
 import styles from "@/styles/notes/notes.module.css";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
+import { rCommentUrl, wCommentUrl, readUserData } from "@/app/lib/endpoints";
+import Cookies from "universal-cookie";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-interface Note {
-  id: number;
-  title: string;
-  content: string;
-  studentName: string;
-  timestamp: string;
+interface NoteData {
+  id: string;
+  topicId: string;
+  text: string;
+  studentId: string;
+  elementId: string;
+  dateCreated: string;
+  dateUpdated: string | null;
+  fullName: string;
 }
 
-const Notes = () => {
+interface NoteResponse {
+  data: NoteData;
+  error: boolean;
+  message: string | null;
+}
+
+interface UserInfo {
+  firstName: string;
+  surname: string;
+}
+
+interface NotesProps {
+  topicId?: string;
+  elementId?: string;
+}
+
+const Notes = ({ topicId = "defaultTopicId", elementId = "defaultElementId" }: NotesProps) => {
   const [body, setBody] = useState<string>("");
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<NoteData[]>([]);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
+  const [fullName, setFullName] = useState<string>("");
+
+  const cookies = new Cookies();
+  const userID = cookies.get('userID');
+  const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
 
   useEffect(() => {
-    setNotes(notesData);
-  }, []);
+    const fetchStudentInfo = async (userId: string) => {
+      if (!clientKey) {
+        console.error("Client-Key is not defined");
+        return;
+      }
+  
+      try {
+        const response = await fetch(`${readUserData}/api/v1/Student/GetStudentInformation/${userId}`, {
+          headers: new Headers({
+            "Client-Key": clientKey,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          }),
+        });
+  
+        if (response.ok) {
+          const result = await response.json();
+          const data: UserInfo = result.data;
+          
+          setFullName(`${data.firstName || ''} ${data.surname || ''}`.trim());
+        } else {
+          console.error("Failed to fetch student information:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching student information:", error);
+      }
+    };
+  
+    if (userID) {
+      fetchStudentInfo(userID);
+    }
+  
+    const fetchNotes = async () => {
+      if (!clientKey) {
+        console.error("Client-Key is not defined");
+        return;
+      }
+  
+      try {
+        const response = await fetch(`${rCommentUrl}/api/Notes/GetNotesByElement/${elementId}`, {
+          headers: new Headers({
+            "Client-Key": clientKey,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          }),
+        });
+  
+        if (response.ok) {
+          const result = await response.json();
+          const notesData: NoteData[] = result.data;
+          setNotes(notesData);
+          console.log("Notes Data Thats fetched :", notesData)
+        } else {
+          console.error("Failed to fetch notes:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      }
+    };
+  
+    fetchNotes();
+  }, [topicId, elementId, userID]);
 
   const handleChange = (value: string) => {
     setBody(value);
@@ -34,29 +119,58 @@ const Notes = () => {
   };
 
   const getDisplayContent = (
-    text: string,
+    text: string = "",
     isCollapsed: boolean,
     wordLimit = 100
   ) => {
-    const words = text.split(" ");
+    const plainText = text.replace(/<[^>]+>/g, '');
+    const words = plainText.split(" ");
     const isLong = words.length > wordLimit;
     const displayContent =
       isCollapsed && isLong
         ? words.slice(0, wordLimit).join(" ") + "..."
-        : text;
+        : plainText;
+    console.log("Display content:", displayContent);
     return { displayContent, isLong };
   };
 
-  const handlePostNote = () => {
-    const newNote: Note = {
-      id: notes.length + 1,
-      title: "New Note",
-      content: body,
-      studentName: "Anonymous",
-      timestamp: new Date().toISOString(),
+  const handlePostNote = async () => {
+    if (!clientKey) {
+      console.error("Client-Key is not defined");
+      return;
+    }
+
+    const plainText = body.replace(/<[^>]+>/g, '');
+
+    const newNote = {
+      topicId,
+      text: plainText,
+      studentId: userID,
+      elementId,
+      fullName
     };
-    setNotes([...notes, newNote]);
-    setBody("");
+
+    try {
+      const response = await fetch(`${wCommentUrl}/api/v1/Notes/AddNote`, {
+        method: "POST",
+        headers: new Headers({
+          "Client-Key": clientKey,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        }),
+        body: JSON.stringify(newNote),
+      });
+
+      if (response.ok) {
+        const postedNote = await response.json();
+        setNotes([...notes, postedNote.data]);
+        setBody("");
+      } else {
+        console.error("Failed to post note:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error posting note:", error);
+    }
   };
 
   return (
@@ -69,17 +183,7 @@ const Notes = () => {
 
       <div className="row mt-3">
         <div className="col-md-5 mb-3">
-          {/* <button
-            className="bi bi-plus-lg btn btn-success custom-button-4"
-            onClick={() => {
-              const editor = document.querySelector(
-                ".ql-editor"
-              ) as HTMLElement;
-              editor?.focus();
-            }}
-          >
-            Add Note
-          </button> */}
+          {/* Add Note button can be re-enabled if needed */}
         </div>
       </div>
 
@@ -116,14 +220,14 @@ const Notes = () => {
       <div className="row mt-3">
         {notes.map((note) => {
           const { displayContent, isLong } = getDisplayContent(
-            note.content,
+            note.text,
             isCollapsed
           );
+
           return (
             <div className={styles.mb3Custom} key={note.id}>
-              {/* <div className="note-title fw-bold">{note.title}</div> */}
               <div className="mt-2">
-                <p  className="videoPar" dangerouslySetInnerHTML={{ __html: displayContent }} />
+                <p className="videoPar">{displayContent}</p>
                 {isLong && (
                   <a
                     onClick={toggleCollapse}
@@ -136,11 +240,12 @@ const Notes = () => {
               </div>
               <div className="d-flex justify-content-between mt-2">
                 <div>
-                <p  className="videoPar">  <strong>By:</strong> {note.studentName}</p>
+                  <p className="videoPar"><strong>By:</strong> {note.fullName}</p>
                 </div>
                 <div>
-                <p  className="videoPar">     <strong>Posted on:</strong>{" "}
-                  {format(new Date(note.timestamp), "PPpp")}</p>
+                  <p className="videoPar">
+                    <strong>Posted on:</strong> {format(note.dateCreated, "PPpp")}
+                  </p>
                 </div>
               </div>
             </div>

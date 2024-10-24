@@ -4,17 +4,20 @@ import Image from 'next/image';
 import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import imageCover from "./verify.svg";
-import { LoginUser, verifyUserAccount } from '@/app/api/auth/auth';
+import { LoginUser, ResendSMS, verifyUserAccount } from '@/app/api/auth/auth';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
 import { isMobile } from 'react-device-detect';
+import { POST } from '@/app/lib/api-client';
 
 
 
 export default function VerifyPage() {
+  // const imageCover = process.env.NEXT_PUBLIC_LOGIN_IMAGE;
     const [otpValues, setOtpValues] = useState(['', '', '', '', '']);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
+    const [resending, setResending] = useState(false);
     const[otp, setOtp] = useState<Number>(0);
     const inputRefs = [
         useRef<HTMLInputElement>(null),
@@ -57,6 +60,25 @@ export default function VerifyPage() {
         }
       };
 
+      async function resend(){
+      setResending(true);
+        var contact = cookies.get('userPhone');
+        debugger;
+        var payload = {
+          phoneNumber:contact
+        }
+
+        const res = await ResendSMS(payload);
+        if(res.status ==200 ){
+          setTimeout(()=>{
+            setResending(false);
+          },10000)
+        }else{
+          setResending(false)
+        }
+        
+      }
+
       async function handleVerify(e:any) {
         e.preventDefault();
         setIsSubmitted(true);
@@ -85,16 +107,17 @@ export default function VerifyPage() {
     return (
         <div className="login-container">
             <div 
-                className='left-container'
+                className="left-container"
                 data-aos="zoom-out-right"
                 style={{
                   backgroundImage: !isMobile? `url(${imageCover.src})`:"none",
-                  backgroundSize: 'cover',                
+                  backgroundSize: '60%',                
                   backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
                   filter:"none !important",
-                  backgroundColor:"#24345C;",
+                //   backgroundColor:"#24345C;",
                   boxShadow: 'inset 0 0 100px rgba(0,0,0,0.5)',
-              }}
+                }}
                 >
                     {/* <div className='verify-card'>
                         <Image src={imageCover.src} alt="verify" width={200} height={200}/>
@@ -133,10 +156,10 @@ export default function VerifyPage() {
                     </button>
                 </div>
                 <div className="auth-footer">
-            <p style={{marginRight:"10px"}}>Already have an account? </p>
-            <Link style={{ color: "#2597ac" }} href="/login">
-              Login
-            </Link>
+            <p style={{marginRight:"10px"}}> <small>Didn&#39;t receive a message?</small></p>
+           
+              <p style={{cursor: resending?"none":"pointer", color:resending?"grey":"", pointerEvents:resending?"none":"all"}}  onClick={()=>resend()}><b> {resending?"Sending SMS..": "Resend SMS"} </b></p>
+          
           </div>
             </form>
         </div>

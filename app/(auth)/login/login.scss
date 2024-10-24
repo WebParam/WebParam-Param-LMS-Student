@@ -158,3 +158,38 @@ input[type="password"].error {
     75% { transform: translateX(5px); }
     100% { transform: translateX(0); }
 }
+
+.modal-activate-account {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+
+    & form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    & button {
+        width: 80%;
+        background-color: #24345C;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+}
+
+.number-input::placeholder {
+    opacity: .7;
+}

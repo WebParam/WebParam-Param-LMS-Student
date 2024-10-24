@@ -1,9 +1,9 @@
 
 const test = "testing";
-const env = process.env.NEXT_PUBLIC_API_ENV == "production" ? "prod" : process.env.NEXT_PUBLIC_API_ENV;
+const env = process.env.NEXT_PUBLIC_API_ENV ?? "prod" ;
 
+// const env = "dev"
 
-// const env = process.env.NEXT_PUBLIC_API_URL;
 
 export const writeUserData = `https://thooto-${env}-be-user-write.azurewebsites.net`;
 
@@ -27,7 +27,7 @@ export const rQuizUrl = `https://thooto-${env}-be-quiz-read.azurewebsites.net`;
 
 export const wAudioGenerateUrl = `https://thooto-${env}-be-audio-generate.azurewebsites.net`;
 
-export const wAssessmentUrl =  "https://thooto-development-assessment-write.azurewebsites.net";
+export const wAssessmentUrl =  `https://thooto-${env}-be-assessment-write.azurewebsites.net`;
 
 export const twAssessmentUrl = `https://thooto-${test}-assessment-write.azurewebsites.net`;
 
@@ -51,6 +51,10 @@ export const rKnowledgeModuleUrl = `https://thooto-${env}-be-newcourse-read.azur
 
 export const rAnalyticUrl = `https://thooto-${env}-be-activity-read.azurewebsites.net`;
 
+export const rActivityUrl = `https://thooto-${env}-be-activity-read.azurewebsites.net`;
+
+export const wActivityUrl = `https://thooto-${env}-be-activity-write.azurewebsites.net`;
+
 export const getCodesUrl = `https://thooto-${env}-be-user-read.azurewebsites.net`;
 
 export const rNotificationUrl = `https://thooto-${env}-be-notification-read.azurewebsites.net`;
@@ -61,3 +65,14 @@ export const wLoogBookUrl = `https://thooto-${env}-be-logbook-write.azurewebsite
 
 export const rLoogBookUrl = `https://thooto-${env}-be-logbook-read.azurewebsites.net`;
 
+export const rCommentUrl =`https://thooto-${env}-be-comment-read.azurewebsites.net`;
+
+export const wCommentUrl =`https://thooto-${env}-be-comment-write.azurewebsites.net`;
+
+
+// New endpoints
+export const rAssessmentThootoUrl = `https://thooto-${env}-be-assessment-read.azurewebsites.net`;
+export const wAssessmentThootoUrl = `https://thooto-${env}-be-assessment-write.azurewebsites.net`;
+export const rQuestionsThootoUrl = `https://thooto-${env}-be-assessment-read.azurewebsites.net/api/v1/Questions`;
+export const rOptionsThootoUrl = `https://thooto-${env}-be-assessment-read.azurewebsites.net/api/v1/Options`;
+export const wStudentAnswersThootoUrl = `https://thooto-${env}-be-assessment-write.azurewebsites.net/api/v1/StudentAnswers`;

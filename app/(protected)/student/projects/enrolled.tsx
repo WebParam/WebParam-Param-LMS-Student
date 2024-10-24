@@ -22,7 +22,8 @@ export default function Enrolled() {
 
     try {
       const data = await getProjectsId(loggedInUser?.data?.id||loggedInUser?.userId);
-      console.log("get data: ", data);
+
+      
 
       if (data) {
         const projects: IProject[]|any = await getProgrammeProjects(data?.data);
@@ -66,7 +67,7 @@ export default function Enrolled() {
                       index={index}
                     />
                   </div>
-                )) : <div className="text-center text-muted">No projects found</div>}
+                )) : <div className="text-center text-muted">No applicationss found</div>}
               </div>
             </div>
     )

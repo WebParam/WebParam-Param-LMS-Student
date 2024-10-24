@@ -2,18 +2,23 @@
 import "./login.scss";
 import React, { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
-import { LoginUser } from "@/app/api/auth/auth";
+import { LoginUser, ResendSMS } from "@/app/api/auth/auth";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
-import { isMobile } from "react-device-detect";
+import Modal from "react-responsive-modal";
 
 export default function LoginPage() {
     const imageCover = process.env.NEXT_PUBLIC_LOGIN_IMAGE;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [errorMessage2, setErrorMessage2] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [hasError, setHasError] = useState<any>({ email: false, password: false });
+    const [modalMessageShow, setModalMessageShow] = useState(false);
+    const [resending, setResending] = useState(false);
+    const [contact, setContact] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
   const cookies = new Cookies();
   const router = useRouter();
@@ -43,21 +48,46 @@ export default function LoginPage() {
       try {
         const res = await LoginUser(payload);
             setIsLoading(false);
-            
-            if (res == undefined) {
-                setErrorMessage('Incorrect User details');
+            debugger;
+            if (res.data.message) {
+                setErrorMessage(res?.data?.message);
                 return;
             }
+            debugger;
             
-            if (res) {
+            if (res.data.data) {
                 
-                cookies.set("loggedInUser", res.data);
-                
-                const redirectPath = "/student/enrolled-courses?tab=enrolled";
+              console.log("Login response:", res);
+
+              const userId = res.data.data.id;
+              console.log("User ID:", userId);
+      
+              const options = {
+                path: '/',
+                sameSite: 'strict' as 'strict',
+                secure: process.env.NEXT_PUBLIC_API_ENV === 'production',
+              };
+      
+              cookies.set("loggedInUser", res.data, options);
+              cookies.set("userID", userId, options);
+      
+              if(process.env.NEXT_PUBLIC_FREEMIUM){
+                const redirectPath = "/student/projects";
                 router.push(redirectPath)
+              }else{
+              const redirectPath = "/student/enrolled-courses?tab=enrolled";
+              router.push(redirectPath)
+              }
+                
+            } else {
+              setErrorMessage(res.data.message);
+              if (res.data.message == "User is not verified"){
+                setModalMessageShow(true);
+              }
             }
         } catch (error: any) {
-            setErrorMessage('Network Error please try again');
+            setErrorMessage(error?.response?.data?.message);
+            console.log("Error:", error);
             setIsLoading(false);
         }
       
@@ -65,6 +95,34 @@ export default function LoginPage() {
       console.log('Form submitted successfully');
       setIsLoading(false);
     }
+
+    async function resend(e:any){
+      e.preventDefault();
+      setResending(true);
+      
+       
+        var payload = {
+          phoneNumber:contact
+        }
+
+        const res = await ResendSMS(payload);
+
+        if (res == undefined||null) {
+          setErrorMessage2('We couldn\'t find the number you entered please try again.');
+          setResending(false);
+          return;
+        }
+        
+
+        debugger;
+        if(res?.data){
+          cookies.set("activate-email", res?.data?.email);
+          router.push('/activate-account');
+        }else{
+          setResending(false)
+        }
+        
+      }
   
     useEffect(() => {
       if (email !== '' || password !== '') {
@@ -73,13 +131,50 @@ export default function LoginPage() {
       }
     }, [email, password]);
 
+    useEffect(() => {
+      if (contact && !contact.startsWith("+27")) {
+        const _formatted = contact.substring(1,contact.length);
+        
+        setContact(`+27${_formatted}`);
+      }
+    }, [contact]);
+
   return (
+    <>
+    <Modal 
+      open={modalMessageShow} 
+      data-aos="zoom-out-right"
+      onClose={() => setModalMessageShow(false)} 
+      closeOnOverlayClick={false}
+      focusTrapped={true}
+      styles={{modal: {borderRadius: '10px'}}}
+
+      center>
+      <div className="modal-activate-account">
+        <h4>User is not verified</h4>
+        <p>Please enter your number to activate your account</p>
+        <form onSubmit={resend}>
+          {resending ? <div className="spinner-grow text-primary" role="status" /> : 
+          <input 
+            type="text" 
+            placeholder="+27-XXX-XXXX" 
+            value={contact}
+            className="number-input"
+            maxLength={12}
+            onChange={(e) => setContact(e.target.value)} />}
+            {errorMessage2 && (
+            <span className="errorMessage">{errorMessage2}</span>
+          )}
+          <button type="submit">Activate</button>
+        </form>
+      </div>
+    </Modal>
     <div className="login-container">
       <div
         className="left-container d-md-block d-none"
         data-aos="zoom-out-right"
         style={{
-          backgroundImage: !isMobile ? `url(${imageCover})` : "none",
+          backgroundImage: `url(${imageCover})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           boxShadow: "inset 0 0 100px rgba(0,0,0,0.5)",
@@ -104,9 +199,9 @@ export default function LoginPage() {
             </div>
           </div>
           <div>
-            <div className="rbt-form-group mb-5">
+            <div className="rbt-form-group mb-5 position-relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -114,7 +209,9 @@ export default function LoginPage() {
                 id="password"
                 // required
                 className={hasError.password ? "error" : ""}
+                
               />
+              {showPassword ? <i onClick={()=>setShowPassword(!showPassword)} className="feather-eye position-absolute" style={{right:"10px", top:"17px", cursor:"pointer"}}  /> : <i onClick={()=>setShowPassword(!showPassword)} className="bi-eye-slash position-absolute" style={{right:"10px", top:"14px", cursor:"pointer"}}  />}
             </div>
           </div>
           <div className="mb--30 remember-me">
@@ -140,7 +237,7 @@ export default function LoginPage() {
             </div>
           </div>
           {errorMessage && (
-            <span className="errorMessage">Incorrect User details</span>
+            <span className="errorMessage">{errorMessage}</span>
           )}
           <div className="form-submit-group">
             <button
@@ -170,5 +267,6 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+    </>
   );
 }
