@@ -30,8 +30,9 @@ interface Survey {
 
 
 export async function postCreateSurvey(survey: Survey) {
+    const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
     const headers = {
-        'Client-Key': 'ec51852d24b1450faff0a868e84d05e5',
+        'Client-Key': clientKey,
         'Content-Type': 'application/json',
     };
     try {

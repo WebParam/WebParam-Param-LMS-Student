@@ -1,5 +1,4 @@
 import styles from '@/app/(protected)/student/check-in/CheckIn.module.scss'
-import { StepProps } from '@/app/(protected)/student/check-in/page';
 import ProgressBar from './ProgressBar';
 import SubmitIcon from './SubmitIcon';
 import BackIcon from '@/app/(protected)/student/check-in/svg/BackIcon';
@@ -15,7 +14,7 @@ interface OverallReViewrops {
     prevStep: () => void;
 }
 
-export default function OverallReView({ step, goToStep, prevStep, stepTitle, heading }: OverallReViewrops) {
+export default function  OverallReView({ step, goToStep, prevStep, stepTitle, heading }: OverallReViewrops) {
     const userId = Cookies.get('userID');
     const handleSubmit = async () => {
         try {
@@ -60,7 +59,7 @@ export default function OverallReView({ step, goToStep, prevStep, stepTitle, hea
                 <h2 className={`${styles.steHeading} opacity-50`}>{`Step ${step}:`}</h2>
                 <h2 className={styles.steHeading}>{heading}</h2>
             </div>
-            <div className={styles.formFooter}>
+            <div className={`${styles.formFooter}`} style={{ marginTop: '30px' }}>
                 <button
                     type="button"
                     className={`${styles.prevButton}`}

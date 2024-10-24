@@ -67,6 +67,8 @@ export const wLoogBookUrl = `https://thooto-${env}-be-logbook-write.azurewebsite
 
 export const rLoogBookUrl = `https://thooto-${env}-be-logbook-read.azurewebsites.net`;
 
+export const wCreateCheckin = `https://thooto-${env}-be-workbooks-write.azurewebsites.net`;
+
 // New endpoints
 export const rAssessmentThootoUrl = `https://thooto-${env}-be-assessment-read.azurewebsites.net`;
 export const wAssessmentThootoUrl = `https://thooto-${env}-be-assessment-write.azurewebsites.net`;
