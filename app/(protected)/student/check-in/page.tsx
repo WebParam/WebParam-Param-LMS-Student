@@ -58,7 +58,7 @@ export default function CheckIn() {
 
         <div className={styles.bodyContainer}>
           {step === 0 && <StepsAndForm nextStep={nextStep} />}
-          {step === 1 && <YouthDetails step={step} goToStep={goToStep} prevStep={prevStep} stepTitle={'Let’s Start...'} heading={'Youth Details'} />}
+          {step === 1 && <YouthDetails step={step} goToStep={goToStep} stepTitle={'Let’s Start...'} heading={'Youth Details'} />}
           {step === 2 && <WorkExperience step={step} goToStep={goToStep} prevStep={prevStep} stepTitle={'Tell us about work...'} heading={'Work Experience'} />}
           {step === 3 && <Learning step={step} goToStep={goToStep} prevStep={prevStep} stepTitle={'One more...'} heading={'Learning'} />}
           {step === 4 && <OverallReView step={step} goToStep={goToStep} prevStep={prevStep} stepTitle={'And we are done...'} heading={'Overall View'} />}

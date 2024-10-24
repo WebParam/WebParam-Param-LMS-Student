@@ -12,7 +12,6 @@ interface YouthDetailsProps extends StepProps {
     stepTitle: string;
     step: number;
     goToStep: (step: number) => void;
-    prevStep: () => void;
 }
 
 const validationSchema = Yup.object({
@@ -22,7 +21,7 @@ const validationSchema = Yup.object({
     hostPartner: Yup.string().required('Host partner is required'),
 });
 
-export default function YouthDetails({ step, goToStep, prevStep, stepTitle, heading }: YouthDetailsProps) {
+export default function YouthDetails({ step, goToStep, stepTitle, heading }: YouthDetailsProps) {
     const surveyData = JSON.parse(sessionStorage.getItem('survey') || '{}');
 
     const initialValues = {
@@ -120,18 +119,6 @@ export default function YouthDetails({ step, goToStep, prevStep, stepTitle, head
                         </div>
 
                         <div className={styles.formFooter}>
-                            <button
-                                type="button"
-                                className={`${styles.prevButton}`}
-                                onClick={() => {
-                                    if (prevStep) {
-                                        prevStep();
-                                    }
-                                }}
-                            >
-                                <BackIcon />
-                                {'BACK'}
-                            </button>
                             <button
                                 type="submit"
                                 className={`${styles.nextButton}`}

@@ -152,6 +152,7 @@ export default function Learning({ step, goToStep, prevStep, stepTitle, heading 
                                 placeholder='Type your Answer'
                                 rows={4}
                                 className={styles.textArea}
+                                value={values.additionalComments}
                                 onChange={(e) => setFieldValue('additionalComments', e.target.value)}
                             />
                             <ErrorMessage name="additionalComments" component="div" className={styles.errorText} />

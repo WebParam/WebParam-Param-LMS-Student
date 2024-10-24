@@ -28,6 +28,7 @@ export default function WorkExperience({ step, goToStep, prevStep, stepTitle, he
     const totalSteps = 10;
     const experienceData = JSON.parse(sessionStorage.getItem('experience') || '{}');
     const [currentProgressStep, setCurrentProgressStep] = useState(experienceData.supervisorFeedback || 4);
+    console.log(experienceData, "experienceDataexperienceData")
 
     const initialValues = {
         workExperienceRating: experienceData.workExperienceRating || '',
@@ -205,6 +206,7 @@ export default function WorkExperience({ step, goToStep, prevStep, stepTitle, he
                                 rows={4}
                                 placeholder='Type your Answer'
                                 className={styles.textArea}
+                                value={values.additionalComments}
                                 onChange={(e) => setFieldValue('additionalComments', e.target.value)}
                             />
                             <ErrorMessage name="additionalComments" component="div" className={styles.errorText} />
