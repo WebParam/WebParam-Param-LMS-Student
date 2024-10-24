@@ -4,18 +4,18 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { submitAssessmentAnswers } from "@/actions/assessments/assessments-action";
 import MultipleChoiceQuestions from "../../../take-assessment/multipleChoise";
-import WarningModal from "../(components)/WarningModal"; 
 import styles from "@/styles/assessment/assessment.module.css";
 import loaderStyles from "@/ui/loader-ui/loader.module.css";
 import { rAssessmentThootoUrl, rQuestionsThootoUrl, rOptionsThootoUrl } from '../../../../../app/lib/endpoints';
 import Cookies from "universal-cookie";
+import WarningModal from "../../assessments/(components)/WarningModal";
 
 type LongAnswerQuestion = {
   id: string;
   title: string;
   description: string;
   questionType: string;
-  score: string;
+  score: number;
   rubrics: any[];
 };
 
@@ -33,14 +33,111 @@ type Question = {
   description: string;
   questionType: string;
   options: Option[];
-  score: any;
+  score: number;
 };
+
+const LongQuestionsDummy:LongAnswerQuestion[] = [
+    {
+        "id": "66ed3c35d62c5372d4a86c30",
+        "title": 'title one',
+        "description": "<p><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\">C0104 Explain the importance of complying with Tax Laws and discuss the consequences on non-compliance with the SARS’ requirements. </strong></p>",
+        "questionType": "Long Text",
+        "score": 6,
+        "rubrics": []
+    },
+    {
+        "id": "66ed3c88d62c5372d4a86c31",
+   
+        "title": 'title two',
+        "description": "<p><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\">C0104 Explain the importance of complying with Tax Laws and discuss the consequences on non-compliance with the SARS’ requirements. </strong></p>",
+        "questionType": "Long Text",
+        "score": 7,
+        "rubrics": []
+    },
+    {
+        "id": "66ed3c98d62c5372d4a86c32",
+     
+        "title": 'title three',
+        "description": "<p><strong style=\"color: rgb(0, 0, 0); background-color: transparent;\">C0104 Explain the importance of complying with Tax Laws and discuss the consequences on non-compliance with the SARS’ requirements. </strong></p>",
+       
+        "questionType": "Long Text",
+        "score": 4,
+        "rubrics": []
+    },
+    {
+        "id": "66ed45fed62c5372d4a86c35",
+        "title": 'title four',
+        "description": "<p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">C0104 Explain the importance of complying with Tax Laws and discuss the consequences on non-compliance with the SARS’ requirements. </span></p>",
+        "questionType": "Long Text",
+        "score": 6,
+        "rubrics": [
+            {
+                "id": "66ed45fed62c5372d4a86c36",
+                "facilitatorScore": 0,
+                "moderatorScore": 0,
+                "facilitatorId": null,
+                "moderatorId": null,
+                "facilitatorMarkDate": null,
+                "moderatorMarkDate": null,
+                "moderatorFeedBack": null,
+                "label": "3",
+                "description": "C0104 Explain the importance of complying with Tax Laws and discuss the consequences on non-compliance with the SARS’ requirements. ",
+                "questionId": "66ed45fed62c5372d4a86c35"
+            },
+            {
+                "id": "66ed460fd62c5372d4a86c37",
+                "facilitatorScore": 0,
+                "moderatorScore": 0,
+                "facilitatorId": null,
+                "moderatorId": null,
+                "facilitatorMarkDate": null,
+                "moderatorMarkDate": null,
+                "moderatorFeedBack": null,
+                "label": "2",
+                "description": "C0104 Explain the importance of complying with Tax Laws and discuss the consequences on non-compliance with the SARS’ requirements. ",
+                "questionId": "66ed45fed62c5372d4a86c35"
+            },
+            {
+                "id": "66ed461cd62c5372d4a86c38",
+                "facilitatorScore": 0,
+                "moderatorScore": 0,
+                "facilitatorId": null,
+                "moderatorId": null,
+                "facilitatorMarkDate": null,
+                "moderatorMarkDate": null,
+                "moderatorFeedBack": null,
+                "label": "1",
+                "description": "C0104 Explain the importance of complying with Tax Laws and discuss the consequences on non-compliance with the SARS’ requirements. ",
+                "questionId": "66ed45fed62c5372d4a86c35"
+            }
+        ]
+    }
+]
+
+const questionsDummy: Question[] = [
+    {
+        "id": "66ed3ce0d62c5372d4a86c33",
+        "title": 'title one',
+        "description": "<p><strong style=\"color: rgb(0, 0, 0); background-color: transparent;\">C0104 Explain the importance of complying with Tax Laws and discuss the consequences on non-compliance with the SARS’ requirements. </strong></p>",
+        "questionType": "Quiz",
+        "score": 6,
+        "options": [
+            {
+                "id": "66ed3ce0d62c5372d4a86c34",
+                "label": "2",
+                "questionId": "66ed3ce0d62c5372d4a86c33",
+                "isCorrect": false,
+                "description": "C0104 Explain the importance of complying with Tax Laws and discuss the consequences on non-compliance with the SARS’ requirements. "
+            }
+        ]
+    }
+]
 
 const AssessmentComponent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  const [longQuestions, setLongQuestions] = useState<LongAnswerQuestion[]>([]);
+  const [longQuestions, setLongQuestions] = useState<LongAnswerQuestion[]>([...LongQuestionsDummy]);
   const [answers, setAnswers] = useState<string[]>([]);
   const [isInteracted, setIsInteracted] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,21 +146,21 @@ const AssessmentComponent = () => {
   const [submitMultipleChoice, setSubmitMultipleChoice] = useState<boolean>(false);
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<any[]>([]);
   const [showWarning, setShowWarning] = useState<boolean>(true);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([...questionsDummy]);
   const [selectedAnswers, setSelectedAnswers] = useState<Option[]>([]);
 
   const cookies = new Cookies();
   const userId = cookies.get('userID');
 
-  const assessmentId = searchParams.get('id');
-  const assessmentName = searchParams.get('title') ?? "Default Assessment Name";
+  const workbookId = searchParams.get('id');
+  const workbookName = searchParams.get('title') ?? "Workbook";
   const totalMarks = searchParams.get('totalMarks') 
   
   const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
   
   useEffect(() => {
-    if (assessmentId && clientKey) {
-      fetch(`${rAssessmentThootoUrl}/api/v1/Questions/GetQuestions/${assessmentId}`, {
+    if (workbookId && clientKey) {
+      fetch(`https://thooto-dev-be-workbooks-read.azurewebsites.net/api/v1/Workbook/GetWorkbookQuestions/${workbookId}`, {
         headers: {
           'Client-Key': clientKey,
           Accept: 'application/json',
@@ -73,6 +170,7 @@ const AssessmentComponent = () => {
         .then((response) => response.json())
         .then(async (data) => {
           if (Array.isArray(data.data)) {
+            console.log("data.data :", data.data);
             const longTextQuestions = data.data.filter((question: any) => question.questionType === "Long Text");
             const quizQuestions = data.data.filter((question: any) => question.questionType === "Quiz");
 
@@ -125,14 +223,14 @@ const AssessmentComponent = () => {
           console.error("Error fetching questions:", error);
         });
     }
-  }, [assessmentId, clientKey]);
+  }, [workbookId, clientKey]);
 
   useEffect(() => {
     const savedState = JSON.parse(
       localStorage.getItem("assessmentState") || "{}"
     );
     if (savedState) {
-      setAnswers(savedState.answers || Array(longQuestions.length).fill(""));
+      setAnswers(savedState.answers || Array(longQuestions?.length).fill(""));
     }
   }, [longQuestions]);
 
@@ -145,7 +243,7 @@ const AssessmentComponent = () => {
             return prevTime - 1;
           } else {
             clearInterval(timer);
-            handleSubmitAssessment();
+            // handleSubmitAssessment();
             return null;
           }
         });
@@ -174,59 +272,59 @@ const AssessmentComponent = () => {
     setIsInteracted(true);
   };
 
-  const handleSubmitAssessment = async () => {
-    saveStateToLocalStorage();
-    setIsInteracted(false);
-    setLoading(true);
+//   const handleSubmitAssessment = async () => {
+//     saveStateToLocalStorage();
+//     setIsInteracted(false);
+//     setLoading(true);
 
-    const submission = {
-      assessmentId: assessmentId as string,
-      assessmentName,
-      userId,
-      answers: [
-        ...questions.map((question, index) => ({
-          questionId: question.id,
-          description: question.description,
-          questionType: question.questionType,
-          options: question.options,
-          studentMultipleChoiceAnswer: selectedAnswers[index] ? [selectedAnswers[index]] : [],
-          studentLongTextAnswer: "",
-          rubrics: [],
-          moderatorFeedBack: "",
-          score: question.score,
-        })),
-        ...longQuestions.map((question, index) => ({
-          questionId: question.id,
-          description: question.description,
-          questionType: question.questionType,
-          options: [],
-          studentMultipleChoiceAnswer: [],
-          studentLongTextAnswer: answers[index],
-          rubrics: question.rubrics,
-          moderatorFeedBack: "",
-          score: question.score,
-        })),
-      ],
-      fileUrl: "",
-    };
+//     const submission = {
+//       assessmentId: workbookId as string,
+//       assessmentName: workbookName,
+//       userId,
+//       answers: [
+//         ...questions.map((question, index) => ({
+//           questionId: question.id,
+//           description: question.description,
+//           questionType: question.questionType,
+//           options: question.options,
+//           studentMultipleChoiceAnswer: selectedAnswers[index] ? [selectedAnswers[index]] : [],
+//           studentLongTextAnswer: "",
+//           rubrics: [],
+//           moderatorFeedBack: "",
+//           score: question.score,
+//         })),
+//         ...longQuestions.map((question, index) => ({
+//           questionId: question.id,
+//           description: question.description,
+//           questionType: question.questionType,
+//           options: [],
+//           studentMultipleChoiceAnswer: [],
+//           studentLongTextAnswer: answers[index],
+//           rubrics: question.rubrics,
+//           moderatorFeedBack: "",
+//           score: question.score,
+//         })),
+//       ],
+//       fileUrl: "",
+//     };
 
-    try {
-      const response = await submitAssessmentAnswers(submission);
-      console.log("Assessment Submitted:", response);
+//     try {
+//       const response = await submitAssessmentAnswers(submission);
+//       console.log("Assessment Submitted:", response);
 
-      console.log("All questions answered. Assessment completed.");
+//       console.log("All questions answered. Assessment completed.");
 
-      localStorage.removeItem("assessmentState");
-      setAnswers(Array(longQuestions.length).fill(""));
-      setTimeRemaining(null);
+//       localStorage.removeItem("assessmentState");
+//       setAnswers(Array(longQuestions.length).fill(""));
+//       setTimeRemaining(null);
 
-      router.back();
-    } catch (error) {
-      console.error("Error submitting assessment:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+//       router.back();
+//     } catch (error) {
+//       console.error("Error submitting assessment:", error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
   const saveStateToLocalStorage = () => {
     localStorage.setItem(
@@ -247,12 +345,8 @@ const AssessmentComponent = () => {
     setShowWarning(false);
   };
 
-  console.log('questions :', questions);
-  console.log('longQuestions :', longQuestions);
-  debugger;
-
   return (
-    <div className="rbt-lesson-rightsidebar overflow-hidden lesson-video">
+    <div className="container" style={{maxWidth:'80%'}}>
       {showWarning && <WarningModal show={showWarning} onHide={() => setShowWarning(false)} onConfirm={handleWarningConfirm} />}
       {!showWarning && (
         <div className="inner" style={{ margin: "0 auto" }}>
@@ -260,7 +354,7 @@ const AssessmentComponent = () => {
             <div className="quiz-form-wrapper">
                 <div>
                   <span>
-                    <strong>{assessmentName}</strong>
+                    <strong>{workbookName}</strong>
                   </span>
                 </div>
               <div className="quize-top-meta">
@@ -282,7 +376,7 @@ const AssessmentComponent = () => {
                   </div>
                 </>
               </div>
-              {assessmentId && (
+              {workbookId && (
                 <MultipleChoiceQuestions
                   questions={questions}
                   selectedAnswers={selectedAnswers}
@@ -320,16 +414,16 @@ const AssessmentComponent = () => {
                   className="rbt-btn btn-sm"
                   style={{height:'40px', border:'none', backgroundColor:`${process.env.NEXT_PUBLIC_PRIMARY_COLOR??'rgb(36, 52, 92)'}`, borderRadius:'8px  '}}
                   type="button"
-                  onClick={handleSubmitAssessment}
+                //   onClick={handleSubmitAssessment}
                   disabled={loading}
                 >
                   {loading ? (
                     <>
                       <span className={loaderStyles.loaderButton}></span>
-                      Submit Assessment
+                      Submit
                     </>
                   ) : (
-                    "Submit Assessment"
+                    "Submit"
                   )}
                 </button>
               </div>

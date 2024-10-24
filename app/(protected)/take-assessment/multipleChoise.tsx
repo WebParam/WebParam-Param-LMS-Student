@@ -16,7 +16,7 @@ type Question = {
   description: string;
   questionType: string;
   options: Option[];
-  score: string;
+  score: number;
 };
 
 type MultipleChoiceQuestionsProps = {
