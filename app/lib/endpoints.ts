@@ -1,6 +1,6 @@
 
 const test = "testing";
-const env = process.env.NEXT_PUBLIC_API_ENV == "production" ? "prod" : process.env.NEXT_PUBLIC_API_ENV;
+const env = process.env.NEXT_PUBLIC_API_ENV ?? "prod" ;
 
 // const env = "dev"
 
@@ -27,7 +27,7 @@ export const rQuizUrl = `https://thooto-${env}-be-quiz-read.azurewebsites.net`;
 
 export const wAudioGenerateUrl = `https://thooto-${env}-be-audio-generate.azurewebsites.net`;
 
-export const wAssessmentUrl =  "https://thooto-development-assessment-write.azurewebsites.net";
+export const wAssessmentUrl =  `https://thooto-${env}-be-assessment-write.azurewebsites.net`;
 
 export const twAssessmentUrl = `https://thooto-${test}-assessment-write.azurewebsites.net`;
 
@@ -64,6 +64,10 @@ export const wNotificationUrl = `https://thooto-${env}-be-notification-write.azu
 export const wLoogBookUrl = `https://thooto-${env}-be-logbook-write.azurewebsites.net`;
 
 export const rLoogBookUrl = `https://thooto-${env}-be-logbook-read.azurewebsites.net`;
+
+export const rCommentUrl =`https://thooto-${env}-be-comment-read.azurewebsites.net`;
+
+export const wCommentUrl =`https://thooto-${env}-be-comment-write.azurewebsites.net`;
 
 
 // New endpoints

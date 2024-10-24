@@ -9,9 +9,8 @@ import { UnitStandardData } from "@/interfaces/enrolled-unit-standards/unit-stan
 import UnitStandardWidget from "@/ui/student/enrolled/sample-unit";
 import { useRouter } from "next/navigation";
 import { useCourseId } from "@/context/courseId-context/courseId-context";
-import { useSearchParams } from "next/navigation";
 
-export default function Enrolled() {
+export default function ModuleAssignments() {
   const { courseId } = useCourseId();
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -25,80 +24,63 @@ export default function Enrolled() {
   const [showAuthor, setShowAuthor] = useState(false);
   const [courseStyle, setCourseStyle] = useState("two");
 
-  const searchParams = useSearchParams();
-
-  const type = searchParams.get("type")??'KM';
-
-
   const getUnitStandards = async (courseId: string) => {
     setLoading(true);
     setError(null);
-  
 
     try {
       const data = await getAlltUnitStandards(courseId);
-      console.log("get data: ", data);
       setUnitStandards(data);
-   
+
       setLoading(false);
-      router.push('/student/enrolled-courses?tab=enrolled');
     } catch (error: any) {
       setError(error.message);
       setLoading(false);
     }
   };
 
-  
-  
   useEffect(() => {
-    
     // const courseId = localStorage.getItem("courseId") ?? "";
     if (process.env.NEXT_PUBLIC_DEMO) {
       if (courseId) {
         getUnitStandards(courseId);
       }
     } else {
-      const courseId = process.env.NEXT_PUBLIC_COURSE_ID??"";
+      const courseId = process.env.NEXT_PUBLIC_COURSE_ID ?? "";
       getUnitStandards(courseId);
     }
-
   }, [courseId]);
-  
 
   if (loading) {
     return <Loader />;
   } else {
   }
 
-  console.log("unitStandards: ", unitStandards);
-
-  const filteredUnitStandards = unitStandards?.filter(unit => unit.moduleCode.startsWith(type));
-
-    return (
-        <div
-              className="tab-pane fade active show"
-              id="home-4"
-              role="tabpanel"
-              aria-labelledby="home-tab-4"
-            >
-              <div className="row g-5">
-                {filteredUnitStandards.length > 0 ? filteredUnitStandards.map((standard, index) => (
-                  <div
-                    className="col-lg-4 col-md-6 col-12"
-                    key={`unit-standard-completed-${index}`}
-                  >
-                    <UnitStandardWidget
-                      data={standard}
-                      courseStyle={courseStyle}
-                      isProgress={isProgress}
-                      isCompleted={isCompleted}
-                      showDescription={showDescription}
-                      isEdit={isEdit}
-                      showAuthor={showAuthor}
-                    />
-                  </div>
-                )) : <div className="text-center text-muted">No Modules found</div>}
-              </div>
-            </div>
-    )
+  return (
+    <div
+      className="tab-pane fade active show"
+      id="home-4"
+      role="tabpanel"
+      aria-labelledby="home-tab-4"
+    >
+      <div className="row g-5">
+        {unitStandards?.map((standard, index) => (
+          <div
+            className="col-lg-4 col-md-6 col-12"
+            key={`unit-standard-completed-${index}`}
+          >
+            <UnitStandardWidget
+              data={standard}
+              courseStyle={courseStyle}
+              isProgress={isProgress}
+              isCompleted={isCompleted}
+              showDescription={showDescription}
+              isEdit={isEdit}
+              showAuthor={showAuthor}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }

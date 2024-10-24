@@ -9,6 +9,7 @@ import { readUserData } from "@/app/lib/endpoints";
 import { GET } from "@/app/lib/api-client";
 import { useProgressContext } from "@/context/progress-card-context/progress-context";
 import { codes } from "../codes";
+import { updateTimeSpent } from "@/app/api/trackTimeSpent/timeSpent";
 
 export default function DemocraticLegal({ student, codes }: any) {
   console.log("codes in democratic legal:", codes)
@@ -63,8 +64,7 @@ export default function DemocraticLegal({ student, codes }: any) {
   }
 
   useEffect(() => {
-    setStudentContactInformation(student);
-    calculateDemographicLegalPercentage();
+    Promise.all([setStudentContactInformation(student), updateTimeSpent()])
   }, [student]);
 
     useEffect(() => {
@@ -168,10 +168,10 @@ export default function DemocraticLegal({ student, codes }: any) {
   >
     <div className="rbt-dashboard-content-wrapper">
     <form
-  onSubmit={handleSubmit}
-  className="rbt-profile-row rbt-default-form row row--15"
-  style={{minWidth:'100%'}}
->
+        onSubmit={(e) => {handleSubmit(e), updateTimeSpent()}}
+        className="rbt-profile-row rbt-default-form row row--15"
+        style={{minWidth:'100%'}}
+      >
   <div className="col-lg-6 col-md-6 col-sm-6 col-12" style={{marginBottom:'15px'}}>
     <div className="rbt-form-group">
       <label htmlFor="equityCode">Equity Code</label>

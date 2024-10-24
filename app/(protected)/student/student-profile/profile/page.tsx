@@ -14,6 +14,7 @@ import { readUserData } from '@/app/lib/endpoints';
 import { GET } from '@/app/lib/api-client';
 import MaintenanceModal from '@/ui/banner/MaintanceModal';
 import { useProgressContext } from '@/context/progress-card-context/progress-context';
+import { updateTimeSpent } from '@/app/api/trackTimeSpent/timeSpent';
 
 export default function Profile({ student, codes }: any) {
   const [firstName, setFirstName] = useState("");
@@ -38,15 +39,9 @@ export default function Profile({ student, codes }: any) {
   const router = useRouter();
   const { setBiographyPercentage } = useProgressContext();
 
-    useEffect(() => {
-        
-        getUserProfile();
-    }, [profilePic]);
-
     
     useEffect(() => {
-        
-        getUserProfile();
+        Promise.all([getUserProfile(), updateTimeSpent()])
     },[profilePic])
     
     
@@ -196,7 +191,7 @@ export default function Profile({ student, codes }: any) {
         <Modal show={uploadingPic} onHide={() => setUploadingPic(false)}>
             <Modal.Body>
                 <div className='d-flex justify-content-center flex-column align-items-center'>
-                    <div className="spinner-border" role="status"/>
+                    <div className="spinner-border text-primary" role="status"/>
                     <p>Uploading Profile Picture...</p>
                 </div>
             </Modal.Body>
@@ -256,7 +251,7 @@ export default function Profile({ student, codes }: any) {
                     </div> */}
                 </div>
             </div>
-            <form onSubmit={handleSubmit} className="rbt-profile-row rbt-default-form row row--15" style={{minWidth:'100%'}}>
+            <form onSubmit={(e) => {handleSubmit(e), updateTimeSpent()}} className="rbt-profile-row rbt-default-form row row--15" style={{minWidth:'100%'}}>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-12">
                     <div className="rbt-form-group">
                         <label htmlFor="firstname">First Name</label>
