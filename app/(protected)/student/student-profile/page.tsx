@@ -12,6 +12,7 @@ import { getStudentData } from '@/app/api/studentProfile/studentprofile';
 import { codes } from './codes';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { updateTimeSpent, UpdateTimeSpent } from '@/app/api/trackTimeSpent/timeSpent';
 
 function UserProfileContent() {
     const cookies = new Cookies();
@@ -31,8 +32,11 @@ function UserProfileContent() {
 
     useEffect(() => {
         getStudent();
+        updateTimeSpent();
         AOS.init({ duration: 1500 , once: true}); // Initialize AOS
     }, []);
+
+  
 
 
     const renderComponent = (tab: string | null) => {

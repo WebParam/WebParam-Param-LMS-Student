@@ -56,7 +56,8 @@ const AssessmentComponent = () => {
   const userId = cookies.get('userID');
 
   const assessmentId = searchParams.get('id');
-  const assessmentName = searchParams.get('title') ?? "Default Assessment Name"; 
+  const assessmentName = searchParams.get('title') ?? "Default Assessment Name";
+  const totalMarks = searchParams.get('totalMarks') 
   
   const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
   
@@ -253,11 +254,16 @@ const AssessmentComponent = () => {
         <div className="inner" style={{ margin: "0 auto" }}>
           <div className="content">
             <div className="quiz-form-wrapper">
+                <div>
+                  <span>
+                    <strong>{assessmentName}</strong>
+                  </span>
+                </div>
               <div className="quize-top-meta">
                 <>
                   <div className="quize-top-left">
                     <span>
-                      Total Marks: <strong>50</strong>
+                      Total Marks: <strong>{totalMarks}</strong>
                     </span>
                   </div>
                   <div className="quize-top-right">

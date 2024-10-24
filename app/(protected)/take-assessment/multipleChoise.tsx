@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "@/styles/quiz/quiz.module.css";
+
 type Option = {
   id: string;
   label: string;
@@ -34,29 +36,33 @@ const MultipleChoiceQuestions: React.FC<MultipleChoiceQuestionsProps> = ({
         <div key={q.id} style={{ marginBottom: '30px' }}>
           <h3 style={{ fontSize: '21px' }}>{`${index + 1}. ${q.description}`}</h3>
           {Array.isArray(q.options) ? q.options.map((option) => (
-            <div key={option.id}>
-              <label
-                style={{
-                  border: `${selectedAnswers[index]?.id === option.id ? `2px solid ${process.env.NEXT_PUBLIC_PRIMARY_COLOR ?? 'rgb(36, 52, 92)'}` : '2px solid var(--color-border)'}`,
-                  height: '40px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '20px',
-                  borderRadius: '6px',
-                  paddingLeft: '30px',
-                  cursor: 'pointer',
-                  marginTop: '5px',
-                }}
-              >
+            <div key={option.id} className="col-lg-12">
+              <p className="rbt-checkbox-wrapper mb--5">
                 <input
+                  id={`rbt-checkbox-${index + 1}-${option.id}`}
+                  name={`rbt-checkbox-${index + 1}`}
                   type="radio"
-                  name={`question-${index}`}
                   value={option.label}
                   checked={selectedAnswers[index]?.id === option.id}
                   onChange={() => handleOptionChange(index, option)}
                 />
-                {option.description}
-              </label>
+                <label
+                  htmlFor={`rbt-checkbox-${index + 1}-${option.id}`}
+                  style={{
+                    border: "none",
+                    boxShadow: "0px 6px 34px rgba(215, 216, 222, 0.41)",
+                    padding: "30px",
+                    background:"white"
+                  }}
+                  className={
+                    selectedAnswers[index]?.id === option.id
+                      ? styles.correct
+                      : styles.wrong
+                  }
+                >
+                  {option.description}
+                </label>
+              </p>
             </div>
           )) : (
             <p>No options available for this question.</p>
