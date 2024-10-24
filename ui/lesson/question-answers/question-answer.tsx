@@ -25,7 +25,7 @@ interface UserInfo {
   surname: string;
 }
 
-const QuestionAndAnswers = ({ elementId = "defaultElementId" }: QnAProps) => {
+const QuestionAndAnswers = ({ elementId = "defaultElementId" }:  QnAProps) => {
   const [body, setBody] = useState("");
   const [title, setTitle] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
