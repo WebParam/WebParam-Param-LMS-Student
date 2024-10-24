@@ -4,6 +4,7 @@ import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import Loader from "@/ui/loader/loader";
 import styles from "@/styles/enrolled-courses/enrolled-courses.module.css";
+import './course.scss';
 // import { isMobile } from "react-device-detect";
 
 import Cookies from "universal-cookie";
@@ -25,12 +26,19 @@ const access = process.env.NEXT_PUBLIC_ACCESS??"ALL_ACCESS";
   const router = useRouter();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
+  const type = searchParams.get("type")??'KM';
 
   useEffect(() => {
     if (tab === null) {
       router.push('/student/enrolled-courses?tab=enrolled');
     }
   }, [tab, router]);
+
+  useEffect(() => {
+    if (!type) {
+      router.push('/student/enrolled-courses?tab=enrolled&type=KM');
+    }
+  }, [type]);
 
   useEffect(() => {
     AOS.init({
@@ -49,25 +57,17 @@ const access = process.env.NEXT_PUBLIC_ACCESS??"ALL_ACCESS";
       data-aos="fade-right"
     >
       <div className="content">
-        <div className="section-title d-flex justify-content-between align-items-center nav-titles">
-          <h4 className="get-4-color rbt-title-style-3" style={{ height:'100%', margin:'0'}}>
+        <div className="section-title d-flex justify-content-between align-items-center nav-titles mb-5">
+          <h4 className="get-4-color rbt-title-style-3" style={{margin:'0', padding:'0'}}>
             <i className="bi bi-laptop "></i>
             <span className="style-3-left">My Courses</span>
           </h4>
           <div>
-            <select className="form-select" style={{width:'150px', borderRadius:'5px', margin:'0'}}>
-              <option value="summative">Summative</option>
-              <option value="formative">Formative</option>
+            <select className="form-select" value={type} onChange={(e) => router.push(`/student/enrolled-courses?tab=enrolled&type=${e.target.value}`)} style={{width:'200px', borderRadius:'5px', margin:'0'}}>
+              <option value="KM">Knowledge Modules</option>
+              <option value="PM">Practical Modules</option>
             </select>
           </div>
-          {/* <div>
-          <select className="form-select">
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-          </div> */}
         </div>
         <div className={`advance-tab-button mb--30 ${styles.advanceTabButton}`}>
           <ul className={`nav nav-tabs tab-button-style-2 ${styles.navTabs}`} id="myTab-4" role="tablist">
