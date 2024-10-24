@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import styles from "@/styles/notes/notes.module.css";
-import { format, parse } from "date-fns";
 import { rCommentUrl, wCommentUrl, readUserData } from "@/app/lib/endpoints";
+import Image from "next/image";
 import Cookies from "universal-cookie";
+import moment from "moment";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -41,6 +42,9 @@ const Notes = ({ topicId = "defaultTopicId", elementId = "defaultElementId" }: N
   const [notes, setNotes] = useState<NoteData[]>([]);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   const [fullName, setFullName] = useState<string>("");
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [profileImage, setProfileImage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const cookies = new Cookies();
   const userID = cookies.get('userID');
@@ -64,9 +68,12 @@ const Notes = ({ topicId = "defaultTopicId", elementId = "defaultElementId" }: N
   
         if (response.ok) {
           const result = await response.json();
-          const data: UserInfo = result.data;
+          const data = result.data;
           
           setFullName(`${data.firstName || ''} ${data.surname || ''}`.trim());
+          console.log("data:", data)
+          setProfileImage(data?.profilePicture);
+          setUserEmail(data?.email);
         } else {
           console.error("Failed to fetch student information:", response.statusText);
         }
@@ -110,9 +117,6 @@ const Notes = ({ topicId = "defaultTopicId", elementId = "defaultElementId" }: N
     fetchNotes();
   }, [topicId, elementId, userID]);
 
-  const handleChange = (value: string) => {
-    setBody(value);
-  };
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -140,6 +144,8 @@ const Notes = ({ topicId = "defaultTopicId", elementId = "defaultElementId" }: N
       return;
     }
 
+    setLoading(true);
+
     const plainText = body.replace(/<[^>]+>/g, '');
 
     const newNote = {
@@ -162,13 +168,16 @@ const Notes = ({ topicId = "defaultTopicId", elementId = "defaultElementId" }: N
       });
 
       if (response.ok) {
+        setLoading(false);
         const postedNote = await response.json();
         setNotes([...notes, postedNote.data]);
         setBody("");
       } else {
+        setLoading(false);
         console.error("Failed to post note:", response.statusText);
       }
     } catch (error) {
+      setLoading(false);
       console.error("Error posting note:", error);
     }
   };
@@ -182,35 +191,41 @@ const Notes = ({ topicId = "defaultTopicId", elementId = "defaultElementId" }: N
       </div>
 
       <div className="row mt-3">
-        <div className="col-md-5 mb-3">
-          {/* Add Note button can be re-enabled if needed */}
-        </div>
       </div>
 
       <div className="row">
-        <div className="col-md-10 mt-4 mb-2">
-          <ReactQuill
+        <div className="col-md-10 mt-4 mb-2 w-100">
+          {/* <ReactQuill
             theme="snow"
             value={body}
             onChange={handleChange}
             className="custom-quill-1"
-          />
+          /> */}
+          <textarea 
+          placeholder="Write your note here..."
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          style={{width:'100%', height:'50px', fontSize:'14px', border:'none', borderBottom:'2px solid #000', boxShadow:'none', borderRadius:'0'}}></textarea>
         </div>
       </div>
 
-      <div className="row mt-3">
+      <div className="row mt-3 d-flex justify-content-end w-100">
         <div className="col-md-10 d-flex justify-content-end">
+          {body && (
           <button
             className="btn btn-secondary me-2 custom-button-4"
+            style={{height:'40px', fontSize:'14px'}}
             onClick={() => setBody("")}
           >
-            Cancel
-          </button>
+              Clear
+            </button>
+          )}
           <button
             className="btn btn-success custom-button-4"
+            style={{height:'40px', fontSize:'14px'}}
             onClick={handlePostNote}
           >
-            Post Note
+            {loading ? <div className="spinner-grow" role="status"/> : "Post Note"}
           </button>
         </div>
       </div>
@@ -218,7 +233,7 @@ const Notes = ({ topicId = "defaultTopicId", elementId = "defaultElementId" }: N
       <hr className="custom-line-break-1" />
 
       <div className="row mt-3">
-        {notes.map((note) => {
+        {notes.sort((a, b) => moment(b.dateCreated).diff(moment(a.dateCreated))).map((note) => {
           const { displayContent, isLong } = getDisplayContent(
             note.text,
             isCollapsed
@@ -239,12 +254,32 @@ const Notes = ({ topicId = "defaultTopicId", elementId = "defaultElementId" }: N
                 )}
               </div>
               <div className="d-flex justify-content-between mt-2">
-                <div>
-                  <p className="videoPar"><strong>By:</strong> {note.fullName}</p>
+              <div className="d-flex align-items-center">
+                  <div className="flex-shrink-0">
+                    {profileImage ? <Image
+                      className="avatar avatar-sm avatar-circle"
+                      src={profileImage}
+                      alt="Image Description"
+                      width={45}
+                      height={45}
+                    />:<span className="avatar avatar-sm avatar-danger avatar-circle" style={{backgroundColor:'rgb(36, 52, 92)',padding:'10px',borderRadius:'50%', color:'#fff', height:'45px', width:'45px', fontSize:'12px'}}>
+                    <span className="avatar-initials">{note?.fullName?.split(" ").map(name => name[0]).join("")||userEmail.slice(0,2).toUpperCase()}</span>
+                  </span>}
+                  
+                  </div>
+                  <div className="flex-grow-1 ms-3">
+                    <a className="d-inline-block link-dark" href="#">
+                      <h6 className="text-hover-primary mb-0">
+                        {note.fullName||userEmail}
+                      </h6>
+                    </a>
+                   
+                  </div>
                 </div>
+
                 <div>
                   <p className="videoPar">
-                    <strong>Posted on:</strong> {format(note.dateCreated, "PPpp")}
+                    {moment(note.dateCreated).fromNow()}
                   </p>
                 </div>
               </div>

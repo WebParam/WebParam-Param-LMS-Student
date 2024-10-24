@@ -9,6 +9,7 @@ import Cookies from 'universal-cookie';
 import { useSearchParams } from 'next/navigation';
 import { rAssessmentUrl } from '@/app/lib/endpoints';
 import { updateTimeSpent } from '@/app/api/trackTimeSpent/timeSpent';
+import CompletedSkeleton from './loading';
 
 type Assessment = {
     mark: number;
@@ -27,6 +28,7 @@ function CompletedAssessment() {
   const [showDownload, setShowDownload] = useState(false);
   const [filteredAssessments, setFilteredAssessments] = useState<Assessment[]>([]);
   const [assessments, setAssessments] = useState<Assessment[]>([]);
+  const [loading, setLoading] = useState(false);
  
   const cookies = new Cookies();
   const loggedInUser = cookies.get('loggedInUser');
@@ -40,12 +42,15 @@ function CompletedAssessment() {
   }, []);
 
   async function fetchAssessments() {
+    setLoading(true);
     try {
       const response = await GET(`${rAssessmentUrl}/api/v1/StudentAnswers/GetStudentAssessments/${userID || loggedInUser?.userId}`);
       debugger;
       setAssessments(response?.data?.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching assessments:", error);
+      setLoading(false);
     }
   }
   
@@ -58,11 +63,14 @@ function CompletedAssessment() {
 
   useEffect(() => {
     if(assessments.length > 0){    
-      debugger;
     const filteredAssessments = assessments?.filter((assessment: Assessment) => assessment?.assessment?.type === (type === 'summative' ? 0:1));
     setFilteredAssessments(filteredAssessments);
     }
   }, [assessments]);
+
+  if (loading) {
+    return <CompletedSkeleton />
+  }
 
 
   return (
@@ -117,7 +125,7 @@ function CompletedAssessment() {
                   <Link
                     className="rbt-btn btn-xs bg-dark-opacity radius-round"
                     title="Download assessment"
-                    href={`https://khumla-dev-assessment-read.azurewebsites.net/api/v1/StudentAnswers/DownloadStudentAssignment/${assessment?.assessment?.id}`}
+                    href={`${rAssessmentUrl}/api/v1/StudentAnswers/DownloadStudentAssignment/${assessment?.assessment?.id}`}
                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     onClick={() => {handleDownload(), updateTimeSpent()}}
                   >
@@ -134,7 +142,7 @@ function CompletedAssessment() {
 }
 
 export default function CompletedAssessmentPage() {
-  return <Suspense fallback={<div>Loading...</div>}>
+  return <Suspense fallback={<CompletedSkeleton />}>
     <CompletedAssessment />
   </Suspense>
 }

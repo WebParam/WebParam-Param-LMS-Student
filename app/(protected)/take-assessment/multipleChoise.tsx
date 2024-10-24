@@ -34,7 +34,7 @@ const MultipleChoiceQuestions: React.FC<MultipleChoiceQuestionsProps> = ({
     <div>
       {questions.map((q, index) => (
         <div key={q.id} style={{ marginBottom: '30px' }}>
-          <h3 style={{ fontSize: '21px' }}>{`${index + 1}. ${q.description}`}</h3>
+          <h3 style={{ fontSize: '21px' }} dangerouslySetInnerHTML={{ __html: `${index + 1}. ${q.description}` }} />
           {Array.isArray(q.options) ? q.options.map((option) => (
             <div key={option.id} className="col-lg-12">
               <p className="rbt-checkbox-wrapper mb--5">

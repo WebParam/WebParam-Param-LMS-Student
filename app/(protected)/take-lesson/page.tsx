@@ -336,7 +336,6 @@ function TakeLesson() {
     </div>
   );
 
-  console.log(`topics:`,expandedTopics)
 
   return (
     <>
@@ -460,7 +459,7 @@ function TakeLesson() {
                                       textWrap: "wrap",
                                     }}
                                   >
-                                    {subTopic.title}
+                                    {subTopic.title.slice(0, 50)}
                                   </p>
                                 </div>
                                 <div className="course-content-right">

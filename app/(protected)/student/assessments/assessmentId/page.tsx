@@ -278,7 +278,7 @@ const AssessmentComponent = () => {
                   </div>
                 </>
               </div>
-              {assessmentId && (
+              {questions.length > 0 && (
                 <MultipleChoiceQuestions
                   questions={questions}
                   selectedAnswers={selectedAnswers}
@@ -288,9 +288,7 @@ const AssessmentComponent = () => {
               {longQuestions.map((item, index) => (
                 <div key={item.id} id={`question-${index + 1}`} className="question">
                   <div className="rbt-single-quiz">
-                    <h4 style={{ margin: "0 auto", fontSize: "21px" }}>
-                      {quizCount + index + 1}. {item.description}
-                    </h4>
+                    <h4 style={{ margin: "0 auto", fontSize: "21px" }} dangerouslySetInnerHTML={{ __html: `${quizCount + index + 1}. ${item.description}` }} />
                     <div className="row g-3 mt--10">
                       <textarea
                         className={styles.textArea}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAssessmentContext } from '../(context)/AssessmentContext';
 import { rAssessmentThootoUrl ,rKnowledgeModuleUrl} from '../../../app/lib/endpoints';
+import CompletedSkeleton from './loading';
 import Link from 'next/link';
 
 enum AssessmentType {
@@ -25,6 +26,7 @@ interface Course {
 
 export default function ActiveAssessment() {
   const { assessmentType } = useAssessmentContext();
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState<Assessment[]>([]);
   const [filteredData, setFilteredData] = useState<Assessment[]>([]);
   const [course, setCourse] = useState<Course | null>(null);
@@ -37,6 +39,8 @@ export default function ActiveAssessment() {
         console.error('Client key is not defined');
         return;
       }
+
+      setLoading(true);
 
       try {
         const url = `${rAssessmentThootoUrl}/api/v1/assessments/GetNewAssessments/${courseId}?clientKey=${clientKey}`;
@@ -62,6 +66,8 @@ export default function ActiveAssessment() {
         }
       } catch (error) {
         console.error('Error fetching assessments:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -125,15 +131,18 @@ export default function ActiveAssessment() {
     return date.toISOString().split('T')[0];
   };
 
+  if (loading) {
+    return <CompletedSkeleton />
+  }
+
   return (
     <table className="rbt-table table table-borderless" style={{ minWidth: '10px' }}>
       <thead>
         <tr>
           <th>Assessment Name</th>
-          <th>Course</th>
           <th>Due Date</th>
           <th>Total Marks</th>
-          <th />
+          <th/>
         </tr>
       </thead>
       <tbody>
@@ -141,9 +150,6 @@ export default function ActiveAssessment() {
           <tr key={index}>
             <th>
               <span className="h6 mb--5">{assessment.title}</span>
-              <p className="b3">
-                Course: <a href="#">{course ? course.title : 'Loading...'}</a>
-              </p>
             </th>
             <td>
               {<p className="b3">{formatDate(assessment.dueDate)}</p>}
