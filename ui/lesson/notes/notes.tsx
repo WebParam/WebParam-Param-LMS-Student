@@ -47,9 +47,6 @@ const Notes = ({ topicId = "defaultTopicId", elementId = "defaultElementId" }: N
   const clientKey = process.env.NEXT_PUBLIC_CLIENTKEY;
 
   useEffect(() => {
-    console.log("UseEffect Fired:");
-    console.log("Fetching notes with userID:", userID, "and elementId:", elementId);
-  
     const fetchStudentInfo = async (userId: string) => {
       if (!clientKey) {
         console.error("Client-Key is not defined");
